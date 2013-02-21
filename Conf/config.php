@@ -3,7 +3,7 @@ return array(
     'APP_DEBUG' => false,
     // 数据库配置
     'DB_TYPE' => 'mysql',
-    'DB_HOST' => 'localhost',
+    'DB_HOST' => '127.0.0.1',
     'DB_NAME' => 'exam',
     'DB_USER' => 'root',
     'DB_PWD' => '123456',
@@ -19,5 +19,7 @@ return array(
     'TOKEN_ON' => true,
     'TOKEN_NAME' => '__hash__',
     'TOKEN_TYPE' => 'md5',
-    'URL' => 'http://192.168.100.217/exam/',
+    
+    // 站点信息
+    'URL' => 'http://web.io/exam/',
 );
