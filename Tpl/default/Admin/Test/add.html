@@ -1,0 +1,53 @@
+ <include file="Html/header.html" />
+ <script charset="utf-8" type="text/javascript" src="/exam/Public/editor/kindeditor.js"></script>
+ <script charset="utf-8" type="text/javascript" src="/exam/Public/editor/lang/zh_CN.js"></script>
+ <link href="/exam/Public/artDialog/skins/opera.css" rel="stylesheet" />
+ <script src="/exam/Public/artDialog/artDialog.js"></script>
+ <script src="/exam/Public/artDialog/plugins/iframeTools.source.js"></script>
+ <script type="text/javascript" language="javascript" src="/exam/Public/js/addTest.js"></script>
+ <script type="text/javascript">
+     function openTitleSetsDel(){
+      art.dialog.open("__TMPL__Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:520,height:450,title:'添加题目'}, false);
+    }
+    function openTitleSingleDel(){
+      art.dialog.open("__TMPL__Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:520,height:450,title:'添加题目'},false);
+      $("#titleSingle").attr("disabled","true");
+    }
+ </script>
+  <script>
+        var editor;
+        KindEditor.ready(function(K) {
+                editor=K.create('#editor_id');
+        });
+  </script>
+    <form action="__URL__/add" method="post" id="title">	
+     <p>
+        <span class="type">类别:</span>
+        <select name="category" id="name">
+            <volist name="arrCate" id="vo">
+            <option value={$vo.id}>{$vo.name}</option>
+          </volist>
+        </select>
+        <input type="radio" name="test_type"  checked value="1"><span class="type">单选题</span>
+        <input type="radio" name="test_type" value="2" ><span class="type">多选题</span>
+        <input type="radio" name="test_type" value="3"><span class="type">判断题</span>
+        <input type="radio" name="test_type" value="4"><span class="type">题组题</span>
+     </p>
+   	 <div id='description'>
+      	<textarea id="editor_id" name="description" style="width:480px">
+  			</textarea>
+  	 </div>
+     <div id="titleDetail"></div>
+      <div id="">
+        <input type="button" value="添加题目信息" id="titleSingle">
+      </div>
+      <div  id="">
+        <input type="button" value="添加题组信息" id="titleSets">
+      </div>
+      <p>
+          <input type="submit" class="btn" value="新增试题" />
+          <input type="reset" class="btn" onclick="if(confirm('确认重置内容?')){document.location.reload()}" value="重置试题">
+      </p>
+    </form>
+ 
+<include file="Html/footer.html"/>

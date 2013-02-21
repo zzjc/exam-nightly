@@ -1,0 +1,55 @@
+<include file="Html/header.html" />
+<link href="/exam/Public/artDialog/skins/opera.css" rel="stylesheet" />
+
+<div class="clearfix">
+    <div class="text_box">
+        <h3>试题</h3>
+        <a href="{:U('Test/add')}">新增试题</a> | <a href="{:U('Test/index')}">试题列表</a> | <a href="{:U('Aspects/index')}">知识点列表</a>
+    </div>
+    <div class="tmpl_box">
+        <h3>模板</h3>
+        <a href="{:U('Template/add')}">增加模板</a> | <a href="{:U('Template/index')}">模板列表</a>
+    </div>
+    <div class="text_box">
+        <h3>用户</h3>
+        <a href="javascript:void(0);" id="changePass">修改密码</a>
+    </div>
+    <div class="tmpl_box">
+        <h3>工具</h3>
+        <a href="{:U('Tool/aspects')}">生成知识点缓存</a> | <a href="{:U('Tool/create_html')}">生成静态HTML</a>
+    </div>
+</div>
+<script src="/exam/Public/artDialog/artDialog.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#changePass').click(function(){
+            art.dialog({
+                title: '修改密码',
+                content: "设定新密码：<input type='password' value='' id='password' /><br /><br />" +
+                        "重复新密码：<input type='password' value='' id='repassword' /> <br /><br />" +
+                        "<input type='hidden' id='username' value='{$_SESSION[\'username\']}'>",
+                ok: function () {
+                    var pass = $('#password').val();
+                    var repass = $('#repassword').val();
+                    if (pass != repass) {
+                        alert('两次密码不一致');
+                        return false;
+                    }
+                    if(pass != '') {
+                        var username = $('#username').val();
+                        $.ajax({
+                            url: '__APP__/admin/auth/changepass',
+                            type: 'POST',
+                            data: { name: username, password: pass }
+                        }).done(function( msg ) {
+
+                        });
+                    }
+                    this.content('密码修改成功，3秒后自动关闭').time(3);
+                    return false;
+                }
+            });
+        });
+    });
+</script>
+<include file="Html/footer.html" />

@@ -1,0 +1,24 @@
+<include file="Html/header.html" />
+<p>模板列表</p>
+<table>
+    <tr>
+        <th>模板名称</th>
+        <th>所属分类</th>
+        <th>模板描述</th>
+        <th>本模板总分</th>
+        <th>总题数</th>
+        <th>操作</th>
+    </tr>
+    <foreach name="templates" item="template">
+        <tr>
+            <td>{$template.name}</td>
+            <td>{$template.catname}</td>
+            <td>{$template.description}</td>
+            <td>{$template.score}</td>
+            <td>{$template.num}</td>
+            <td><a href="{:U('Template/delete?id=')}{$template.id}" onclick="if(!confirm('是否确定删除此模板，此操作无法恢复。')){return false;}">删除</a></td>
+        </tr>
+    </foreach>
+
+</table>
+<include file="Html/footer.html" />

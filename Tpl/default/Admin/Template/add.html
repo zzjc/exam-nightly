@@ -1,0 +1,78 @@
+<include file="Html/header.html" />
+<form action="" method="POST" id="template" onsubmit="return tmpl_validate()">
+    <p>
+        <span class="label">类别：</span>
+        <select name="cat_id">
+            <option value="1">营销师大赛</option>
+        </select>
+    </p>
+    <p><span class="label">试卷标题：</span><input type="text" name="name" id="name" value="" /></p>
+    <p><span class="label">试卷说明：</span><input type="text" name="description" id="description" value="" /></p>
+    <div class="rules">
+        <p><span class="label">组题规则：</span> <a id="add_rule" href="javascript:void">添加新规则</a></p>
+        <div id="rule_list"></div>
+        <div id="rule_hide_list"></div>
+        <div class="rule new_rule">
+            <p>
+                题型：
+                <select id="type">
+                    <option value="1">单选题</option>
+                    <option value="2">多选题</option>
+                    <option value="3">判断题</option>
+                    <option value="4">案例分析题</option>
+                </select>
+                难度：
+                <select id="difficult_from">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select> 到
+                <select id="difficult_to">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select> <br />
+                题数：<input type="text" class="number" value="" />
+                每题分数：<input type="text" class="perscore" value="" />
+            </p>
+            <div class="aspects">
+                <textarea id="aspects" rows="1"></textarea>
+                <p><a id="submit_rule" href="javascript:void">确定此规则</a></p>
+            </div>
+        </div>
+    </div>
+    <p>总分： <span id="score">0</span>分（<span id="total_num">0</span>题）</p>
+    <input type="hidden" id="score_hidden" name="sum" />
+    <input type="hidden" id="total_hidden" name="total" />
+    <p><input type="submit" class="btn" value="新增模板" /> <input type="reset" class="btn" onclick="if(confirm('确认要重置？数据将丢失')){document.location.reload()}" value="重置模板" /></p>
+</form>
+<script type="text/javascript">
+    $('#aspects').textext({
+        plugins : 'tags prompt focus autocomplete ajax arrow',
+        tagsItems : "",
+        prompt : '选择知识点...',
+        html: {
+            hidden: '<input type="hidden" id="aspects_name" />'
+        },
+        ajax : {
+            url : '/exam/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
+            dataType : 'json',
+            cacheResults : false
+        }
+    });
+</script>
+<include file="Html/footer.html" />

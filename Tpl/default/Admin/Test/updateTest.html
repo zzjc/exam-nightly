@@ -1,0 +1,162 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link href="/exam/Public/artDialog/skins/opera.css" rel="stylesheet" />
+<script src="/exam/Public/js/jquery.js"></script>
+<script src="/exam/Public/artDialog/artDialog.js"></script>
+<script src="/exam/Public/artDialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/exam/Public/js/textext.js"></script>
+<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/kindeditor.js"></script>
+<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/lang/zh_CN.js"></script>
+	 <script>
+        var editor;
+        var origin=artDialog.open.origin;
+        var test_type=art.dialog.data("type");
+        var id=art.dialog.data("id");
+        $(function(){
+            var keditor;
+            KindEditor.ready(function(K) {
+                keditor=K.create('#editor_id');
+                editor=keditor;
+          });          
+            switch(test_type)
+   　     　{
+  　　         case "1":
+   　　            $("#answer").html("<span>答案:</span>"+
+                                     "<input type='radio' name='answer[]' value='1'>A"+
+                                     "<input type='radio' name='answer[]' value='2'>B"+
+                                     "<input type='radio' name='answer[]' value='3'>C"+
+                                     "<input type='radio' name='answer[]' value='4'>D"
+                                     );        
+                    break;
+               case "2":
+                    $("#answer").html("<span>答案:</span>"+
+                                      "<input type='checkbox' name='answer[]' value='1'>A"+
+                                      "<input type='checkbox'name='answer[]' value='2'>B"+
+                                      "<input type='checkbox' name='answer[]' value='3'>C"+
+                                      "<input type='checkbox' name='answer[]' value='4'>D");         
+                    break;
+                case "3":
+                     $("#answer").html("<span>答案:</span>"+
+                                       "<input type='radio' name='answer[]' value='yes'>对"+
+                                       "<input type='radio'name='answer[]' value='no'>错");       
+                     break;
+                case "4":
+                    $("#answer").html("<span>答案:</span>"+
+                                      "<input type='checkbox' name='answer[]' value='1'>A"+
+                                      "<input type='checkbox' name='answer[]' value='2'>B"+
+                                      "<input type='checkbox' name='answer[]' value='3'>C"+
+                                      "<input type='checkbox' name='answer[]' value='4'>D")       
+　　        }
+  //获取题目的具体信息方便修改
+            $.ajax({
+              url:"/exam/Admin/Test/getTitleInfo",
+              type:"post",
+              data:"id="+id,
+              dataType:"text",
+              success:function(d){
+               var titleInfo=jQuery.parseJSON(d);
+               var aspects=[];
+               //alert(titleInfo["name"]["0"]["name"]);
+               for(var i=0;i<titleInfo["name"].length;i++){
+                 aspects.push(titleInfo["name"][i]["name"]);
+               }
+               switch(test_type){
+                case "1":
+                  $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);
+                  $("#point").val(titleInfo["point"]);
+                  $("#author").val(titleInfo["author"]);
+                  $("#difficult").val(titleInfo["level"]);
+                  editor.html(titleInfo["content"]);
+                  break;
+                case "2":
+                  var answer=titleInfo["answer"].split(",");
+                  for(var i=0;i<answer.length;i++){
+                      $("input[type='checkbox'][value='"+answer[i]+"']").attr("checked",true);
+                   }
+                   $("#point").val(titleInfo["point"]);
+                   $("#author").val(titleInfo["author"]);
+                   $("#difficult").val(titleInfo["level"]);
+                   editor.html(titleInfo["content"]);
+                  break;
+                case "3":
+                  $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);
+                  $("#point").val(titleInfo["point"]);
+                  $("#author").val(titleInfo["author"]);
+                  $("#difficult").val(titleInfo["level"]);
+                  editor.html(titleInfo["content"]);
+                  break;
+                case "4":
+                  break;
+               } 
+               $('#aspects').textext({
+                  plugins:'tags prompt focus autocomplete ajax arrow',
+                  tagsItems:aspects,
+                  prompt:'输入知识点...',
+                  html: {
+                    hidden: '<input type="hidden" id="aspects_name" />'
+                  },
+                  ajax : {
+                    url : '/exam/Data/aspects.json',
+                    dataType : 'json',
+                    cacheResults : true
+                  }
+                });
+              }
+            })             
+        })
+   //判断题目类型和输出题目具体信息
+		function sub(){
+			var aspects=document.getElementById('aspects_name').value;
+      var answerMulti=$("input[name='answer[]'][type='checkbox']:checked");
+      var answerSingle=$("input[name='answer[]'][type='radio']:checked").val();
+      if(answerMulti!=""){
+        var multiAnswer="";
+          for(var i=0;i<answerMulti.length;i++){
+              multiAnswer+=multiAnswer==""?answerMulti[i].value:","+answerMulti[i].value;   
+              }
+      }
+			var answer=answerSingle?answerSingle:multiAnswer;
+			var point=document.getElementById('point').value;
+			var question=editor.html();
+      var level=$("#difficult").val();
+      var author=$("#author").val();
+      $.ajax({
+        url:"/exam/Admin/Test/updateTest",
+        type:"post",
+        data:"aspects="+aspects+"&answer="+answer+"&point="+point+"&question="+question+"&level="+level+"    &author="+author+"&id="+id,
+        dataType:"text",
+        success:function(d){
+           alert("修改成功");
+           art.dialog.close();
+        }
+
+      })
+			
+		}
+	 </script>
+</head>
+<body>
+<p>请输入题干:<textarea id='editor_id' style="width:480px"></textarea></p>
+<p><textarea id="aspects" rows="1" name="aspects" style="width:480px"></textarea></p>
+<div id="answer"></div>
+<p><span>分数:</span><input type="text" id="point"></p>
+<p>
+    难度：<select id="difficult" name="level">
+         	  <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>          
+</p>
+<p><span>作者:</span><input type="text" id="author" name="author"></p>
+<p><input type="button" onclick="if(confirm('确认修改？')){sub()}" id="exit" value="修改"></p>
+</body>
+</html>

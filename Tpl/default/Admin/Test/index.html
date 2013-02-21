@@ -1,0 +1,54 @@
+<include file="Html/header.html" />
+<link rel="stylesheet" href="/exam/Public/css/styleTitle.css" type="text/css" />
+<script src="/exam/Public/js/jquery.js"></script>
+<script type="text/javascript" language="javascript" src="/exam/Public/js/testManage.js"></script>
+<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/kindeditor.js"></script>
+<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/lang/zh_CN.js"></script>
+<link href="/exam/Public/artDialog/skins/opera.css" rel="stylesheet" />
+<script src="/exam/Public/artDialog/artDialog.js"></script>
+<script src="/exam/Public/artDialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript">
+     function openUpdateTest(testId){
+      var type=$("#type").val();
+      art.dialog.data('id',testId);
+      art.dialog.data("type",type);
+      art.dialog.open("__TMPL__Admin/Test/updateTest.html",{fixed: true,id:'memdiv',width:510,height:460,title:'修改题目'}, false);
+    }
+</script>
+
+<p>模板列表</p>
+<table>
+    <tr>
+        <th>
+            考试类型
+        </th>
+        <th>
+            <select>
+                <option>营销师</option>
+                <option>test</option>
+            </select>
+        </th>
+        <th>
+            试题类型
+        </th>
+        <th>
+            <select id="type">
+                <option value="1">单选</option>
+                <option value="2">多选</option>
+                <option value="3">判断</option>
+                <option value="4">题组</option>
+            </select>   
+
+        </th>
+    </tr>
+</table>
+<table id="test">
+    <tr>
+        <th>题目材料</th>
+        <th>试卷题目</th>
+        <th>答案</th>
+        <th>分数</th>
+        <th>操作</th>
+    </tr>
+</table>
+<include file="Html/footer.html" />
