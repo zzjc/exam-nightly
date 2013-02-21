@@ -10,6 +10,16 @@ class TestAction extends Action
         }
     }
     /*
+      *添加知识点
+    */
+    public function addAspects(){
+       $aspects=M("aspects");
+       $data["name"]=Input::getVar($_POST["name"]);
+       $data["cat_id"]=Input::getVar($_POST["cat_id"]);
+       $aspects->add($data);
+
+    }
+    /*
     *分类获取题目信息内容
     */
      public function index()
@@ -26,7 +36,7 @@ class TestAction extends Action
                 $show=$page->show();  
                 $list = $test->where("test_type=1")->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>...</td><td>".$val["content"].
+                    echo "<tr><td>...</td><td>".mb_substr($val["content"],0,40,"utf-8")."...".
                          "</td><td>".$val["answer"]."</td><td>".$val["point"].
                          "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
@@ -44,7 +54,7 @@ class TestAction extends Action
                 $show=$page->show();  
                 $list = $test->where("test_type=2")->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>...</td><td>".$val["content"].
+                    echo "<tr><td>...</td><td>".mb_substr($val["content"],0,40,"utf-8")."...".
                          "</td><td>".$val["answer"]."</td><td>".$val["point"].
                          "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
@@ -63,7 +73,7 @@ class TestAction extends Action
                 $show=$page->show();  
                 $list = $test->where("test_type=3")->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>...</td><td>".$val["content"].
+                    echo "<tr><td>...</td><td>".mb_substr($val["content"],0,40,"utf-8")."...".
                          "</td><td>".$val["answer"]."</td><td>".$val["point"].
                          "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
@@ -80,7 +90,7 @@ class TestAction extends Action
                 $show=$page->show();  
                 $list =$casetest->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>".mb_substr($val["description"],0,40,"utf-8")."</td><td>...</td><td>...</td><td>...</td>
+                    echo "<tr><td>".mb_substr($val["description"],0,40,"utf-8")."..."."</td><td>...</td><td>...</td><td>...</td>
                           <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
                          删除</a></td></tr>";
@@ -154,7 +164,6 @@ class TestAction extends Action
           $data["answer"]=Input::getVar($post["answer"][$i]);
           $data["test_type"]=Input::getVar($post["test_type"]);
           $data["point"]=Input::getVar($post["point"][$i]);
-          $data["author"]=Input::getVar($post["author"][$i]);
           $data["date"]=time();
           if($model->add($data)){
             return mysql_insert_id();
@@ -207,7 +216,6 @@ class TestAction extends Action
        $data["point"]=Input::getVar($_POST["point"]);
        $data["content"]=Input::getVar($_POST["question"]);
        $data["level"]=Input::getVar($_POST["level"]);
-       $data["author"]=Input::getVar($_POST["author"]);
        $testId=Input::getVar($_POST["id"]);
        $test->where('id='.$testId)->save($data);
        $aspectArr=explode(",",str_replace("\"","",str_replace("]","",str_replace("[","",$aspects))));

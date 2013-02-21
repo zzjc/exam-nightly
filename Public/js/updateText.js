@@ -54,7 +54,6 @@
          case "1":
            $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);
            $("#point").val(titleInfo["point"]);
-           $("#author").val(titleInfo["author"]);
            $("#difficult").val(titleInfo["level"]);
            editor.html(titleInfo["content"]);
            break;
@@ -64,14 +63,12 @@
                $("input[type='checkbox'][value='"+answer[i]+"']").attr("checked",true);
             }
             $("#point").val(titleInfo["point"]);
-            $("#author").val(titleInfo["author"]);
             $("#difficult").val(titleInfo["level"]);
             editor.html(titleInfo["content"]);
            break;
          case "3":
            $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);
            $("#point").val(titleInfo["point"]);
-           $("#author").val(titleInfo["author"]);
            $("#difficult").val(titleInfo["level"]);
            editor.html(titleInfo["content"]);
            break;
@@ -81,7 +78,6 @@
                $("input[type='checkbox'][value='"+answer[i]+"']").attr("checked",true);
             }
            $("#point").val(titleInfo["point"]);
-           $("#author").val(titleInfo["author"]);
            $("#difficult").val(titleInfo["level"]);
            editor.html(titleInfo["content"]);
            break;
@@ -117,11 +113,10 @@
  	var point=document.getElementById('point').value;
  	var question=editor.html();
      var level=$("#difficult").val();
-     var author=$("#author").val();
      $.ajax({
        url:"/exam/Admin/Test/updateTest",
        type:"post",
-       data:"aspects="+aspects+"&answer="+answer+"&point="+point+"&question="+question+"&level="+level+"    &author="+author+"&id="+id,
+       data:"aspects="+aspects+"&answer="+answer+"&point="+point+"&question="+question+"&level="+level+"&id="+id,
        dataType:"text",
        success:function(d){
           if(test_type!=4){

@@ -48,6 +48,14 @@
                                       "<input type='checkbox' name='answer[]' value='4'>D")       
 　　        }             
         })
+    /*
+      *添加知识点
+    */
+    function addAspects(){
+      var cat_id=origin.$("#name").val();
+      art.dialog.data("cat_id",cat_id);
+      art.dialog.open("/exam/Tpl/default/Admin/Test/addAspects.html",{title:"添加知识点"});
+    }
     //判断题目类型和输出题目具体信息
 		function sub(){
 			var aspects=document.getElementById('aspects_name').value;
@@ -70,7 +78,6 @@
                             "</p><span class='detailSplit'>分数:"+point+
                             "</span><span class='detailSplit'>答案:"+answer+
                             "</span><span class='detailSplit'>难度:"+level+
-                            "</span><span>作者</span>:"+author+
                             "</div>");
       var title_hide=$("<div class='title_hide'>"+
                           "<input type='hidden' name='content[]' value='"+question+"'/>"+
@@ -78,12 +85,10 @@
                           "<input type='hidden' name='answer[]' value='"+answer+"'/>"+
                           "<input type='hidden' name='point[]' value='"+point+"'/>"+
                           "<input type='hidden' name='level[]' value='"+level+"'/>"+
-                          "<input type='hidden' name='author[]' value='"+author+"'/>"+
                         "</div>");
       detailOb.append(title_hide);
 			art.dialog.close();
-		}
-            
+		}    
 
 
 
@@ -91,7 +96,10 @@
 </head>
 <body>
 <p>请输入题干:<textarea id='editor_id' style="width:480px"></textarea></p>
-<p><textarea id="aspects" rows="1" name="aspects" style="width:480px"></textarea></p>
+<div>
+  <div><textarea id="aspects" rows="1" name="aspects" style="width:480px"></textarea></div>
+  <div><input type="button" onclick="addAspects()" value="添加知识点"></div>
+</div>
 <div id="answer"></div>
 <p><span>分数:</span><input type="text" id="point"></p>
 <p>
@@ -108,7 +116,6 @@
             <option value="10">10</option>
           </select>          
 </p>
-<p><span>作者:</span><input type="text" id="author" name="author"></p>
 <p><input type="button" onclick="sub()" id="exit" value="确定规则"></p>
 </body>
 </html>
