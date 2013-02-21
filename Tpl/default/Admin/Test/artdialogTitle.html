@@ -70,7 +70,6 @@
                             "</p><span class='detailSplit'>分数:"+point+
                             "</span><span class='detailSplit'>答案:"+answer+
                             "</span><span class='detailSplit'>难度:"+level+
-                            "</span><span>作者</span>:"+author+
                             "</div>");
       var title_hide=$("<div class='title_hide'>"+
                           "<input type='hidden' name='content[]' value='"+question+"'/>"+
@@ -78,7 +77,6 @@
                           "<input type='hidden' name='answer[]' value='"+answer+"'/>"+
                           "<input type='hidden' name='point[]' value='"+point+"'/>"+
                           "<input type='hidden' name='level[]' value='"+level+"'/>"+
-                          "<input type='hidden' name='author[]' value='"+author+"'/>"+
                         "</div>");
       detailOb.append(title_hide);
 			art.dialog.close();
@@ -108,7 +106,6 @@
             <option value="10">10</option>
           </select>          
 </p>
-<p><span>作者:</span><input type="text" id="author" name="author"></p>
 <p><input type="button" onclick="sub()" id="exit" value="确定规则"></p>
 </body>
 </html>

@@ -154,7 +154,6 @@ class TestAction extends Action
           $data["answer"]=Input::getVar($post["answer"][$i]);
           $data["test_type"]=Input::getVar($post["test_type"]);
           $data["point"]=Input::getVar($post["point"][$i]);
-          $data["author"]=Input::getVar($post["author"][$i]);
           $data["date"]=time();
           if($model->add($data)){
             return mysql_insert_id();
@@ -207,7 +206,6 @@ class TestAction extends Action
        $data["point"]=Input::getVar($_POST["point"]);
        $data["content"]=Input::getVar($_POST["question"]);
        $data["level"]=Input::getVar($_POST["level"]);
-       $data["author"]=Input::getVar($_POST["author"]);
        $testId=Input::getVar($_POST["id"]);
        $test->where('id='.$testId)->save($data);
        $aspectArr=explode(",",str_replace("\"","",str_replace("]","",str_replace("[","",$aspects))));
