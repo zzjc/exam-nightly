@@ -6,7 +6,7 @@ return array(
     'DB_HOST' => 'localhost',
     'DB_NAME' => 'exam',
     'DB_USER' => 'root',
-    'DB_PWD' => '123456',
+    'DB_PWD' => 'root',
     'DB_PORT' => '3306',
     'DB_PREFIX' => '',
     // 分组配置
@@ -19,5 +19,4 @@ return array(
     'TOKEN_ON' => true,
     'TOKEN_NAME' => '__hash__',
     'TOKEN_TYPE' => 'md5',
-    'URL' => 'http://192.168.100.217/exam/',
 );

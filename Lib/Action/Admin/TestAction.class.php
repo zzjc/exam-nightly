@@ -1,6 +1,5 @@
 <?php
 import('ORG.Util.Input');
-//import("ORG.Util.Page");
 import("ORG.Page.Page");
 class TestAction extends Action
 {
@@ -10,7 +9,9 @@ class TestAction extends Action
             $this->redirect('Auth/login');
         }
     }
-    //分类获取题目信息内容
+    /*
+    *分类获取题目信息内容
+    */
      public function index()
     {
         $test=M("test");
@@ -27,7 +28,9 @@ class TestAction extends Action
                 foreach($list as $key=>$val){
                     echo "<tr><td>...</td><td>".$val["content"].
                          "</td><td>".$val["answer"]."</td><td>".$val["point"].
-                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>删除</a></td></tr>";
+                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                         删除</a></td></tr>";
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
 
@@ -43,7 +46,9 @@ class TestAction extends Action
                 foreach($list as $key=>$val){
                     echo "<tr><td>...</td><td>".$val["content"].
                          "</td><td>".$val["answer"]."</td><td>".$val["point"].
-                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>删除</a></td></tr>";
+                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                         删除</a></td></tr>";
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
 
@@ -60,10 +65,11 @@ class TestAction extends Action
                 foreach($list as $key=>$val){
                     echo "<tr><td>...</td><td>".$val["content"].
                          "</td><td>".$val["answer"]."</td><td>".$val["point"].
-                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>删除</a></td></tr>";
+                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                         删除</a></td></tr>";
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
-
                     }
                 }
                 break;
@@ -74,8 +80,10 @@ class TestAction extends Action
                 $show=$page->show();  
                 $list =$casetest->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>".mb_substr($val["description"],0,40,"utf-8")."</td><td>...</td><td>...</td><td>...</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>删除</a></td></tr>";
+                    echo "<tr><td>".mb_substr($val["description"],0,40,"utf-8")."</td><td>...</td><td>...</td><td>...</td>
+                          <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
+                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                         删除</a></td></tr>";
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
 
@@ -118,7 +126,9 @@ class TestAction extends Action
              $this->display();
          } 
     }
-   //添加题组案例题
+   /*
+   *添加题组案例题
+   */
     public function addCasetest($model,$post){
        if($model->autoCheckToken($post)){
          $data['cat_id']=Input::getVar($post["category"]);
@@ -132,7 +142,9 @@ class TestAction extends Action
           die("表单令牌错误");
         }
     }
-    //添加试卷题目
+    /*
+    *添加试卷题目
+    */
     public function addTest($model,$post,$pid,$i){
       if($model->autoCheckToken($post)){
           $data["pid"]=$pid;
@@ -152,7 +164,9 @@ class TestAction extends Action
       }
 
     }
-    //添加题目与知识点关联
+    /*
+    *添加题目与知识点关联
+    */
     public function addTestAspect($model,$post,$testId,$aspectsId){
       if($model->autoCheckToken($post)){
           $data['aspects_id']=$aspectsId;
@@ -164,12 +178,14 @@ class TestAction extends Action
 
 
     }
-    //获取一个id的题目信息
-    public function getTitleInfo(){
+    /*
+    *获取一个id的题目信息
+    */
+    public function getTitleInfo($setsTitleId){
       $test=M("test");
       $test_aspects=M("test_aspects");
       $aspects=M("aspects");
-      $id=Input::getVar($_POST["id"]);
+        $id=Input::getVar($_POST["id"]);
       $aspectsId=$test_aspects->field("aspects_id")->where("test_id=".$id)->select();
       $aspectsName=array();
       for($i=0;$i<count($aspectsId);$i++){
@@ -177,9 +193,11 @@ class TestAction extends Action
       }
       $titleInfo=$test->where("id=".$id)->find();
       $titleInfo["name"]=$aspectsName;
-      echo json_encode($titleInfo);
+        echo json_encode($titleInfo);
     }
-    //修改题目
+    /*
+    *修改题目
+    */
     public function updateTest(){
        $test=M("test");
        $test_aspects=M("test_aspects");
@@ -201,7 +219,40 @@ class TestAction extends Action
           $test_aspects->add($datt);   
        }
     }
-    //删除试题
+    /*
+    *根据id获取材料阅读题的信息
+    */
+    public function getTitleSetsInfo(){
+      $casetest=M("casetest");
+      $test=M("test");
+      $aspects=M("aspects");
+      $test_aspects=M("test_aspects");
+      $setsId=Input::getVar($_POST["id"]);
+      $description=$casetest->where("id=".$setsId."")->getField("description");
+      $titleInfo=$test->where("pid=".$setsId."")->select();
+      for($j=0;$j<count($titleInfo);$j++){
+        $aspectsId=$test_aspects->field("aspects_id")->where("test_id=". $titleInfo[$j]["id"])->select();
+        $aspectsName=array();
+        for($i=0;$i<count($aspectsId);$i++){
+          $aspectsName[]=$aspects->field("name")->where("id=".$aspectsId[$i]["aspects_id"])->find();
+        }
+        $titleInfo[$j]["name"]=$aspectsName;
+      }
+      array_unshift($titleInfo,$description);
+      echo json_encode($titleInfo); 
+    }
+    /*
+    *修改材料阅读题材料
+    */
+    public function updateDescription(){
+      $setsId=Input::getVar($_POST["id"]);
+      $data["description"]=Input::getVar($_POST["description"]);
+      $casetest=M("casetest");
+      $casetest->where("id=".$setsId)->save($data);
+    }
+    /*
+    *删除试题
+    */
     public function del()
     {   
       $type=Input::getVar($_POST["type"]);

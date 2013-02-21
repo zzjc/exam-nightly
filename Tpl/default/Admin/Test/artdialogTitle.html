@@ -4,7 +4,7 @@
 <head>
 <link href="/exam/Public/artDialog/skins/opera.css" rel="stylesheet" />
 <script src="/exam/Public/js/jquery.js"></script>
-<script src="/exam/Public/artDialog/artDialog.min.js"></script>
+<script src="/exam/Public/artDialog/artDialog.js"></script>
 <script src="/exam/Public/artDialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/exam/Public/js/textext.js"></script>
 <script charset="utf-8" type="text/javascript" src="/exam/Public/editor/kindeditor.js"></script>
@@ -48,7 +48,7 @@
                                       "<input type='checkbox' name='answer[]' value='4'>D")       
 　　        }             
         })
-        //判断题目类型和输出题目具体信息
+    //判断题目类型和输出题目具体信息
 		function sub(){
 			var aspects=document.getElementById('aspects_name').value;
             var answerMulti=$("input[name='answer[]'][type='checkbox']:checked");
@@ -66,12 +66,12 @@
       var author=$("#author").val();
 			var detailOb=origin.$("#titleDetail");
 			detailOb.append("<div class='rule_done'><p>问题:"+question+
-                            "</p><p>答案:"+answer+
                             "</p><p>知识点:"+aspects+
-                            "</p><p>分数:"+point+
-                            "</p><p>难度:"+level+
-                            "</p><p>作者:"+author+
-                            "</p></div>");
+                            "</p><span class='detailSplit'>分数:"+point+
+                            "</span><span class='detailSplit'>答案:"+answer+
+                            "</span><span class='detailSplit'>难度:"+level+
+                            "</span><span>作者</span>:"+author+
+                            "</div>");
       var title_hide=$("<div class='title_hide'>"+
                           "<input type='hidden' name='content[]' value='"+question+"'/>"+
                           "<input type='hidden' name='name[]' value='"+aspects+"'/>"+
@@ -116,14 +116,14 @@
     $('#aspects').textext({
         plugins : 'tags prompt focus autocomplete ajax arrow',
         tagsItems : "",
-        prompt : '输入知识点...',
+        prompt : '选择知识点...',
         html: {
             hidden: '<input type="hidden" id="aspects_name" />'
         },
         ajax : {
-            url : '/exam/Data/aspects.json',
+            url : '/exam/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
             dataType : 'json',
-            cacheResults : true
+            cacheResults : false
         }
     });
 </script>

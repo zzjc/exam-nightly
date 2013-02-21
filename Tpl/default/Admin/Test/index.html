@@ -12,10 +12,15 @@
       var type=$("#type").val();
       art.dialog.data('id',testId);
       art.dialog.data("type",type);
-      art.dialog.open("__TMPL__Admin/Test/updateTest.html",{fixed: true,id:'memdiv',width:510,height:460,title:'修改题目'}, false);
+      art.dialog.open("__TMPL__Admin/Test/updateTest.html",{fixed: true,id:"singleTest",width:510,height:460,title:'修改题目'}, false);
+    }
+    function openUpdateSets(testId){
+      var type=$("#type").val();
+      art.dialog.data('id',testId);
+      art.dialog.data("type",type);
+      art.dialog.open("/exam/Tpl/default/Admin/Test/updateSets.html",{fixed: true,id:"setsTest",width:510,height:460,title:'修改题目'}, false);
     }
 </script>
-
 <p>模板列表</p>
 <table>
     <tr>
@@ -36,7 +41,7 @@
                 <option value="1">单选</option>
                 <option value="2">多选</option>
                 <option value="3">判断</option>
-                <option value="4">题组</option>
+                <option value="4">案例分析</option>
             </select>   
 
         </th>

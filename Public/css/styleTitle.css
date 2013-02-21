@@ -177,12 +177,16 @@ code{
 
 #title {
     background: #F5F5F5;
-    width: 480px;
+    width:480px;
     padding: 20px;
 }
 #title .type{
     display: inline-block;
     width: 50px;
+}
+#title #type{
+    display: inline-block;
+    width: 70px;
 }
 #title input {
     margin-right: 0;
@@ -211,12 +215,23 @@ code{
 
 }
 #title .rule_done {
-    background: #DDD;
+    background:#DDD;
     border-bottom: 1px solid #CCC;
     border-right: 1px solid #CCC;
     margin-top: 5px;
     margin-bottom:5px;
 }
+#title .rule_done .detailSplit{
+    margin-right:20px;
+}
 #test #page{
     text-align:center;
+}
+
+#singleTitle .rule_done {
+    background:#DDD;
+    border-bottom: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+    margin-top: 5px;
+    margin-bottom:5px;
 }
