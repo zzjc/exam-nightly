@@ -1,12 +1,12 @@
 <include file="Html/header.html" />
-<link rel="stylesheet" href="/exam/Public/css/styleTitle.css" type="text/css" />
-<script src="/exam/Public/js/jquery.js"></script>
-<script type="text/javascript" language="javascript" src="/exam/Public/js/testManage.js"></script>
-<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/kindeditor.js"></script>
-<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/lang/zh_CN.js"></script>
-<link href="/exam/Public/artDialog/skins/opera.css" rel="stylesheet" />
-<script src="/exam/Public/artDialog/artDialog.js"></script>
-<script src="/exam/Public/artDialog/plugins/iframeTools.source.js"></script>
+<link rel="stylesheet" href="/Public/css/styleTitle.css" type="text/css" />
+<script src="/Public/js/jquery.js"></script>
+<script type="text/javascript" language="javascript" src="/Public/js/testManage.js"></script>
+<script charset="utf-8" type="text/javascript" src="/Public/editor/kindeditor.js"></script>
+<script charset="utf-8" type="text/javascript" src="/Public/editor/lang/zh_CN.js"></script>
+<link href="/Public/artDialog/skins/opera.css" rel="stylesheet" />
+<script src="/Public/artDialog/artDialog.js"></script>
+<script src="/Public/artDialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript">
      function openUpdateTest(testId){
       var type=$("#type").val();
@@ -18,7 +18,7 @@
       var type=$("#type").val();
       art.dialog.data('id',testId);
       art.dialog.data("type",type);
-      art.dialog.open("/exam/Tpl/default/Admin/Test/updateSets.html",{fixed: true,id:"setsTest",width:510,height:460,title:'修改题目'}, false);
+      art.dialog.open("/Tpl/default/Admin/Test/updateSets.html",{fixed: true,id:"setsTest",width:510,height:460,title:'修改题目'}, false);
     }
 </script>
 <p>试题列表</p>

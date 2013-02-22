@@ -13,34 +13,34 @@
   　{
       case "1":
           $("#answer").html("<span>答案:</span>"+
-                              "<input type='radio' name='answer[]' value='1'>A"+
-                              "<input type='radio' name='answer[]' value='2'>B"+
-                              "<input type='radio' name='answer[]' value='3'>C"+
-                              "<input type='radio' name='answer[]' value='4'>D"
+                              "<input type='radio' name='answer[]' value='A'>A"+
+                              "<input type='radio' name='answer[]' value='B'>B"+
+                              "<input type='radio' name='answer[]' value='C'>C"+
+                              "<input type='radio' name='answer[]' value='D'>D"
                               );        
              break;
         case "2":
              $("#answer").html("<span>答案:</span>"+
-                               "<input type='checkbox' name='answer[]' value='1'>A"+
-                               "<input type='checkbox'name='answer[]' value='2'>B"+
-                               "<input type='checkbox' name='answer[]' value='3'>C"+
-                               "<input type='checkbox' name='answer[]' value='4'>D");         
+                               "<input type='checkbox' name='answer[]' value='A'>A"+
+                               "<input type='checkbox'name='answer[]' value='B'>B"+
+                               "<input type='checkbox' name='answer[]' value='C'>C"+
+                               "<input type='checkbox' name='answer[]' value='D'>D");         
              break;
          case "3":
               $("#answer").html("<span>答案:</span>"+
-                                "<input type='radio' name='answer[]' value='yes'>对"+
-                                "<input type='radio'name='answer[]' value='no'>错");       
+                                "<input type='radio' name='answer[]' value='A'>对"+
+                                "<input type='radio'name='answer[]' value='B'>错");       
               break;
          case "4":
              $("#answer").html("<span>答案:</span>"+
-                               "<input type='checkbox' name='answer[]' value='1'>A"+
-                               "<input type='checkbox' name='answer[]' value='2'>B"+
-                               "<input type='checkbox' name='answer[]' value='3'>C"+
-                               "<input type='checkbox' name='answer[]' value='4'>D")   
+                               "<input type='checkbox' name='answer[]' value='A'>A"+
+                               "<input type='checkbox' name='answer[]' value='B'>B"+
+                               "<input type='checkbox' name='answer[]' value='C'>C"+
+                               "<input type='checkbox' name='answer[]' value='D'>D")   
    }
      //获取题目的具体信息方便修改
      $.ajax({
-       url:"/exam/Admin/Test/getTitleInfo",
+       url:"/Admin/Test/getTitleInfo",
        type:"post",
        data:"id="+id,
        dataType:"text",
@@ -58,7 +58,7 @@
            editor.html(titleInfo["content"]);
            break;
          case "2":
-           var answer=titleInfo["answer"].split(",");
+           var answer=titleInfo["answer"].split("");
            for(var i=0;i<answer.length;i++){
                $("input[type='checkbox'][value='"+answer[i]+"']").attr("checked",true);
             }
@@ -90,7 +90,7 @@
              hidden: '<input type="hidden" id="aspects_name" />'
            },
            ajax : {
-             url :'/exam/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
+             url :'/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
              dataType : 'json',
              cacheResults :false
            }
@@ -106,7 +106,7 @@
      if(answerMulti!=""){
        var multiAnswer="";
          for(var i=0;i<answerMulti.length;i++){
-             multiAnswer+=multiAnswer==""?answerMulti[i].value:","+answerMulti[i].value;   
+             multiAnswer+=answerMulti[i].value;   
              }
      }
  	var answer=answerSingle?answerSingle:multiAnswer;
@@ -114,7 +114,7 @@
  	var question=editor.html();
      var level=$("#difficult").val();
      $.ajax({
-       url:"/exam/Admin/Test/updateTest",
+       url:"/Admin/Test/updateTest",
        type:"post",
        data:"aspects="+aspects+"&answer="+answer+"&point="+point+"&question="+question+"&level="+level+"&id="+id,
        dataType:"text",
@@ -130,9 +130,10 @@
  //获得试题信息
  function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;
+    alert(p);
     origin.$("#test tr:gt(0)").empty();
     $.ajax({
-        url:"/exam/Admin/Test/index",
+        url:"/Admin/Test/index",
         type:"get",
         data:"type="+test_type+"&p="+p,
         dataType:"text",
@@ -146,7 +147,7 @@ function setsTitleInfo(){
   var singleTitleOb=origin.$("#singleTitle");
   singleTitleOb.empty();
   $.ajax({
-       url:"/exam/Admin/Test/getTitleSetsInfo",
+       url:"/Admin/Test/getTitleSetsInfo",
        type:"post",
        data:"id="+setsId,
        dataType:"text",
