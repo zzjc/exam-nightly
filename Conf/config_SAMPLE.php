@@ -21,5 +21,5 @@ return array(
     'TOKEN_TYPE' => 'md5',
     
     // 站点信息
-    'URL' => 'http://192.168.100.217/exam/'
+    'URL' => 'http://192.168.100.217/exam/', // 后面需要斜杠
 );

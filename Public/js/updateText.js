@@ -40,7 +40,7 @@
    }
      //获取题目的具体信息方便修改
      $.ajax({
-       url:"/exam/Admin/Test/getTitleInfo",
+       url:"/Admin/Test/getTitleInfo",
        type:"post",
        data:"id="+id,
        dataType:"text",
@@ -94,7 +94,7 @@
              hidden: '<input type="hidden" id="aspects_name" />'
            },
            ajax : {
-             url :'/exam/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
+             url :'/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
              dataType : 'json',
              cacheResults :false
            }
@@ -119,7 +119,7 @@
      var level=$("#difficult").val();
      var author=$("#author").val();
      $.ajax({
-       url:"/exam/Admin/Test/updateTest",
+       url:"/Admin/Test/updateTest",
        type:"post",
        data:"aspects="+aspects+"&answer="+answer+"&point="+point+"&question="+question+"&level="+level+"    &author="+author+"&id="+id,
        dataType:"text",
@@ -137,7 +137,7 @@
     var p=origin.$("#page").val()?origin.$("#page").val():1;
     origin.$("#test tr:gt(0)").empty();
     $.ajax({
-        url:"/exam/Admin/Test/index",
+        url:"/Admin/Test/index",
         type:"get",
         data:"type="+test_type+"&p="+p,
         dataType:"text",
@@ -151,7 +151,7 @@ function setsTitleInfo(){
   var singleTitleOb=origin.$("#singleTitle");
   singleTitleOb.empty();
   $.ajax({
-       url:"/exam/Admin/Test/getTitleSetsInfo",
+       url:"/Admin/Test/getTitleSetsInfo",
        type:"post",
        data:"id="+setsId,
        dataType:"text",

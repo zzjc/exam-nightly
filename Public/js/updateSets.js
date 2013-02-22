@@ -8,7 +8,7 @@ $(function(){
         editor=keditor;
     }); 
     $.ajax({
-      url:"/exam/Admin/Test/getTitleSetsInfo",
+      url:"/Admin/Test/getTitleSetsInfo",
       type:"post",
       data:"id="+setsId,
       dataType:"text",
@@ -43,7 +43,7 @@ $(function(){
 function updateDescription(){
   var description=editor.html();
   $.ajax({
-      url:"/exam/Admin/Test/updateDescription",
+      url:"/Admin/Test/updateDescription",
       type:"post",
       data:"id="+setsId+"&description="+description,
       dataType:"text",
