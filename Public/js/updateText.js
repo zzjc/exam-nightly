@@ -9,34 +9,33 @@
          keditor=K.create('#editor_id');
          editor=keditor;
    });   
-     switch(test_type)
-  　{
+     switch(test_type){
       case "1":
           $("#answer").html("<span>答案:</span>"+
-                              "<input type='radio' name='answer[]' value='1'>A"+
-                              "<input type='radio' name='answer[]' value='2'>B"+
-                              "<input type='radio' name='answer[]' value='3'>C"+
-                              "<input type='radio' name='answer[]' value='4'>D"
+                              "<input type='radio' name='answer[]' value='A'>A"+
+                              "<input type='radio' name='answer[]' value='B'>B"+
+                              "<input type='radio' name='answer[]' value='C'>C"+
+                              "<input type='radio' name='answer[]' value='D'>D"
                               );        
              break;
         case "2":
              $("#answer").html("<span>答案:</span>"+
-                               "<input type='checkbox' name='answer[]' value='1'>A"+
-                               "<input type='checkbox'name='answer[]' value='2'>B"+
-                               "<input type='checkbox' name='answer[]' value='3'>C"+
-                               "<input type='checkbox' name='answer[]' value='4'>D");         
+                               "<input type='checkbox' name='answer[]' value='A'>A"+
+                               "<input type='checkbox'name='answer[]' value='B'>B"+
+                               "<input type='checkbox' name='answer[]' value='C'>C"+
+                               "<input type='checkbox' name='answer[]' value='D'>D");         
              break;
          case "3":
               $("#answer").html("<span>答案:</span>"+
-                                "<input type='radio' name='answer[]' value='yes'>对"+
-                                "<input type='radio'name='answer[]' value='no'>错");       
+                                "<input type='radio' name='answer[]' value='A'>对"+
+                                "<input type='radio'name='answer[]' value='B'>错");       
               break;
          case "4":
              $("#answer").html("<span>答案:</span>"+
-                               "<input type='checkbox' name='answer[]' value='1'>A"+
-                               "<input type='checkbox' name='answer[]' value='2'>B"+
-                               "<input type='checkbox' name='answer[]' value='3'>C"+
-                               "<input type='checkbox' name='answer[]' value='4'>D")   
+                               "<input type='checkbox' name='answer[]' value='A'>A"+
+                               "<input type='checkbox' name='answer[]' value='B'>B"+
+                               "<input type='checkbox' name='answer[]' value='C'>C"+
+                               "<input type='checkbox' name='answer[]' value='D'>D")   
    }
      //获取题目的具体信息方便修改
      $.ajax({
@@ -54,24 +53,21 @@
          case "1":
            $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);
            $("#point").val(titleInfo["point"]);
-           $("#author").val(titleInfo["author"]);
            $("#difficult").val(titleInfo["level"]);
            editor.html(titleInfo["content"]);
            break;
          case "2":
-           var answer=titleInfo["answer"].split(",");
+           var answer=titleInfo["answer"].split("");
            for(var i=0;i<answer.length;i++){
                $("input[type='checkbox'][value='"+answer[i]+"']").attr("checked",true);
             }
             $("#point").val(titleInfo["point"]);
-            $("#author").val(titleInfo["author"]);
             $("#difficult").val(titleInfo["level"]);
             editor.html(titleInfo["content"]);
            break;
          case "3":
            $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);
            $("#point").val(titleInfo["point"]);
-           $("#author").val(titleInfo["author"]);
            $("#difficult").val(titleInfo["level"]);
            editor.html(titleInfo["content"]);
            break;
@@ -81,7 +77,6 @@
                $("input[type='checkbox'][value='"+answer[i]+"']").attr("checked",true);
             }
            $("#point").val(titleInfo["point"]);
-           $("#author").val(titleInfo["author"]);
            $("#difficult").val(titleInfo["level"]);
            editor.html(titleInfo["content"]);
            break;
@@ -110,18 +105,17 @@
      if(answerMulti!=""){
        var multiAnswer="";
          for(var i=0;i<answerMulti.length;i++){
-             multiAnswer+=multiAnswer==""?answerMulti[i].value:","+answerMulti[i].value;   
+             multiAnswer+=answerMulti[i].value;   
              }
      }
  	var answer=answerSingle?answerSingle:multiAnswer;
  	var point=document.getElementById('point').value;
  	var question=editor.html();
      var level=$("#difficult").val();
-     var author=$("#author").val();
      $.ajax({
        url:"/Admin/Test/updateTest",
        type:"post",
-       data:"aspects="+aspects+"&answer="+answer+"&point="+point+"&question="+question+"&level="+level+"    &author="+author+"&id="+id,
+       data:"aspects="+aspects+"&answer="+answer+"&point="+point+"&question="+question+"&level="+level+"&id="+id,
        dataType:"text",
        success:function(d){
           if(test_type!=4){
@@ -135,6 +129,7 @@
  //获得试题信息
  function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;
+    alert(p);
     origin.$("#test tr:gt(0)").empty();
     $.ajax({
         url:"/Admin/Test/index",
