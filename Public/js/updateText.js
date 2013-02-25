@@ -161,7 +161,6 @@
  //获得试题信息
  function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;
-    alert(p);
     origin.$("#test tr:gt(0)").empty();
     $.ajax({
         url:"/Admin/Test/index",
