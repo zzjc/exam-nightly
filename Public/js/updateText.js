@@ -15,8 +15,7 @@
          keditor=K.create('#editor_id');
          editor=keditor;
    });   
-     switch(test_type)
-  　{
+     switch(test_type){
       case "1":
           $("#answer").html("<span>答案:</span>"+
                               "<input type='radio' name='answer[]' value='A'>A"+
@@ -162,6 +161,7 @@
  //获得试题信息
  function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;
+    alert(p);
     origin.$("#test tr:gt(0)").empty();
     $.ajax({
         url:"/Admin/Test/index",

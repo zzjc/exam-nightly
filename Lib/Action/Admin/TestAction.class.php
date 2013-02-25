@@ -168,6 +168,7 @@ class TestAction extends Action
             $data["test_type"]=Input::getVar($post["setsType"][$i]);
           }
           $data["point"]=Input::getVar($post["point"][$i]);
+          $data["author"]=$_SESSION['username'];
           $data["date"]=time();
           if($model->add($data)){
             return mysql_insert_id();
