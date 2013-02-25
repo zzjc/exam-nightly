@@ -23,7 +23,7 @@ class TestAction extends Action
     *分类获取题目信息内容
     */
      public function index()
-    {
+    { 
         $test=M("test");
         $casetest=M("casetest");
         if($this->isAjax()){
@@ -122,13 +122,13 @@ class TestAction extends Action
           }
           for($i=0;$i<count($_POST["content"]);$i++){
             $aspectArr= json_decode(str_replace("\\","",$_POST["name"][$i]),true);
-            $testId=$this->addTest($testOb,$_POST,$pid,$i);
+            $testId=$this->addTest($testOb,$_POST,$pid,$i,$test_type);
             for($j=0;$j<count($aspectArr);$j++){
               $aspectsId=$aspectOb->field("id")->where("name='{$aspectArr[$j]}'")->find();
               $this->addTestAspect($test_aspectsOb,$_POST,$testId,$aspectsId["id"]);
             }     
           } 
-           $this->redirect('Test/index/test_type/'.$test_type);    
+            $this->redirect('Test/index/test_type/'.$test_type);    
         }else{
              $cate=M("category");
              $arrCate=$cate->select();
@@ -155,14 +155,18 @@ class TestAction extends Action
     /*
     *添加试卷题目
     */
-    public function addTest($model,$post,$pid,$i){
+    public function addTest($model,$post,$pid,$i,$test_type){
       if($model->autoCheckToken($post)){
           $data["pid"]=$pid;
           $data['cat_id']=Input::getVar($post["category"]);
           $data["content"]=Input::getVar($post["content"][$i]);
           $data["level"]=Input::getVar($post["level"][$i]);
           $data["answer"]=Input::getVar($post["answer"][$i]);
-          $data["test_type"]=Input::getVar($post["test_type"]);
+          if($test_type!=4){
+            $data["test_type"]=$test_type;
+          }else{
+            $data["test_type"]=Input::getVar($post["setsType"][$i]);
+          }
           $data["point"]=Input::getVar($post["point"][$i]);
           $data["date"]=time();
           if($model->add($data)){

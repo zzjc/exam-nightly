@@ -31,6 +31,6 @@
     $(function(){
       type();
       $("[name='test_type']").bind("change",type);
-      $("#titleSets").bind("click",openTitleSetsDel);
+      $("#titleSets").bind("click",selectSetsType);
       $("#titleSingle").bind("click",openTitleSingleDel);
     })

@@ -1,4 +1,4 @@
-<?php
+ <?php
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
@@ -123,7 +123,7 @@ class Page extends Think {
                 }
             }else{
                 if($this->totalPages != 1){
-                    $linkPage .= "&nbsp;<span class='current'>".$page."</span>";
+                    $linkPage .= "&nbsp;<span class='current'>".$page."</span><input type='hidden' id='page' value='".$page."'>";
                 }
             }
         }

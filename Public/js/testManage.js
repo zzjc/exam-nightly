@@ -2,7 +2,7 @@
 function del(id){
     var type=$("#type").val();
     $.ajax({
-        url:"/exam/Admin/Test/del",
+        url:"/Admin/Test/del",
         async:false,
         type:"post",
         data:"type="+type+"&id="+id,
@@ -26,7 +26,7 @@ function testInfo(page){
     }
     $("#test tr:gt(0)").empty();
     $.ajax({
-        url:"/exam/Admin/Test/index",
+        url:"/Admin/Test/index",
         type:"get",
         data:"type="+type+"&p="+p,
         dataType:"text",
