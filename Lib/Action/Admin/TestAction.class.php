@@ -165,9 +165,14 @@ class TestAction extends Action
           if($test_type!=4){
             $data["test_type"]=$test_type;
           }else{
+<<<<<<< HEAD
             $data["test_type"]=Input::getVar($post["setsType"][$i]);
+=======
+             $data["test_type"]=strlen($data["answer"])>1?"2":"1";
+>>>>>>> 56a5fbda9ac795ae92a10e4046ea44e855109a67
           }
           $data["point"]=Input::getVar($post["point"][$i]);
+          $data["author"]=$_SESSION['username'];
           $data["date"]=time();
           if($model->add($data)){
             return mysql_insert_id();

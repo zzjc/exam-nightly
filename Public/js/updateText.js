@@ -15,8 +15,7 @@
          keditor=K.create('#editor_id');
          editor=keditor;
    });   
-     switch(test_type)
-  　{
+     switch(test_type){
       case "1":
           $("#answer").html("<span>答案:</span>"+
                               "<input type='radio' name='answer[]' value='A'>A"+
@@ -25,6 +24,7 @@
                               "<input type='radio' name='answer[]' value='D'>D"
                               );        
              break;
+<<<<<<< HEAD
       case "2":
            $("#answer").html("<span>答案:</span>"+
                              "<input type='checkbox' name='answer[]' value='A'>A"+
@@ -57,6 +57,26 @@
                    "<input type='radio'name='answer[]' value='B'>错");  
 
          }
+=======
+        case "2":
+             $("#answer").html("<span>答案:</span>"+
+                               "<input type='checkbox' name='answer[]' value='A'>A"+
+                               "<input type='checkbox'name='answer[]' value='B'>B"+
+                               "<input type='checkbox' name='answer[]' value='C'>C"+
+                               "<input type='checkbox' name='answer[]' value='D'>D");         
+             break;
+         case "3":
+              $("#answer").html("<span>答案:</span>"+
+                                "<input type='radio' name='answer[]' value='A'>对"+
+                                "<input type='radio'name='answer[]' value='B'>错");       
+              break;
+         case "4":
+             $("#answer").html("<span>答案:</span>"+
+                               "<input type='checkbox' name='answer[]' value='A'>A"+
+                               "<input type='checkbox' name='answer[]' value='B'>B"+
+                               "<input type='checkbox' name='answer[]' value='C'>C"+
+                               "<input type='checkbox' name='answer[]' value='D'>D")   
+>>>>>>> 56a5fbda9ac795ae92a10e4046ea44e855109a67
    }
      //获取题目的具体信息方便修改
      $.ajax({
@@ -162,6 +182,7 @@
  //获得试题信息
  function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;
+    alert(p);
     origin.$("#test tr:gt(0)").empty();
     $.ajax({
         url:"/Admin/Test/index",
