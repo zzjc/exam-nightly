@@ -31,7 +31,7 @@ class TestAction extends Action
             switch($type){
               case 1:
                 $count=$test->where("test_type=1")->count();  
-                $page=new Page($count,1);  
+                $page=new Page($count,10);  
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");
                 $show=$page->show();  
                 $list = $test->where("test_type=1")->limit($page->firstRow.','.$page->listRows)->select();
@@ -49,7 +49,7 @@ class TestAction extends Action
                 break;
               case 2:
                 $count=$test->where("test_type=2")->count();  
-                $page=new page($count,1);
+                $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");  
                 $show=$page->show();  
                 $list = $test->where("test_type=2")->limit($page->firstRow.','.$page->listRows)->select();
@@ -68,7 +68,7 @@ class TestAction extends Action
                 break;
               case 3:
                 $count=$test->where("test_type=3")->count();  
-                $page=new page($count,1);
+                $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");  
                 $show=$page->show();  
                 $list = $test->where("test_type=3")->limit($page->firstRow.','.$page->listRows)->select();
@@ -85,7 +85,7 @@ class TestAction extends Action
                 break;
               case 4:
                 $count=$casetest->count();  
-                $page=new page($count,1);
+                $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");  
                 $show=$page->show();  
                 $list =$casetest->limit($page->firstRow.','.$page->listRows)->select();
