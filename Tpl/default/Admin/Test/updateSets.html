@@ -2,23 +2,25 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<link href="/exam/Public/artDialog/skins/opera.css" rel="stylesheet" />
-<link rel="stylesheet" href="/exam/Public/css/styleTitle.css" type="text/css" />
-<script src="/exam/Public/js/jquery.js"></script>
-<script src="/exam/Public/artDialog/artDialog.js"></script>
-<script src="/exam/Public/artDialog/plugins/iframeTools.source.js"></script>
-<script type="text/javascript" src="/exam/Public/js/textext.js"></script>
-<script type="text/javascript" src="/exam/Public/js/updateSets.js"></script>
-<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/kindeditor.js"></script>
-<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/lang/zh_CN.js"></script>
+<link href="/Public/artDialog/skins/opera.css" rel="stylesheet" />
+<link rel="stylesheet" href="/Public/css/styleTitle.css" type="text/css" />
+<script src="/Public/js/jquery.js"></script>
+<script src="/Public/artDialog/artDialog.js"></script>
+<script src="/Public/artDialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/Public/js/textext.js"></script>
+<script type="text/javascript" src="/Public/js/updateSets.js"></script>
+<script charset="utf-8" type="text/javascript" src="/Public/editor/kindeditor.js"></script>
+<script charset="utf-8" type="text/javascript" src="/Public/editor/lang/zh_CN.js"></script>
 <script type="text/javascript">
-     function openUpdateTest(testId,setsId){
+     function openUpdateTest(testId,setsId,sets_type){
       var origin=artDialog.open.origin;
       var type=origin.$("#type").val();
+      var sets_type=sets_type;
       art.dialog.data('id',testId);
       art.dialog.data("type",type);
       art.dialog.data("setsId",setsId);
-      art.dialog.open("/exam/Tpl/default/Admin/Test/updateTest.html",{fixed: true,id:"singleTitle",width:510,height:460,title:'修改题目'}, false);
+      art.dialog.data("sets_type",sets_type);
+      art.dialog.open("/Tpl/default/Admin/Test/updateTest.html",{fixed: true,id:"singleTitle",width:510,height:460,title:'修改题目'}, false);
     }
 </script>
 </head>

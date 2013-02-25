@@ -2,17 +2,17 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<link href="/exam/Public/artDialog/skins/opera.css" rel="stylesheet" />
-<script src="/exam/Public/js/jquery.js"></script>
-<script src="/exam/Public/artDialog/artDialog.js"></script>
-<script src="/exam/Public/artDialog/plugins/iframeTools.source.js"></script>
-<script type="text/javascript" src="/exam/Public/js/textext.js"></script>
+<link href="/Public/artDialog/skins/opera.css" rel="stylesheet" />
+<script src="/Public/js/jquery.js"></script>
+<script src="/Public/artDialog/artDialog.js"></script>
+<script src="/Public/artDialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/Public/js/textext.js"></script>
 <script type="text/javascript">
 	function addAspects(){
 	    var aspects=$("#addAspects").val();
 	    var cat_id=art.dialog.data("cat_id");
          $.ajax({
-            url:"/exam/Admin/Test/addAspects",
+            url:"/Admin/Test/addAspects",
             type:"post",
             data:"name="+aspects+"&cat_id="+cat_id,
             dataType:"text",

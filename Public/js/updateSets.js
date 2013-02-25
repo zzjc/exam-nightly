@@ -1,4 +1,4 @@
-var test_type=art.dialog.data("type");
+//setsId题组id
 var setsId=art.dialog.data("id");
 var origin=artDialog.open.origin;
 $(function(){ 
@@ -8,7 +8,7 @@ $(function(){
         editor=keditor;
     }); 
     $.ajax({
-      url:"/exam/Admin/Test/getTitleSetsInfo",
+      url:"/Admin/Test/getTitleSetsInfo",
       type:"post",
       data:"id="+setsId,
       dataType:"text",
@@ -24,6 +24,7 @@ $(function(){
           var point=titleInfo[i]["point"];
           var answer=titleInfo[i]["answer"];
           var level=titleInfo[i]["level"];
+          var test_type=titleInfo[i]["test_type"];
           for(var j=0;j<titleInfo[i]["name"].length;j++){
             aspects+=aspects?","+titleInfo[i]["name"][j]["name"]:titleInfo[i]["name"][j]["name"];
           }
@@ -32,7 +33,7 @@ $(function(){
                               "</p><span class='detailSplit'>分数:"+point+
                               "</span><span class='detailSplit'>答案:"+answer+
                               "</span><span class='detailSplit'>难度:"+level+
-                              "</span><span><a href='javascript:void(0)' onclick='openUpdateTest("+testId+","+setsId+")'>修改</a></span>"+
+                              "</span><span><a href='javascript:void(0)' onclick='openUpdateTest("+testId+","+setsId+","+test_type+")'>修改</a></span>"+
                               "</div>");
             aspects="";
         }
@@ -43,7 +44,7 @@ $(function(){
 function updateDescription(){
   var description=editor.html();
   $.ajax({
-      url:"/exam/Admin/Test/updateDescription",
+      url:"/Admin/Test/updateDescription",
       type:"post",
       data:"id="+setsId+"&description="+description,
       dataType:"text",

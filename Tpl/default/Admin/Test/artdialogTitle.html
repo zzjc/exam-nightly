@@ -2,16 +2,17 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<link href="/exam/Public/artDialog/skins/opera.css" rel="stylesheet" />
-<script src="/exam/Public/js/jquery.js"></script>
-<script src="/exam/Public/artDialog/artDialog.js"></script>
-<script src="/exam/Public/artDialog/plugins/iframeTools.source.js"></script>
-<script type="text/javascript" src="/exam/Public/js/textext.js"></script>
-<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/kindeditor.js"></script>
-<script charset="utf-8" type="text/javascript" src="/exam/Public/editor/lang/zh_CN.js"></script>
+<link href="/Public/artDialog/skins/opera.css" rel="stylesheet" />
+<script src="/Public/js/jquery.js"></script>
+<script src="/Public/artDialog/artDialog.js"></script>
+<script src="/Public/artDialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/Public/js/textext.js"></script>
+<script charset="utf-8" type="text/javascript" src="/Public/editor/kindeditor.js"></script>
+<script charset="utf-8" type="text/javascript" src="/Public/editor/lang/zh_CN.js"></script>
 	 <script>
         var editor;
         var origin=artDialog.open.origin;
+        var setsType=art.dialog.data("setsType");
         $(function(){
             var keditor;
             KindEditor.ready(function(K) {
@@ -23,29 +24,46 @@
    　     　{
   　　         case "1":
    　　            $("#answer").html("<span>答案:</span>"+
-                                     "<input type='radio' name='answer[]' value='1'>A"+
-                                     "<input type='radio' name='answer[]' value='2'>B"+
-                                     "<input type='radio' name='answer[]' value='3'>C"+
-                                     "<input type='radio' name='answer[]' value='4'>D");        
+                                     "<input type='radio' name='answer[]' value='A'>A"+
+                                     "<input type='radio' name='answer[]' value='B'>B"+
+                                     "<input type='radio' name='answer[]' value='C'>C"+
+                                     "<input type='radio' name='answer[]' value='D'>D");        
                     break;
                case "2":
                     $("#answer").html("<span>答案:</span>"+
-                                      "<input type='checkbox' name='answer[]' value='1'>A"+
-                                      "<input type='checkbox'name='answer[]' value='2'>B"+
-                                      "<input type='checkbox' name='answer[]' value='3'>C"+
-                                      "<input type='checkbox' name='answer[]' value='4'>D");         
+                                      "<input type='checkbox' name='answer[]' value='A'>A"+
+                                      "<input type='checkbox'name='answer[]' value='B'>B"+
+                                      "<input type='checkbox' name='answer[]' value='C'>C"+
+                                      "<input type='checkbox' name='answer[]' value='D'>D");         
                     break;
                 case "3":
                      $("#answer").html("<span>答案:</span>"+
-                                       "<input type='radio' name='answer[]' value='yes'>对"+
-                                       "<input type='radio'name='answer[]' value='no'>错");       
+                                       "<input type='radio' name='answer[]' value='A'>对"+
+                                       "<input type='radio'name='answer[]' value='B'>错");       
                      break;
                 case "4":
-                    $("#answer").html("<span>答案:</span>"+
-                                      "<input type='checkbox' name='answer[]' value='1'>A"+
-                                      "<input type='checkbox' name='answer[]' value='2'>B"+
-                                      "<input type='checkbox' name='answer[]' value='3'>C"+
-                                      "<input type='checkbox' name='answer[]' value='4'>D")       
+                  switch(setsType){
+                    case "1":
+                      $("#answer").html("<span>答案:</span>"+
+                        "<input type='radio' name='answer[]' value='A'>A"+
+                        "<input type='radio' name='answer[]' value='B'>B"+
+                        "<input type='radio' name='answer[]' value='C'>C"+
+                        "<input type='radio' name='answer[]' value='D'>D");        
+                    break;
+                    case "2":
+                      $("#answer").html("<span>答案:</span>"+
+                        "<input type='checkbox' name='answer[]' value='A'>A"+
+                        "<input type='checkbox'name='answer[]' value='B'>B"+
+                        "<input type='checkbox' name='answer[]' value='C'>C"+
+                        "<input type='checkbox' name='answer[]' value='D'>D");         
+                      break;
+                    case "3":
+                     $("#answer").html("<span>答案:</span>"+
+                        "<input type='radio' name='answer[]' value='A'>对"+
+                        "<input type='radio'name='answer[]' value='B'>错");       
+                     break;
+                  }
+
 　　        }             
         })
     /*
@@ -54,7 +72,7 @@
     function addAspects(){
       var cat_id=origin.$("#name").val();
       art.dialog.data("cat_id",cat_id);
-      art.dialog.open("/exam/Tpl/default/Admin/Test/addAspects.html",{title:"添加知识点"});
+      art.dialog.open("/Tpl/default/Admin/Test/addAspects.html",{title:"添加知识点"});
     }
     //判断题目类型和输出题目具体信息
 		function sub(){
@@ -64,7 +82,7 @@
             if(answerMulti!=""){
                 var multiAnswer="";
                 for(var i=0;i<answerMulti.length;i++){
-                    multiAnswer+=multiAnswer==""?answerMulti[i].value:","+answerMulti[i].value;   
+                    multiAnswer+=answerMulti[i].value;   
                  }
             }
 			var answer=answerSingle?answerSingle:multiAnswer;
@@ -85,6 +103,7 @@
                           "<input type='hidden' name='answer[]' value='"+answer+"'/>"+
                           "<input type='hidden' name='point[]' value='"+point+"'/>"+
                           "<input type='hidden' name='level[]' value='"+level+"'/>"+
+                          "<input type='hidden' name='setsType[]' value='"+setsType+"'/>"+
                         "</div>");
       detailOb.append(title_hide);
 			art.dialog.close();
@@ -128,7 +147,7 @@
             hidden: '<input type="hidden" id="aspects_name" />'
         },
         ajax : {
-            url : '/exam/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
+            url : '/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
             dataType : 'json',
             cacheResults : false
         }
