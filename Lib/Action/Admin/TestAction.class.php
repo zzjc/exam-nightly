@@ -34,7 +34,7 @@ class TestAction extends Action
                 $confident['pid']=0;
                 $count=$test->where($confident)->count();  
                 $page=new Page($count,10);  
-                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");
+                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% ");
                 $show=$page->show();  
                 $list = $test->where("test_type=1")->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
@@ -54,7 +54,7 @@ class TestAction extends Action
                 $confident['pid']=0;
                 $count=$test->where("test_type=2")->count();  
                 $page=new page($count,10);
-                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");  
+                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% ");  
                 $show=$page->show();  
                 $list = $test->where("test_type=2")->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
@@ -75,7 +75,7 @@ class TestAction extends Action
                 $confident['pid']=0;
                 $count=$test->where("test_type=3")->count();  
                 $page=new page($count,10);
-                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");  
+                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
                 $show=$page->show();  
                 $list = $test->where("test_type=3")->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
@@ -92,7 +92,7 @@ class TestAction extends Action
               case 4:
                 $count=$casetest->count();  
                 $page=new page($count,10);
-                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");  
+                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
                 $show=$page->show();  
                 $list =$casetest->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){

@@ -99,7 +99,7 @@ class Page extends Think {
             $prePage = "";
         }else{
             $preRow =  $this->nowPage-$this->rollPage;
-            $prePage = "<a href='".$url."&".$p."=$preRow' >上".$this->rollPage."页</a>";
+            $prePage = "&nbsp;<a href='javascript:testInfo($preRow)'>上".$this->rollPage."页</a>";
             $theFirst = "&nbsp;<a href='javascript:testInfo(1)'>&nbsp;".$this->config['first']."&nbsp;</a>";
         }
         if($nowCoolPage == $this->coolPages){
@@ -108,6 +108,7 @@ class Page extends Think {
         }else{
             $nextRow = $this->nowPage+$this->rollPage;
             $theEndRow = $this->totalPages;
+            $nextPage = "<a href='javascript:testInfo($nextRow)'>&nbsp;下".$this->rollPage."页</a>";
             $theEnd = "&nbsp;<a href='javascript:testInfo($theEndRow)'>&nbsp;".$this->config['last']."&nbsp;</a>";
         }
         // 1 2 3 4 5
