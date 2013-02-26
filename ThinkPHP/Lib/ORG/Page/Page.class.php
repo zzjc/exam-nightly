@@ -83,13 +83,13 @@ class Page extends Think {
         $upRow   = $this->nowPage-1;
         $downRow = $this->nowPage+1;
         if ($upRow>0){
-              $upPage="<a href='javascript:testInfo($upRow)'>".$this->config['prev']."</a>";
+              $upPage="<a href='javascript:testInfo($upRow)'>&nbsp;".$this->config['prev']."</a>";
         }else{
             $upPage="";
         }
 
         if ($downRow <= $this->totalPages){
-            $downPage="<a href='javascript:testInfo($downRow)'>".$this->config['next']."</a>";
+            $downPage="<a href='javascript:testInfo($downRow)'>&nbsp;".$this->config['next']."</a>";
         }else{
             $downPage="";
         }
@@ -100,7 +100,7 @@ class Page extends Think {
         }else{
             $preRow =  $this->nowPage-$this->rollPage;
             $prePage = "<a href='".$url."&".$p."=$preRow' >上".$this->rollPage."页</a>";
-            $theFirst = "<a href='".$url."&".$p."=1' >".$this->config['first']."</a>";
+            $theFirst = "&nbsp;<a href='javascript:testInfo(1)'>&nbsp;".$this->config['first']."&nbsp;</a>";
         }
         if($nowCoolPage == $this->coolPages){
             $nextPage = "";
@@ -108,8 +108,7 @@ class Page extends Think {
         }else{
             $nextRow = $this->nowPage+$this->rollPage;
             $theEndRow = $this->totalPages;
-            $nextPage = "<a href='".$url."&".$p."=$nextRow' >下".$this->rollPage."页</a>";
-            $theEnd = "<a href='".$url."&".$p."=$theEndRow' >".$this->config['last']."</a>";
+            $theEnd = "&nbsp;<a href='javascript:testInfo($theEndRow)'>&nbsp;".$this->config['last']."&nbsp;</a>";
         }
         // 1 2 3 4 5
         $linkPage = "";

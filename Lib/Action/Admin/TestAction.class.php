@@ -20,7 +20,7 @@ class TestAction extends Action
 
     }
     /*
-    *分类获取题目信息内容
+    *试题列表分类获取题目信息内容
     */
      public function index()
     { 
@@ -30,7 +30,9 @@ class TestAction extends Action
             $type=Input::getVar($_GET["type"]);
             switch($type){
               case 1:
-                $count=$test->where("test_type=1")->count();  
+                $confident['test_type']=1;
+                $confident['pid']=0;
+                $count=$test->where($confident)->count();  
                 $page=new Page($count,10);  
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");
                 $show=$page->show();  
@@ -48,6 +50,8 @@ class TestAction extends Action
                 }
                 break;
               case 2:
+                $confident['test_type']=2;
+                $confident['pid']=0;
                 $count=$test->where("test_type=2")->count();  
                 $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");  
@@ -67,6 +71,8 @@ class TestAction extends Action
                 }
                 break;
               case 3:
+                $confident['test_type']=3;
+                $confident['pid']=0;
                 $count=$test->where("test_type=3")->count();  
                 $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页 %upPage%  %first%  %prePage%  %linkPage%  %nextPage% %downPage% %end%");  
@@ -199,7 +205,7 @@ class TestAction extends Action
       $test=M("test");
       $test_aspects=M("test_aspects");
       $aspects=M("aspects");
-        $id=Input::getVar($_POST["id"]);
+      $id=Input::getVar($_POST["id"]);
       $aspectsId=$test_aspects->field("aspects_id")->where("test_id=".$id)->select();
       $aspectsName=array();
       for($i=0;$i<count($aspectsId);$i++){
@@ -207,7 +213,7 @@ class TestAction extends Action
       }
       $titleInfo=$test->where("id=".$id)->find();
       $titleInfo["name"]=$aspectsName;
-        echo json_encode($titleInfo);
+      echo json_encode($titleInfo);
     }
     /*
     *修改题目
