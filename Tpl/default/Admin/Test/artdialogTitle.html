@@ -88,24 +88,31 @@
 			var point=document.getElementById('point').value;
 			var question=editor.html();
       var level=$("#difficult").val();
-      var author=$("#author").val();
-			var detailOb=origin.$("#titleDetail");
-			detailOb.append("<div class='rule_done'><p>问题:"+question+
-                            "</p><p>知识点:"+aspects+
-                            "</p><span class='detailSplit'>分数:"+point+
-                            "</span><span class='detailSplit'>答案:"+answer+
-                            "</span><span class='detailSplit'>难度:"+level+
-                            "</div>");
-      var title_hide=$("<div class='title_hide'>"+
-                          "<input type='hidden' name='content[]' value='"+question+"'/>"+
-                          "<input type='hidden' name='name[]' value='"+aspects+"'/>"+
-                          "<input type='hidden' name='answer[]' value='"+answer+"'/>"+
-                          "<input type='hidden' name='point[]' value='"+point+"'/>"+
-                          "<input type='hidden' name='level[]' value='"+level+"'/>"+
-                          "<input type='hidden' name='setsType[]' value='"+setsType+"'/>"+
-                        "</div>");
-      detailOb.append(title_hide);
-			art.dialog.close();
+      var tips=answer==""?"答案不能为空":"";
+      tips+=tips==""?aspects=="[]"?"知识点不能为空":"":aspects=="[]"?",知识点不能为空":"";
+      tips+=tips==""?point==""?"分数不能为空":"":point==""?",分数不能为空":"";
+      tips+=tips==""?question==""?"题干不为空":"":question==""?",题干不为空":"";
+      if(tips==""){
+        var detailOb=origin.$("#titleDetail");
+        detailOb.append("<div class='rule_done'><p>问题:"+question+
+                              "</p><p>知识点:"+aspects+
+                              "</p><span class='detailSplit'>分数:"+point+
+                              "</span><span class='detailSplit'>答案:"+answer+
+                              "</span><span class='detailSplit'>难度:"+level+
+                              "</div>");
+        var title_hide=$("<div class='title_hide'>"+
+                            "<input type='hidden' name='content[]' value='"+question+"'/>"+
+                            "<input type='hidden' name='name[]' value='"+aspects+"'/>"+
+                            "<input type='hidden' name='answer[]' value='"+answer+"'/>"+
+                            "<input type='hidden' name='point[]' value='"+point+"'/>"+
+                            "<input type='hidden' name='level[]' value='"+level+"'/>"+
+                            "<input type='hidden' name='setsType[]' value='"+setsType+"'/>"+
+                          "</div>");
+        detailOb.append(title_hide);
+        art.dialog.close();
+      }else{
+        alert(tips);
+      }
 		}    
 
 

@@ -144,7 +144,14 @@
  	var answer=answerSingle?answerSingle:multiAnswer;
  	var point=document.getElementById('point').value;
  	var question=editor.html();
-     var level=$("#difficult").val();
+  var level=$("#difficult").val();
+  var tips=answer==""?"答案不能为空":"";
+  tips+=tips==""?aspects=="[]"?"知识点不能为空":"":aspects=="[]"?",知识点不能为空":"";
+  tips+=tips==""?point==""?"分数不能为空":"":point==""?",分数不能为空":"";
+  tips+=tips==""?question==""?"题干不为空":"":question==""?",题干不为空":"";
+  if(tips!=""){
+    alert(tips);
+  }else{   
      $.ajax({
        url:"/Admin/Test/updateTest",
        type:"post",
@@ -158,7 +165,8 @@
           }
        }    
      })
- 		}
+   }
+ 	}
  //获得试题信息
  function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;

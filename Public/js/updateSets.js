@@ -1,6 +1,7 @@
 //setsId题组id
 var setsId=art.dialog.data("id");
 var origin=artDialog.open.origin;
+var test_type=art.dialog.data("type");
 $(function(){ 
     var keditor;
     KindEditor.ready(function(K) {
@@ -43,14 +44,32 @@ $(function(){
 })
 function updateDescription(){
   var description=editor.html();
-  $.ajax({
-      url:"/Admin/Test/updateDescription",
-      type:"post",
-      data:"id="+setsId+"&description="+description,
-      dataType:"text",
-      success:function(d){
-        art.dialog.close();
-      }
-    })
-
+  if(description!=""){
+    $.ajax({
+        url:"/Admin/Test/updateDescription",
+        type:"post",
+        data:"id="+setsId+"&description="+description,
+        dataType:"text",
+        success:function(d){
+          testInfo();
+        }
+      })
+  }else{
+    alert("题干不能为空");
+  }
 }
+ //获得试题信息
+ function testInfo(){
+    var p=origin.$("#page").val()?origin.$("#page").val():1;
+    origin.$("#test tr:gt(0)").empty();
+    $.ajax({
+        url:"/Admin/Test/index",
+        type:"get",
+        data:"type="+test_type+"&p="+p,
+        dataType:"text",
+        success:function(d){
+         origin.$("#test").append(d);
+         art.dialog.close();
+        }
+    })
+ }
