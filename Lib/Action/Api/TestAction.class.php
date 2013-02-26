@@ -152,7 +152,7 @@ class TestAction extends Action
             left join test_device td
             on t.id = td.test_id
             where pid = 0
-            order by pid ASC
+            order by pid ASC, test_type ASC
             limit $from, $num";
         $tests = $test->query($sql);
 
