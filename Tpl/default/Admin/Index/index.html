@@ -65,7 +65,7 @@
                 content: "分类：<input type='text' value='' id='category' /><br /><br />",
                 ok: function () {
                     var catname = $('#category').val();
-                    if(catname != '') {
+                    if(catname.length != 0) {
                         $.ajax({
                             url: '__APP__/admin/category/addCategory',
                             type: 'POST',
@@ -73,6 +73,9 @@
                         }).done(function( msg ) {
 
                         });
+                    } else {
+                        alert('请填写分类名称');
+                        return false;
                     }
                     this.content('<strong>' + catname + '</strong> 分类添加成功，3秒后自动关闭').time(3);
                     return false;
