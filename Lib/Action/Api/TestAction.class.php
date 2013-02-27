@@ -81,7 +81,7 @@ class TestAction extends Action
                                 order by rand() limit 20";
                     $tests = $testmodel->query($test_sql);
                     foreach($tests as $k => $t) {
-                        $tests[$k]['title'] = mb_substr(strip_tags($t['title']), 0, 15, 'utf-8');
+                        $tests[$k]['title'] = mb_substr(trim(strip_tags($t['title'])), 0, 15, 'utf-8');
                         $tests[$k]['title'] = trim($tests[$k]['title']);
                         $tests[$k]['client'] = '';
                         $images[] = $t['img'];
@@ -159,7 +159,7 @@ class TestAction extends Action
         $images = array();
         $final = array();
         foreach($tests as $key => $t) {
-            $tests[$key]['title'] = mb_substr(strip_tags($t['title']), 0, 15, 'utf-8');
+            $tests[$key]['title'] = mb_substr(trim(strip_tags($t['title'])), 0, 15, 'utf-8');
             $tests[$key]['title'] = trim($tests[$key]['title']);
             $tests[$key]['client'] = '';
             $images[] = $t['img'];
