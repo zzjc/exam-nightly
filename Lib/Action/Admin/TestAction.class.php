@@ -115,6 +115,7 @@ class TestAction extends Action
     */
     public function add()
     {
+       $cate=M("category");
        if($this->isPost()){
           $descriptionOb=M("casetest");
           $testOb=M("test");
@@ -134,9 +135,8 @@ class TestAction extends Action
               $this->addTestAspect($test_aspectsOb,$_POST,$testId,$aspectsId["id"]);
             }     
           } 
-            $this->redirect('Test/index/test_type/'.$test_type);    
+            $this->redirect('Test/add');    
         }else{
-             $cate=M("category");
              $arrCate=$cate->select();
              $this->assign("arrCate",$arrCate);
              $this->display();

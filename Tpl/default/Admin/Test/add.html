@@ -13,6 +13,7 @@
      function selectSetsType(){
         art.dialog({
                    title:'选择题目类型',
+
                    follow: document.getElementById('titleSets'),
                    content: "<input type='radio' value='1' name='setsType[]'/>单选题<br /><br />" +
                            "<input type='radio' value='2' name='setsType[]' />多选题<br /><br />"+
@@ -48,7 +49,7 @@
      <p>
         <span class="type">类别:</span>
         <select name="category" id="name">
-            <volist name="arrCate" id="vo">
+          <volist name="arrCate" id="vo">
             <option value={$vo.id}>{$vo.name}</option>
           </volist>
         </select>
@@ -70,7 +71,7 @@
       </div>
       <p>
           <input type="submit" class="btn" value="新增试题" />
-          <input type="reset" class="btn" onclick="if(confirm('确认重置内容?')){document.location.reload()}" value="重置试题">
+          <input type="reset" class="btn"  onclick="if(confirm('确认重置内容?')){document.location.reload()}" value="重置试题">
       </p>
     </form>
  
