@@ -2,6 +2,7 @@
    *判断题目类型
    */
    function type(){
+       $(".btn").css("display","none");
        var test_type=$("input[name='test_type'][type='radio']:checked").val();
        $("#titleSets").hide();
        $("#titleSingle").show();    
