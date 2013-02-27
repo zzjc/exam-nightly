@@ -16,7 +16,7 @@
     </div>
     <div class="tmpl_box">
         <h3>知识点</h3>
-        <a href="javascript:void(0);" id="addAspects">添加知识点</a> | <a href="{:U('Aspects/index')}">知识点列表</a>
+        <a href="{:U('Aspects/index')}">知识点列表</a>
     </div>
     <div class="text_box">
         <h3>用户</h3>
@@ -73,27 +73,6 @@
                         }).done(function( msg ) {
 
                         });
-                    }
-                    this.content('<strong>' + catname + '</strong> 分类添加成功，3秒后自动关闭').time(3);
-                    return false;
-                }
-            });
-        });
-
-        $('#addAspects').click(function(){
-            art.dialog({
-                title: '添加知识点',
-                content: "分类：<input type='text' value='' id='category' /><br /><br />",
-                ok: function () {
-                    var catname = $('#category').val();
-                    if(catname != '') {
-                        $.ajax({
-                            url: '__APP__/admin/category/addCategory',
-                            type: 'POST',
-                            data: { name: catname }
-                        }).done(function( msg ) {
-
-                                });
                     }
                     this.content('<strong>' + catname + '</strong> 分类添加成功，3秒后自动关闭').time(3);
                     return false;
