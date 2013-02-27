@@ -18,6 +18,7 @@ function del(id){
 }
 //获得试题信息
 function testInfo(page){
+    var categoryId=$("#name").val();
     var type=$("#type").val();
     if(typeof(page)=="number"){
         var p=page;
@@ -28,7 +29,7 @@ function testInfo(page){
     $.ajax({
         url:"/Admin/Test/index",
         type:"get",
-        data:"type="+type+"&p="+p,
+        data:"categoryId="+categoryId+"&type="+type+"&p="+p,
         dataType:"text",
         success:function(d){
             $("#test").append(d);
@@ -37,6 +38,7 @@ function testInfo(page){
 }
 $(document).ready(function(){
     $("#type").bind("change", testInfo);
+    $("#name").bind("change", testInfo);
     testInfo();
 
 })

@@ -27,19 +27,21 @@ class TestAction extends Action
         $test=M("test");
         $casetest=M("casetest");
         if($this->isAjax()){
+            $categoryId=Input::getVar($_GET["categoryId"]);
             $type=Input::getVar($_GET["type"]);
             switch($type){
               case 1:
                 $confident['test_type']=1;
                 $confident['pid']=0;
+                $confident['cat_id']=$categoryId;
                 $count=$test->where($confident)->count();  
                 $page=new Page($count,10);  
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% ");
                 $show=$page->show();  
-                $list = $test->where("test_type=1")->limit($page->firstRow.','.$page->listRows)->select();
+                $list = $test->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>...</td><td>".mb_substr($val["content"],0,40,"utf-8")."...".
-                         "</td><td>".$val["answer"]."</td><td>".$val["point"].
+                    echo "<tr><td>...</td><td>".strip_tags(mb_substr($val["content"],0,40,"utf-8"))."...".
+                         "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
                          "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
                          删除</a></td></tr>";
@@ -52,14 +54,15 @@ class TestAction extends Action
               case 2:
                 $confident['test_type']=2;
                 $confident['pid']=0;
-                $count=$test->where("test_type=2")->count();  
+                $confident['cat_id']=$categoryId;
+                $count=$test->where($confident)->count();  
                 $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% ");  
                 $show=$page->show();  
-                $list = $test->where("test_type=2")->limit($page->firstRow.','.$page->listRows)->select();
+                $list = $test->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>...</td><td>".mb_substr($val["content"],0,40,"utf-8")."...".
-                         "</td><td>".$val["answer"]."</td><td>".$val["point"].
+                    echo "<tr><td>...</td><td>".strip_tags(mb_substr($val["content"],0,40,"utf-8"))."...".
+                         "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
                          "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
                          删除</a></td></tr>";
@@ -73,14 +76,15 @@ class TestAction extends Action
               case 3:
                 $confident['test_type']=3;
                 $confident['pid']=0;
-                $count=$test->where("test_type=3")->count();  
+                $confident['cat_id']=$categoryId;
+                $count=$test->where($confident)->count();  
                 $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
                 $show=$page->show();  
-                $list = $test->where("test_type=3")->limit($page->firstRow.','.$page->listRows)->select();
+                $list = $test->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>...</td><td>".mb_substr($val["content"],0,40,"utf-8")."...".
-                         "</td><td>".$val["answer"]."</td><td>".$val["point"].
+                    echo "<tr><td>...</td><td>".strip_tags(mb_substr($val["content"],0,40,"utf-8"))."...".
+                         "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
                          "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
                          删除</a></td></tr>";
@@ -90,13 +94,14 @@ class TestAction extends Action
                 }
                 break;
               case 4:
-                $count=$casetest->count();  
+                $confident['cat_id']=$categoryId;
+                $count=$casetest->where($confident)->count();  
                 $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
                 $show=$page->show();  
-                $list =$casetest->limit($page->firstRow.','.$page->listRows)->select();
+                $list =$casetest->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>".mb_substr($val["description"],0,40,"utf-8")."..."."</td><td>...</td><td>...</td><td>...</td>
+                    echo "<tr><td>".strip_tags(mb_substr($val["description"],0,40,"utf-8"))."..."."</td><td>...</td><td>...</td><td>...</td>
                           <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
                          删除</a></td></tr>";
@@ -107,6 +112,9 @@ class TestAction extends Action
                 }
             }
         }else{
+          $cate=M("category");
+          $arrCate=$cate->select();
+          $this->assign("arrCate",$arrCate);
           $this->display();
          }
     }
