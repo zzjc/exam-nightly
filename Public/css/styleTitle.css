@@ -119,12 +119,18 @@ input.btn:active,button:active,.button:active{
     background-image:-webkit-linear-gradient(#dcdcdc, #dedede);
 }
 .btn{
-    display:none;
     font-size:16px;
     padding:12px 26px;
     text-shadow:0 1px 3px rgba(0, 0, 0, 0.5);
     font-weight:bold;
     margin-top:15px;
+}
+#addText{
+    display: none;
+}
+#resetText{
+    display: none;
+
 }
 code{
     -webkit-border-radius:3px;

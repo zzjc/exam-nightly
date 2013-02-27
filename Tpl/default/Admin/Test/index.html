@@ -28,10 +28,11 @@
             考试类型
         </th>
         <th>
-            <select>
-                <option>营销师</option>
-                <option>test</option>
-            </select>
+         <select name="category" id="name">
+           <volist name="arrCate" id="vo">
+             <option value={$vo.id}>{$vo.name}</option>
+           </volist>
+         </select>
         </th>
         <th>
             试题类型
