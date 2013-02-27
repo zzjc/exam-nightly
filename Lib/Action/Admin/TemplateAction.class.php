@@ -20,6 +20,9 @@ class TemplateAction extends Action
 
     public function add()
     {
+        $cat = M('category');
+        $cats = $cat->select();
+        $this->assign('cats', $cats);
         if($this->isPost()) {            
             $Template = M('template');
             if($Template->autoCheckToken($_POST)) {

@@ -3,7 +3,9 @@
     <p>
         <span class="label">类别：</span>
         <select name="cat_id">
-            <option value="1">营销师大赛</option>
+            <?php foreach($cats as $cat): ?>
+            <option value="<?php echo $cat['id']; ?>"><?php echo $cat['name']; ?></option>
+            <?php endforeach; ?>
         </select>
     </p>
     <p><span class="label">试卷标题：</span><input type="text" name="name" id="name" value="" /></p>
