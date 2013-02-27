@@ -1,0 +1,14 @@
+<include file="Html/header.html" />
+<p>分类列表</p>
+<table>
+    <tr>
+        <th>分类名称</th>
+    </tr>
+    <foreach name="cats" item="cat">
+        <tr>
+            <td>{$cat.name}</td>
+        </tr>
+    </foreach>
+</table>
+{$page}
+<include file="Html/footer.html" />
