@@ -94,18 +94,13 @@ class TestAction extends Action
             }
         }
         $string = Json::encode(json_encode($final));
-        $rand_name = rand(1000, 9999) . time();
-        $tarFile = $rand_name . '.tar.gz';
-        require 'Archive/Tar.php';
-        $tar = new Archive_Tar($tarFile, 'gz');
-        $tar->create($images);
-        if ($tar->addString('exam.json', $string))
-            echo C('URL') . $tarFile;
+        echo $this->tarFile($images, $string);
+
     }
 
-    public function subString($title)
+    protected function subString($title)
     {
-        return mb_substr(trim(strip_tags($title)), 0, 15, 'utf-8');
+        return mb_substr(trim(strip_tags($title)), 0, 14, 'utf-8');
     }
 
     public function getExtraTest($difficult_from, $difficult_to, $number)
@@ -140,23 +135,19 @@ class TestAction extends Action
      */
     public function exercise()
     {
-        $rand_name = rand(1000, 9999) . time();
-        $tarFile = $rand_name . '.tar.gz';
-        require 'Archive/Tar.php';
-        $tar = new Archive_Tar($tarFile, 'gz');  
         $range = Input::getVar($_GET['range']);
         $cat_id = Input::getVar($_GET['cid']);
         $data = explode($this->_ds, $range);
-        $from = $data[0];
+        $from = $data[0] - 1;
         $to   = $data[1];
-        $num = $to - $from + 1;
+        $num = $to - $from;
         $test = M('test');
         $sql = "select t.id,t.content title, td.image480 as img, t.answer, t.point, t.level, t.test_type as type
             from test t
             left join test_device td
             on t.id = td.test_id
             where pid = 0
-            order by pid ASC, test_type ASC
+            order by test_type ASC
             limit $from, $num";
         $tests = $test->query($sql);
 
@@ -169,9 +160,7 @@ class TestAction extends Action
             $final[0][] = $tests[$key];
         }
         $string = Json::encode(json_encode($final));
-        $tar->create($images);
-        if ($tar->addString('exam.json', $string))
-            echo C('URL') . $tarFile;
+        echo $this->tarFile($images, $string);
     }
 
     /**
@@ -183,5 +172,18 @@ class TestAction extends Action
         $test = M('test');
         $count = $test->where('pid = 0')->count();
         echo $count;
+    }
+
+    protected function tarFile($images, $string)
+    {
+        $rand_name = rand(1000, 9999) . time();
+        $tarFile = $rand_name . '.tar.gz';
+        require 'Archive/Tar.php';
+        $tar = new Archive_Tar($tarFile, 'gz');
+        $tar->create($images);
+        if ($tar->addString('exam.json', $string))
+            return C('URL') . $tarFile;
+        else
+            return 'tar file occur errors';
     }
 }
