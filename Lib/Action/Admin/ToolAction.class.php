@@ -17,6 +17,7 @@ class ToolAction extends Action
             }
             $aspects_json =  Json::encode(json_encode($tmp));
             $tmp = array();
+            unlink('Data/aspects/' . $c['id'] . '.json');
             file_put_contents('Data/aspects/' . $c['id'] . '.json', $aspects_json);
         }
         header("Content-type: text/html; charset=utf-8");
@@ -65,7 +66,11 @@ class ToolAction extends Action
             if(!file_put_contents($jscache, substr($js_url, 0, -1))) {
                 echo 'js error';
             }
+            $command = file_get_contents('Command.sh');
+            exec($command);
             echo "生成完成!<br />";
+
+
         } else
             echo '没有创建任何静态HTML页面，可能尚未有更新新的题目.<br />';
 

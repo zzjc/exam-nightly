@@ -58,7 +58,7 @@ class TestAction extends Action
                     array_merge($tests, $extra);
                 }
                 foreach($tests as $t) {
-                    $t['title'] = mb_substr(strip_tags($t['title']), 0, 15, 'utf-8');
+                    $t['title'] = $this->subString($t['title']);
                     $t['title'] = trim($t['title']);
                     $t['client'] = '';
                     $images[] = $t['img'];
@@ -81,8 +81,7 @@ class TestAction extends Action
                                 order by rand() limit 20";
                     $tests = $testmodel->query($test_sql);
                     foreach($tests as $k => $t) {
-                        $tests[$k]['title'] = mb_substr(trim(strip_tags($t['title'])), 0, 15, 'utf-8');
-                        $tests[$k]['title'] = trim($tests[$k]['title']);
+                        $tests[$k]['title'] = $this->subString($t['title']);
                         $tests[$k]['client'] = '';
                         $images[] = $t['img'];
                         $sum += $t['point'];
@@ -102,6 +101,11 @@ class TestAction extends Action
         $tar->create($images);
         if ($tar->addString('exam.json', $string))
             echo C('URL') . $tarFile;
+    }
+
+    public function subString($title)
+    {
+        return mb_substr(trim(strip_tags($title)), 0, 15, 'utf-8');
     }
 
     public function getExtraTest($difficult_from, $difficult_to, $number)
@@ -159,8 +163,7 @@ class TestAction extends Action
         $images = array();
         $final = array();
         foreach($tests as $key => $t) {
-            $tests[$key]['title'] = mb_substr(trim(strip_tags($t['title'])), 0, 15, 'utf-8');
-            $tests[$key]['title'] = trim($tests[$key]['title']);
+            $tests[$key]['title'] = $this->subString($t['title']);
             $tests[$key]['client'] = '';
             $images[] = $t['img'];
             $final[0][] = $tests[$key];
