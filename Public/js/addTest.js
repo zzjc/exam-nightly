@@ -32,6 +32,7 @@
      }
     $(function(){
       type();
+      $("#name").bind("change",type);
       $("[name='test_type']").bind("change",type);
       $("#titleSets").bind("click",selectSetsType);
       $("#titleSingle").bind("click",openTitleSingleDel);

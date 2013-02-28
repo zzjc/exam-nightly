@@ -10,14 +10,18 @@
 <script type="text/javascript">
      function openUpdateTest(testId){
       var type=$("#type").val();
+      var categoryId=$("#name").val();
       art.dialog.data('id',testId);
       art.dialog.data("type",type);
+      art.dialog.data('categoryId',categoryId);
       art.dialog.open("/Tpl/default/Admin/Test/updateTest.html",{fixed: true,id:"singleTest",width:510,height:460,title:'修改题目'}, false);
     }
     function openUpdateSets(testId){
-      var type=$("#type").val();
+     var type=$("#type").val();
+     var categoryId=$("#name").val();
       art.dialog.data("type",type);
       art.dialog.data('id',testId);
+      art.dialog.data('categoryId',categoryId);
       art.dialog.open("/Tpl/default/Admin/Test/updateSets.html",{fixed: true,id:"setsTest",width:510,height:460,title:'修改题目'}, false);
     }
 </script>

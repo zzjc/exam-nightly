@@ -1,7 +1,12 @@
-//setsId题组id
+/*
+*setsId题组id
+*test_type题目类型
+*categoryId考试科目类别
+*/
 var setsId=art.dialog.data("id");
 var origin=artDialog.open.origin;
 var test_type=art.dialog.data("type");
+var categoryId=art.dialog.data("categoryId");
 $(function(){ 
     var keditor;
     KindEditor.ready(function(K) {
@@ -42,6 +47,7 @@ $(function(){
     })
 
 })
+//修改材料阅读题材料
 function updateDescription(){
   var description=editor.html();
   if(description!=""){
@@ -59,17 +65,17 @@ function updateDescription(){
   }
 }
  //获得试题信息
- function testInfo(){
+function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;
     origin.$("#test tr:gt(0)").empty();
     $.ajax({
         url:"/Admin/Test/index",
         type:"get",
-        data:"type="+test_type+"&p="+p,
+        data:"categoryId="+categoryId+"&type="+test_type+"&p="+p,
         dataType:"text",
         success:function(d){
-         origin.$("#test").append(d);
-         art.dialog.close();
+            origin.$("#test").append(d);
+            art.dialog.close();
         }
     })
- }
+}
