@@ -138,7 +138,7 @@ class TestAction extends Action
         $range = Input::getVar($_GET['range']);
         $cat_id = Input::getVar($_GET['cid']);
         $data = explode($this->_ds, $range);
-        $from = $data[0] - 1;
+        $from = $data[0];
         $to   = $data[1];
         $num = $to - $from;
         $test = M('test');
@@ -147,8 +147,9 @@ class TestAction extends Action
             left join test_device td
             on t.id = td.test_id
             where pid = 0
-            order by test_type ASC
-            limit $from, $num";
+            and id >= $from
+            and id <= $to
+            order by test_type ASC";
         $tests = $test->query($sql);
 
         $images = array();
