@@ -82,7 +82,6 @@ class TestAction extends Action
                     $tests = $testmodel->query($test_sql);
                     foreach($tests as $k => $t) {
                         $tests[$k]['title'] = mb_substr(trim(strip_tags($t['title'])), 0, 15, 'utf-8');
-                        $tests[$k]['title'] = trim($tests[$k]['title']);
                         $tests[$k]['client'] = '';
                         $images[] = $t['img'];
                         $sum += $t['point'];
@@ -160,7 +159,6 @@ class TestAction extends Action
         $final = array();
         foreach($tests as $key => $t) {
             $tests[$key]['title'] = mb_substr(trim(strip_tags($t['title'])), 0, 15, 'utf-8');
-            $tests[$key]['title'] = trim($tests[$key]['title']);
             $tests[$key]['client'] = '';
             $images[] = $t['img'];
             $final[0][] = $tests[$key];
