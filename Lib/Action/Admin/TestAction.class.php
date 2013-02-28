@@ -40,7 +40,10 @@ class TestAction extends Action
                 $show=$page->show();  
                 $list = $test->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>...</td><td>".strip_tags(mb_substr($val["content"],0,40,"utf-8"))."...".
+                    $str=trim(strip_tags($val["content"]));
+                    $str=preg_replace('/\s(?=\s)/','',$str);
+                    $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
+                    echo "<tr><td>...</td><td>".$str."...".
                          "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
                          "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
@@ -61,7 +64,10 @@ class TestAction extends Action
                 $show=$page->show();  
                 $list = $test->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>...</td><td>".strip_tags(mb_substr($val["content"],0,40,"utf-8"))."...".
+                    $str=trim(strip_tags($val["content"]));
+                    $str=preg_replace('/\s(?=\s)/','',$str);
+                    $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
+                    echo "<tr><td>...</td><td>".$str."...".
                          "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
                          "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
@@ -83,7 +89,10 @@ class TestAction extends Action
                 $show=$page->show();  
                 $list = $test->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>...</td><td>".strip_tags(mb_substr($val["content"],0,40,"utf-8"))."...".
+                    $str=trim(strip_tags($val["content"]));
+                    $str=preg_replace('/\s(?=\s)/','',$str);
+                    $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
+                    echo "<tr><td>...</td><td>".$str."...".
                          "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
                          "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
@@ -101,7 +110,10 @@ class TestAction extends Action
                 $show=$page->show();  
                 $list =$casetest->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
-                    echo "<tr><td>".strip_tags(mb_substr($val["description"],0,40,"utf-8"))."..."."</td><td>...</td><td>...</td><td>...</td>
+                    $str=trim(strip_tags($val["description"]));
+                    $str=preg_replace('/\s(?=\s)/','',$str);
+                    $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
+                    echo "<tr><td>".$str."..."."</td><td>...</td><td>...</td><td>...</td>
                           <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
                          修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
                          删除</a></td></tr>";
