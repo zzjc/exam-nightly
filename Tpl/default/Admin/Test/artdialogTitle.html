@@ -13,6 +13,7 @@
         var editor;
         var origin=artDialog.open.origin;
         var setsType=art.dialog.data("setsType");
+         var cat_id=origin.$("#name").val();
         $(function(){
             var keditor;
             KindEditor.ready(function(K) {
@@ -69,7 +70,6 @@
       *添加知识点
     */
     function addAspects(){
-      var cat_id=origin.$("#name").val();
       art.dialog.data("cat_id",cat_id);
       art.dialog.open("/Tpl/default/Admin/Test/addAspects.html",{title:"添加知识点"});
     }
@@ -117,9 +117,6 @@
         alert(tips);
       }
 		}    
-
-
-
 	 </script>
 </head>
 <body>
@@ -156,7 +153,7 @@
             hidden: '<input type="hidden" id="aspects_name" />'
         },
         ajax : {
-            url : '/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
+            url : '/Data/aspects/'+cat_id+'.json?' + parseInt(Math.random()*100000000),
             dataType : 'json',
             cacheResults : false
         }
