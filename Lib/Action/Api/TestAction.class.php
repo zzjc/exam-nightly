@@ -14,7 +14,8 @@ class TestAction extends Action
     {
         $template_id = Input::getVar($_GET['tid']);
         $Template = M('template');
-        $t = $Template->where("id = $template_id")->field('content,num')->find();
+        $t = $Template->where("id = $template_id")->field('content,num,cat_id')->find();
+        $cid = $t['cat_id']; //分类ID
         $rules = json_decode($t['content']);
         $testmodel = M();
         $images = array();
@@ -49,12 +50,13 @@ class TestAction extends Action
                         WHERE $level
                         and aspects.name in ($aspects)
                         and pid = 0
+                        and cat_id = $cid
                         ORDER BY rand() LIMIT $num";
                 $tests = $testmodel->query($sql);
                 $true_num = count($tests);
                 if($true_num < $num) {
                     $number = $num - $true_num;
-                    $extra = $this->getExtraTest($difficult_from, $difficult_to, $number);
+                    $extra = $this->getExtraTest($difficult_from, $difficult_to, $number, $cid);
                     array_merge($tests, $extra);
                 }
                 foreach($tests as $t) {
@@ -67,6 +69,7 @@ class TestAction extends Action
             } else {
                 $num = $rule['number'];
                 $sql = "select id, description from casetest
+                        where cat_id = $cid
                         ORDER BY rand() LIMIT $num";
                 $cases = $testmodel->query($sql);
                 foreach($cases as $key => $case) {
@@ -103,7 +106,7 @@ class TestAction extends Action
         return mb_substr(trim(strip_tags($title)), 0, 14, 'utf-8');
     }
 
-    public function getExtraTest($difficult_from, $difficult_to, $number)
+    public function getExtraTest($difficult_from, $difficult_to, $number, $cid)
     {
         if($difficult_from == $difficult_to) {
             $level = "level != $difficult_to";
@@ -122,6 +125,7 @@ class TestAction extends Action
                         on test.id = td.test_id
                         WHERE $level
                         and pid = 0
+                        and cat_id = $cid
                         ORDER BY rand() LIMIT $number";
         $test = M();
         return $test->query($sql);
@@ -130,23 +134,22 @@ class TestAction extends Action
     /**
      * 练习接口
      * 根据区间范围和分类进行随机抽题
-     * @todo 目前没有按照分类来进行取题，后面加上按照分类取题
      * @return string
      */
     public function exercise()
     {
         $range = Input::getVar($_GET['range']);
-        $cat_id = Input::getVar($_GET['cid']);
+        $cid = Input::getVar($_GET['cid']);
         $data = explode($this->_ds, $range);
         $from = $data[0];
         $to   = $data[1];
-        $num = $to - $from;
         $test = M('test');
         $sql = "select t.id,t.content title, td.image480 as img, t.answer, t.point, t.level, t.test_type as type
             from test t
             left join test_device td
             on t.id = td.test_id
             where pid = 0
+            and cat_id = $cid
             and id >= $from
             and id <= $to
             order by test_type ASC";
@@ -166,7 +169,6 @@ class TestAction extends Action
 
     /**
      * 单题总数
-     * @todo 全部的题目总数，后期按照分类随机取题的时候要加入分类参数
      */
     public function testTotal()
     {
