@@ -17,6 +17,7 @@ class ToolAction extends Action
             }
             $aspects_json =  Json::encode(json_encode($tmp));
             $tmp = array();
+            unlink('Data/aspects/' . $c['id'] . '.json');
             file_put_contents('Data/aspects/' . $c['id'] . '.json', $aspects_json);
         }
         header("Content-type: text/html; charset=utf-8");
