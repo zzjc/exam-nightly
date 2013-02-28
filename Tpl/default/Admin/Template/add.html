@@ -2,16 +2,16 @@
 <form action="" method="POST" id="template" onsubmit="return tmpl_validate()">
     <p>
         <span class="label">类别：</span>
-        <select name="cat_id">
+        <select name="cat_id" id="catlist">
             <?php foreach($cats as $cat): ?>
-            <option value="<?php echo $cat['id']; ?>"><?php echo $cat['name']; ?></option>
+            <option value="<?php echo $cat['id']; ?>" <?php if($select == $cat['id']) echo 'selected'; ?>><?php echo $cat['name']; ?></option>
             <?php endforeach; ?>
         </select>
     </p>
     <p><span class="label">试卷标题：</span><input type="text" name="name" id="name" value="" /></p>
     <p><span class="label">试卷说明：</span><input type="text" name="description" id="description" value="" /></p>
     <div class="rules">
-        <p><span class="label">组题规则：</span> <a id="add_rule" href="javascript:void">添加新规则</a></p>
+        <p><span class="label">组题规则：</span> <a id="add_rule" href="javascript:void(0)">添加新规则</a></p>
         <div id="rule_list"></div>
         <div id="rule_hide_list"></div>
         <div class="rule new_rule">
@@ -53,7 +53,7 @@
             </p>
             <div class="aspects">
                 <textarea id="aspects" rows="1"></textarea>
-                <p><a id="submit_rule" href="javascript:void">确定此规则</a></p>
+                <p><a id="submit_rule" href="javascript:void(0)">确定此规则</a></p>
             </div>
         </div>
     </div>
@@ -63,6 +63,14 @@
     <p><input type="submit" class="btn" value="新增模板" /> <input type="reset" class="btn" onclick="if(confirm('确认要重置？数据将丢失')){document.location.reload()}" value="重置模板" /></p>
 </form>
 <script type="text/javascript">
+    $(document).ready(function(){
+        var cat_id = $('#catlist').val();
+        $('#catlist').change(function(){
+            cat_id = $('#catlist').val();
+            var url = "__APP__/Admin/Template/add/select/" + cat_id;
+            $(location).attr('href',url);
+        });
+    });
     $('#aspects').textext({
         plugins : 'tags prompt focus autocomplete ajax arrow',
         tagsItems : "",
@@ -71,7 +79,7 @@
             hidden: '<input type="hidden" id="aspects_name" />'
         },
         ajax : {
-            url : '/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
+            url : '/Data/aspects/'+ '<?php echo $select;?>' +'.json?' + parseInt(Math.random()*100000000),
             dataType : 'json',
             cacheResults : false
         }

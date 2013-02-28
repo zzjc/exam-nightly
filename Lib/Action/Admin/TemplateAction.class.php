@@ -23,6 +23,8 @@ class TemplateAction extends Action
         $cat = M('category');
         $cats = $cat->select();
         $this->assign('cats', $cats);
+        $select = !empty($_GET['select'])?Input::getVar($_GET['select']):1;
+        $this->assign('select', $select);
         if($this->isPost()) {            
             $Template = M('template');
             if($Template->autoCheckToken($_POST)) {
