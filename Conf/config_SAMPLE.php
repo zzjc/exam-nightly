@@ -9,6 +9,7 @@ return array(
     'DB_PWD' => '',
     'DB_PORT' => '3306',
     'DB_PREFIX' => '',
+    'SALT' => 'wtf%6%#*&2',
     // 分组配置
     'APP_GROUP_LIST' => 'Home,Admin,Api',
     'DEFAULT_GROUP' => 'Home',

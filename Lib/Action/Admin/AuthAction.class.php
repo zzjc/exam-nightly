@@ -12,7 +12,7 @@ class AuthAction extends Action
             $Manager = M('manager');
             if($Manager->autoCheckToken($_POST)) {
                 $username = Input::getVar($_POST['username']);
-                $password = md5(Input::getVar($_POST['password']));
+                $password = $this->salt(Input::getVar($_POST['password']));
                 $row = $Manager->where("name = '$username' AND password = '$password'")->find();
                 if($row) {
                     Session::set('manager', true);
@@ -26,7 +26,7 @@ class AuthAction extends Action
         }
         $this->display();
     }
-    
+
     public function logout()
     {
         unset($_SESSION);
@@ -40,10 +40,16 @@ class AuthAction extends Action
     public function changePass()
     {
         $username = Input::getVar($_POST['name']);
-        $password = md5(Input::getVar($_POST['password']));
+        $password = $this->salt(Input::getVar($_POST['password']));
         $user = M('manager');
         $data['password'] = $password;
         $status = $user->where("name = '$username'")->save($data);
         echo $status;
+    }
+
+    public function salt($password)
+    {
+        $salt = C('SALT');
+        return md5($salt . md5($password));
     }
 }
