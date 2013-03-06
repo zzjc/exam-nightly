@@ -89,6 +89,7 @@ class TestAction extends Action
                         $images[] = $t['img'];
                         $sum += $t['point'];
                     }
+                    $cases[$key]['description'] = strip_tags($cases[$key]['description']);
                     $cases[$key]['score'] = strval($sum);
                     $cases[$key]['options'] = $tests;
 
