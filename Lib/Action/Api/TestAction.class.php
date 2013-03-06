@@ -146,17 +146,8 @@ class TestAction extends Action
         $from = $data[0];
         $to   = $data[1];
         $test = M('test');
-        $sql = "select t.id,t.content title, td.image480 as img, t.answer, t.point, t.level, t.test_type as type
-            from test t
-            left join test_device td
-            on t.id = td.test_id
-            where pid = 0
-            and t.cat_id = $cid
-            and id >= $from
-            and id <= $to
-            order by test_type ASC";
+        $sql = "select d.id,d.content title,d.image480 img, d.answer, d.point, d.level, d.test_type as type from (select a.id,a.content,a.answer,a.point,a.level,a.test_type,td.image480, (select count(id) from test where id<=a.id and pid = 0 and cat_id = $cid) as rownum from test a inner join test_device td on td.test_id = a.id) d where rownum between $from and $to order by test_type ASC";
         $tests = $test->query($sql);
-
         $images = array();
         $final = array();
         foreach($tests as $key => $t) {
