@@ -9,6 +9,9 @@
 <script type="text/javascript" src="/Public/js/textext.js"></script>
 <script type="text/javascript">
 	function addAspects(){
+    if($("#addAspects").val()){
+      var origin=artDialog.open.origin;
+      var question=origin.editor.html();
 	    var aspects=$("#addAspects").val();
 	    var cat_id=art.dialog.data("cat_id");
          $.ajax({
@@ -17,10 +20,22 @@
             data:"name="+aspects+"&cat_id="+cat_id,
             dataType:"text",
             success:function(d){
-              art.dialog.close();
+             $.ajax({
+                url:"/Admin/Tool/aspects",
+                type:"post",
+                data:"",
+                dataType:"text",
+                success:function(d){
+                  origin.location.reload();
+                  art.dialog.close();
+                }
+              })
             }
           })
-    } 
+    }else{
+      alert("知识点不能为空");
+    }     
+  } 
 </script>
 </head>
 <body>

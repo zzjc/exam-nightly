@@ -13,8 +13,21 @@
         var editor;
         var origin=artDialog.open.origin;
         var setsType=art.dialog.data("setsType");
-         var cat_id=origin.$("#name").val();
+        var cat_id=origin.$("#name").val();
         $(function(){
+            $('#aspects').textext({
+                plugins : 'tags prompt focus autocomplete ajax arrow',
+                tagsItems : "",
+                prompt : '选择知识点...',
+                html: {
+                    hidden: '<input type="hidden" id="aspects_name" />'
+                },
+                ajax : {
+                    url : '/Data/aspects/'+cat_id+'.json?' + parseInt(Math.random()*100000000),
+                    dataType : 'json',
+                    cacheResults : false
+                }
+            });            
             var keditor;
             KindEditor.ready(function(K) {
                 keditor=K.create('#editor_id');
@@ -144,18 +157,3 @@
 <p><input type="button" onclick="sub()" id="exit" value="确定规则"></p>
 </body>
 </html>
-<script type="text/javascript">
-    $('#aspects').textext({
-        plugins : 'tags prompt focus autocomplete ajax arrow',
-        tagsItems : "",
-        prompt : '选择知识点...',
-        html: {
-            hidden: '<input type="hidden" id="aspects_name" />'
-        },
-        ajax : {
-            url : '/Data/aspects/'+cat_id+'.json?' + parseInt(Math.random()*100000000),
-            dataType : 'json',
-            cacheResults : false
-        }
-    });
-</script>
