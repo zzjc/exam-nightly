@@ -104,7 +104,8 @@ class TestAction extends Action
 
     protected function subString($title)
     {
-        return mb_substr(trim(strip_tags($title)), 0, 14, 'utf-8');
+        $string = mb_substr(trim(strip_tags($title)), 0, 14, 'utf-8');
+        return str_replace(PHP_EOL, '', $string);
     }
 
     public function getExtraTest($difficult_from, $difficult_to, $number, $cid)

@@ -69,8 +69,6 @@ class ToolAction extends Action
             $command = file_get_contents('Command.sh');
             exec($command);
             echo "生成完成!<br />";
-
-
         } else
             echo '没有创建任何静态HTML页面，可能尚未有更新新的题目.<br />';
 
