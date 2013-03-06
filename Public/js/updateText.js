@@ -9,6 +9,7 @@
  var sets_type=art.dialog.data("sets_type");
  var id=art.dialog.data("id");
  var setsId=art.dialog.data("setsId");
+ var categoryId=art.dialog.data("categoryId");
  $(function(){
      var keditor;
      KindEditor.ready(function(K) {
@@ -58,7 +59,6 @@
          }
    }
      //获取题目的具体信息方便修改
-     //??aspects出现问题
      $.ajax({
        url:"/Admin/Test/getTitleInfo",
        type:"post",
@@ -122,7 +122,7 @@
              hidden: '<input type="hidden" id="aspects_name" />'
            },
            ajax : {
-             url :'/Data/aspects/1.json?' + parseInt(Math.random()*100000000),
+             url :'/Data/aspects/'+categoryId+'.json?' + parseInt(Math.random()*100000000),
              dataType : 'json',
              cacheResults :false
            }
@@ -167,21 +167,21 @@
      })
    }
  	}
- //获得试题信息
- function testInfo(){
+  //获得试题信息
+function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;
     origin.$("#test tr:gt(0)").empty();
     $.ajax({
         url:"/Admin/Test/index",
         type:"get",
-        data:"type="+test_type+"&p="+p,
+        data:"categoryId="+categoryId+"&type="+test_type+"&p="+p,
         dataType:"text",
         success:function(d){
-         origin.$("#test").append(d);
-         art.dialog.close();
+            origin.$("#test").append(d);
+            art.dialog.close();
         }
     })
- }
+}
 function setsTitleInfo(){
   var singleTitleOb=origin.$("#singleTitle");
   singleTitleOb.empty();
