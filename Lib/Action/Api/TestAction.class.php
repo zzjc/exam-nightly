@@ -45,7 +45,7 @@ class TestAction extends Action
                         on test.id = ta.test_id
                         inner join aspects
                         on ta.aspects_id = aspects.id
-                        left join test_device td
+                        inner join test_device td
                         on test.id = td.test_id
                         WHERE $level
                         and aspects.name in ($aspects)
@@ -78,7 +78,7 @@ class TestAction extends Action
                                 test.level, test.answer, td.image480 as img,
                                 test.test_type as type, test.point
                                 from test
-                                left join test_device td
+                                inner join test_device td
                                 on test.id = td.test_id
                                 where pid = {$case['id']}
                                 order by rand() limit 20";
@@ -121,7 +121,7 @@ class TestAction extends Action
                         on test.id = ta.test_id
                         inner join aspects
                         on ta.aspects_id = aspects.id
-                        left join test_device td
+                        inner join test_device td
                         on test.id = td.test_id
                         WHERE $level
                         and pid = 0
