@@ -174,8 +174,10 @@ class TestAction extends Action
      */
     public function testTotal()
     {
+        $cid = Input::getVar($_GET['cid']);
+        if(!$cid)$cid = 1;
         $test = M('test');
-        $count = $test->where('pid = 0')->count();
+        $count = $test->where('pid = 0 and cat_id = ' . $cid)->count();
         echo $count;
     }
 
