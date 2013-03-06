@@ -45,12 +45,12 @@ class TestAction extends Action
                         on test.id = ta.test_id
                         inner join aspects
                         on ta.aspects_id = aspects.id
-                        left join test_device td
+                        inner join test_device td
                         on test.id = td.test_id
                         WHERE $level
                         and aspects.name in ($aspects)
                         and pid = 0
-                        and cat_id = $cid
+                        and test.cat_id = $cid
                         ORDER BY rand() LIMIT $num";
                 $tests = $testmodel->query($sql);
                 $true_num = count($tests);
@@ -78,7 +78,7 @@ class TestAction extends Action
                                 test.level, test.answer, td.image480 as img,
                                 test.test_type as type, test.point
                                 from test
-                                left join test_device td
+                                inner join test_device td
                                 on test.id = td.test_id
                                 where pid = {$case['id']}
                                 order by rand() limit 20";
@@ -89,6 +89,7 @@ class TestAction extends Action
                         $images[] = $t['img'];
                         $sum += $t['point'];
                     }
+                    $cases[$key]['description'] = strip_tags($cases[$key]['description']);
                     $cases[$key]['score'] = strval($sum);
                     $cases[$key]['options'] = $tests;
 
@@ -121,11 +122,11 @@ class TestAction extends Action
                         on test.id = ta.test_id
                         inner join aspects
                         on ta.aspects_id = aspects.id
-                        left join test_device td
+                        inner join test_device td
                         on test.id = td.test_id
                         WHERE $level
                         and pid = 0
-                        and cat_id = $cid
+                        and test.cat_id = $cid
                         ORDER BY rand() LIMIT $number";
         $test = M();
         return $test->query($sql);
@@ -140,6 +141,7 @@ class TestAction extends Action
     {
         $range = Input::getVar($_GET['range']);
         $cid = Input::getVar($_GET['cid']);
+        if(!$cid)$cid = 1;
         $data = explode($this->_ds, $range);
         $from = $data[0];
         $to   = $data[1];
@@ -149,7 +151,7 @@ class TestAction extends Action
             left join test_device td
             on t.id = td.test_id
             where pid = 0
-            and cat_id = $cid
+            and t.cat_id = $cid
             and id >= $from
             and id <= $to
             order by test_type ASC";
