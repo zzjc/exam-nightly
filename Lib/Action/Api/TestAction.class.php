@@ -50,7 +50,7 @@ class TestAction extends Action
                         WHERE $level
                         and aspects.name in ($aspects)
                         and pid = 0
-                        and cat_id = $cid
+                        and test.cat_id = $cid
                         ORDER BY rand() LIMIT $num";
                 $tests = $testmodel->query($sql);
                 $true_num = count($tests);
@@ -126,7 +126,7 @@ class TestAction extends Action
                         on test.id = td.test_id
                         WHERE $level
                         and pid = 0
-                        and cat_id = $cid
+                        and test.cat_id = $cid
                         ORDER BY rand() LIMIT $number";
         $test = M();
         return $test->query($sql);
@@ -141,6 +141,7 @@ class TestAction extends Action
     {
         $range = Input::getVar($_GET['range']);
         $cid = Input::getVar($_GET['cid']);
+        if(!$cid)$cid = 1;
         $data = explode($this->_ds, $range);
         $from = $data[0];
         $to   = $data[1];
@@ -150,7 +151,7 @@ class TestAction extends Action
             left join test_device td
             on t.id = td.test_id
             where pid = 0
-            and cat_id = $cid
+            and t.cat_id = $cid
             and id >= $from
             and id <= $to
             order by test_type ASC";
