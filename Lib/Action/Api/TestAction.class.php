@@ -150,7 +150,7 @@ class TestAction extends Action
         $from = $data[0];
         $to   = $data[1];
         $test = M('test');
-        echo $sql = "select d.id,d.content title,d.image480 img, d.answer, d.point, d.level, d.test_type as type from (select a.*,td.*, (select count(id) from test where test.id<=a.id and cat_id = $cid and pid = 0) as rownum from test a inner join test_device td on td.test_id = a.id where pid = 0 and cat_id = $cid) d where rownum between $from and $to order by test_type ASC";
+        $sql = "select d.id,d.content title,d.image480 img, d.answer, d.point, d.level, d.test_type as type from (select a.*,td.*, (select count(id) from test where test.id<=a.id and cat_id = $cid and pid = 0) as rownum from test a inner join test_device td on td.test_id = a.id where pid = 0 and cat_id = $cid) d where rownum between $from and $to order by test_type ASC";
         $tests = $test->query($sql);
         $images = array();
         $final = array();
