@@ -116,7 +116,7 @@ class TestAction extends Action
         if($difficult_from == $difficult_to) {
             $level = "level != $difficult_to";
         } else {
-            $level = "level <= $difficult_from or level >= $difficult_to";
+            $level = "level < $difficult_from or level > $difficult_to";
         }
         $sql = "SELECT distinct(test.id),test.content title,
                         test.level, test.answer, td.image480 as img,
