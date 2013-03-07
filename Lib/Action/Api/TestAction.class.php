@@ -105,7 +105,10 @@ class TestAction extends Action
     protected function subString($title)
     {
         $string = mb_substr(trim(strip_tags($title)), 0, 14, 'utf-8');
-        return str_replace(PHP_EOL, '', $string);
+        $string =  str_replace(PHP_EOL, '', $string);
+        $string =  str_replace("\r", ' ', $string);
+        $string =  str_replace(" ", '', $string);
+        return  str_replace("\t", ' ', $string);
     }
 
     public function getExtraTest($difficult_from, $difficult_to, $number, $cid)
