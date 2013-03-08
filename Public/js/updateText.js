@@ -159,9 +159,25 @@
        dataType:"text",
        success:function(d){
           if(test_type!=4){
-            testInfo();
+            $.ajax({
+              url:"/Admin/Picture/update_html",
+              type:"post",
+              data:"testId="+id,
+              dataType:"text",
+              success:function(ed){
+                testInfo();
+              }
+            })
           }else{
-            setsTitleInfo();
+            $.ajax({
+              url:"/Admin/Picture/update_html",
+              type:"post",
+              data:"testId="+id,
+              dataType:"text",
+              success:function(fd){
+                setsTitleInfo();
+              }
+            })            
           }
        }    
      })
