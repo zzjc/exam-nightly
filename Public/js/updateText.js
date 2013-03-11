@@ -144,6 +144,9 @@
  	var answer=answerSingle?answerSingle:multiAnswer;
  	var point=document.getElementById('point').value;
  	var question=editor.html();
+  question = question.replace(/%/g, "%25");  
+  question= question.replace(/\&/g, "%26");  
+  question= question.replace(/\+/g, "%2B");
   var level=$("#difficult").val();
   var tips=answer==""?"答案不能为空":"";
   tips+=tips==""?aspects=="[]"?"知识点不能为空":"":aspects=="[]"?",知识点不能为空":"";
