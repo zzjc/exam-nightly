@@ -154,7 +154,7 @@ class TestAction extends Action
               $aspectsId=$aspectOb->field("id")->where("name='{$aspectArr[$j]}'")->find();
               $this->addTestAspect($test_aspectsOb,$_POST,$testId,$aspectsId["id"]);
             } 
-          $dir = 'Data/html';
+            $dir = 'Data/html';
             $template = "Data/template.html"; 
             $template_html = file_get_contents($template);
             unlink('Data/html/' .$testId.'.html');

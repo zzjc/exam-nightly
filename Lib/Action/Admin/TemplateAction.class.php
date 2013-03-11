@@ -3,17 +3,20 @@ import('ORG.Util.Input');
 require 'Common/Json.php';
 class TemplateAction extends Action
 {
+    private $gid;
     public function _initialize()
     {
         if(!Session::is_set('manager')) {
             $this->redirect('Auth/login');
         }
+        $this->gid = $_SESSION['gid'];
     }
 
     public function index()
     {
+
         $Template = M('template');
-        $templates = $Template->join("category on category.id = template.cat_id")->field('template.*, category.name catname')->select();
+        $templates = $Template->join("category on category.id = template.cat_id")->where('group_id = ' . $this->gid)->field('template.*, category.name catname')->select();
         $this->assign('templates', $templates);
         $this->display();
     }
@@ -21,7 +24,7 @@ class TemplateAction extends Action
     public function add()
     {
         $cat = M('category');
-        $cats = $cat->select();
+        $cats = $cat->where('group_id = ' . $this->gid)->select();
         $this->assign('cats', $cats);
         $select = !empty($_GET['select'])?Input::getVar($_GET['select']):1;
         $this->assign('select', $select);

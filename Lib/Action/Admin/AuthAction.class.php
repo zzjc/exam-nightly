@@ -8,16 +8,28 @@ class AuthAction extends Action
     public function login()
     {
         if ($this->isPost()) {
-
             $Manager = M('manager');
             if($Manager->autoCheckToken($_POST)) {
                 $username = Input::getVar($_POST['username']);
                 $password = $this->salt(Input::getVar($_POST['password']));
-                $row = $Manager->where("name = '$username' AND password = '$password'")->find();
-                if($row) {
+                $sql = "select m.id,m.name,g.id gid,g.name gname from manager m
+                        left join groups g
+                        on m.group_id = g.id
+                        where m.name = '$username' and password = '$password'";
+                $row = $Manager->query($sql);
+                if($row[0]['gid'] == 0 || $row[0]['gid'] == 1) {
+                    $user = $row[0];
                     Session::set('manager', true);
-                    Session::set('userid', $row['id']);
-                    Session::set('username', $row['name']);
+                    Session::set('userid', $user['id']);
+                    Session::set('username', $user['name']);
+                    if($user['gid'] == 0) {
+                        Session::set('gid', 0);
+                        Session::set('gname', '管理员');
+                    } else {
+                        Session::set('gid', $user['gid']);
+                        Session::set('gname', $user['gname']);
+                    }
+
                     $this->redirect('index/index');
                 }
             } else {
