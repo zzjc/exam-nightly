@@ -162,7 +162,6 @@ class TestAction extends Action
             $html_name = $dir . '/' . $testId. '.html';
             file_put_contents($html_name, $new);
             $url="cd /home/test\n\r../command/phantomjs/bin/phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".png";
-            $url="cd /home/test\n\r../command/phantomjs/bin/phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".png";
             file_put_contents('Com.sh',$url);
             exec("Com.sh");
           } 

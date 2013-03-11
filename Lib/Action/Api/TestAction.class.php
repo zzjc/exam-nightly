@@ -104,7 +104,11 @@ class TestAction extends Action
 
     protected function subString($title)
     {
-        return mb_substr(trim(strip_tags($title)), 0, 14, 'utf-8');
+        $string = mb_substr(trim(strip_tags($title)), 0, 14, 'utf-8');
+        $string =  str_replace(PHP_EOL, '', $string);
+        $string =  str_replace("\r", ' ', $string);
+        $string =  str_replace(" ", '', $string);
+        return  str_replace("\t", ' ', $string);
     }
 
     public function getExtraTest($difficult_from, $difficult_to, $number, $cid)
@@ -112,7 +116,7 @@ class TestAction extends Action
         if($difficult_from == $difficult_to) {
             $level = "level != $difficult_to";
         } else {
-            $level = "level <= $difficult_from or level >= $difficult_to";
+            $level = "level < $difficult_from or level > $difficult_to";
         }
         $sql = "SELECT distinct(test.id),test.content title,
                         test.level, test.answer, td.image480 as img,
@@ -146,17 +150,8 @@ class TestAction extends Action
         $from = $data[0];
         $to   = $data[1];
         $test = M('test');
-        $sql = "select t.id,t.content title, td.image480 as img, t.answer, t.point, t.level, t.test_type as type
-            from test t
-            left join test_device td
-            on t.id = td.test_id
-            where pid = 0
-            and t.cat_id = $cid
-            and id >= $from
-            and id <= $to
-            order by test_type ASC";
+        $sql = "select d.id,d.content title,d.image480 img, d.answer, d.point, d.level, d.test_type as type from (select a.*,td.*, (select count(id) from test where test.id<=a.id and cat_id = $cid and pid = 0) as rownum from test a inner join test_device td on td.test_id = a.id where pid = 0 and cat_id = $cid) d where rownum between $from and $to order by test_type ASC";
         $tests = $test->query($sql);
-
         $images = array();
         $final = array();
         foreach($tests as $key => $t) {
@@ -174,8 +169,10 @@ class TestAction extends Action
      */
     public function testTotal()
     {
+        $cid = Input::getVar($_GET['cid']);
+        if(!$cid)$cid = 1;
         $test = M('test');
-        $count = $test->where('pid = 0')->count();
+        $count = $test->where('pid = 0 and cat_id = ' . $cid)->count();
         echo $count;
     }
 

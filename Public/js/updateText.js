@@ -171,7 +171,6 @@
                 testInfo();
               }
             })
-              testInfo();
           }else{
             $.ajax({
               url:"/Admin/Picture/update_html",
@@ -181,8 +180,8 @@
               success:function(fd){
                 setsTitleInfo();
               }
-            })   
-              setsTitleInfo();         
+
+            })
           }
        }    
      })
