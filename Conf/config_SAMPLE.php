@@ -22,5 +22,6 @@ return array(
     'TOKEN_TYPE' => 'md5',
     
     // 站点信息
-    'URL' => 'http://192.168.100.217/exam/'
+    'URL' => 'http://192.168.100.217/exam/', // 别忘记最后的 '/'
+    'DOCUMENT_ROOT' => '/home/test/', // 别忘记最后的 '/'
 );

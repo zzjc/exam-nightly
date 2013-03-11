@@ -19,13 +19,19 @@
         <a href="{:U('Aspects/index')}">知识点列表</a>
     </div>
     <div class="text_box">
-        <h3>用户</h3>
+        <h3>个人资料</h3>
         <a href="javascript:void(0);" id="changePass">修改密码</a>
     </div>
+    <?php if($_SESSION['gid'] == 0): ?>
     <div class="tmpl_box">
         <h3>工具</h3>
         <a href="{:U('Tool/aspects')}">生成知识点缓存</a> | <a href="{:U('Tool/create_html')}">生成静态HTML</a>
     </div>
+    <div class="text_box">
+        <h3>用户</h3>
+        <a href="{:U('User/add')}">新增用户</a> | <a href="{:U('User/index')}">用户管理</a>
+    </div>
+    <?php endif; ?>
 </div>
 <script src="/Public/artDialog/artDialog.js"></script>
 <script type="text/javascript">
@@ -69,7 +75,7 @@
                         $.ajax({
                             url: '__APP__/admin/category/addCategory',
                             type: 'POST',
-                            data: { name: catname }
+                            data: { name: catname, gid: "{$_SESSION['gid']}" }
                         }).done(function( msg ) {
 
                         });
