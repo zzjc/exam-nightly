@@ -1,0 +1,19 @@
+<include file="Html/header.html" />
+<p>用户列表</p>
+<table>
+    <tr>
+        <th>用户名</th>
+        <th>所属分组</th>
+        <th>操作</th>
+    </tr>
+    <foreach name="users" item="user">
+        <tr>
+            <td>{$user.name}</td>
+            <td>{$user.groups}</td>
+            <td><a href="{:U('User/delete?id=')}{$user.id}" onclick="if(!confirm('是否确定删除此用户，此操作无法恢复。')){return false;}">删除</a></td>
+        </tr>
+    </foreach>
+
+</table>
+<p>{$page}</p>
+<include file="Html/footer.html" />

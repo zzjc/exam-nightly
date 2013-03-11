@@ -1,0 +1,19 @@
+<include file="Html/header.html" />
+<form action="" method="POST" id="user">
+    <p><span class="label">用户名：</span><input type="text" name="name" id="name" value="" /></p>
+    <br>
+    <p><span class="label">密&nbsp;&nbsp;&nbsp;码：</span><input type="password" name="password" id="password" value="" /></p>
+    <br>
+    <p>
+        <span class="label">类别：</span>
+        <select name="gid" id="catlist">
+            <?php foreach($groups as $group): ?>
+            <option value="<?php echo $group['id']; ?>"> <?php echo $group['name']; ?></option>
+            <?php endforeach; ?>
+        </select>
+    </p>
+    <br>
+    <p><input type="submit" value="新增用户" class="btn"/></p>
+
+</form>
+<include file="Html/footer.html" />
