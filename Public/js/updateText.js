@@ -180,7 +180,7 @@
               success:function(fd){
                 setsTitleInfo();
               }
-            })     
+            })
           }
        }    
      })

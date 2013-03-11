@@ -3,11 +3,13 @@ import('ORG.Util.Input');
 import("ORG.Page.Page");
 class TestAction extends Action
 {
+    private $gid;
     public function _initialize()
     {
         if(!Session::is_set('manager')) {
             $this->redirect('Auth/login');
         }
+        $this->gid = $_SESSION['gid'];
     }
     /*
       *添加知识点
@@ -125,7 +127,7 @@ class TestAction extends Action
             }
         }else{
           $cate=M("category");
-          $arrCate=$cate->select();
+          $arrCate=$cate->where('group_id = ' . $this->gid)->select();
           $this->assign("arrCate",$arrCate);
           $this->display();
          }
@@ -137,7 +139,6 @@ class TestAction extends Action
     {
        $cate=M("category");
        if($this->isPost()){
-          print_r($_POST);
           $descriptionOb=M("casetest");
           $testOb=M("test");
           $aspectOb=M("aspects");
@@ -168,7 +169,7 @@ class TestAction extends Action
           } 
            $this->redirect('Test/add');    
         }else{
-             $arrCate=$cate->select();
+             $arrCate=$cate->where('group_id = ' . $this->gid)->select();
              $this->assign("arrCate",$arrCate);
              $this->display();
          } 
