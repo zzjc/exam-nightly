@@ -137,6 +137,7 @@ class TestAction extends Action
     {
        $cate=M("category");
        if($this->isPost()){
+          print_r($_POST);
           $descriptionOb=M("casetest");
           $testOb=M("test");
           $aspectOb=M("aspects");
@@ -153,9 +154,19 @@ class TestAction extends Action
             for($j=0;$j<count($aspectArr);$j++){
               $aspectsId=$aspectOb->field("id")->where("name='{$aspectArr[$j]}'")->find();
               $this->addTestAspect($test_aspectsOb,$_POST,$testId,$aspectsId["id"]);
-            }     
+            } 
+            $dir = 'Data/html';
+            $template = "Data/template.html"; 
+            $template_html = file_get_contents($template);
+            unlink('Data/html/' .$testId.'.html');
+            $new = str_replace('{REPLACE_HOLDER}', $_POST["content"][$i], $template_html);
+            $html_name = $dir . '/' . $testId. '.html';
+            file_put_contents($html_name, $new);
+            $url="cd /home/test\n\r../command/phantomjs/bin/phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".png";
+            file_put_contents('Com.sh',$url);
+            exec("Com.sh");
           } 
-            $this->redirect('Test/add');    
+           $this->redirect('Test/add');    
         }else{
              $arrCate=$cate->select();
              $this->assign("arrCate",$arrCate);
@@ -301,6 +312,8 @@ class TestAction extends Action
       $test_aspects=M("test_aspects");
       if($type!=4){
         if($test->where("id=".$id)->delete()&&$test_aspects->where("test_id=".$id)->delete()){
+          unlink('Data/html/' .$id.'.html');
+          unlink('Storage/image480/'.$id.".png");
           echo true;
         }else{
           echo false;
@@ -309,6 +322,8 @@ class TestAction extends Action
         $testId=$test->field("id")->where("pid=".$id)->select();
         for($i=0;$i<count($testId);$i++){
           $test_aspects->where("test_id=".$testId[$i]["id"])->delete();
+          unlink('Data/html/'.$testId[$i]["id"].'.html');
+          unlink('Storage/image480/'.$testId[$i]["id"].".png");
         }
         if($casetest->where("id=".$id)->delete()&&$test->where("pid=".$id)->delete()){
           echo true;  
