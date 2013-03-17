@@ -53,8 +53,6 @@ class ToolAction extends Action
                 file_put_contents($html_name, $new);
                 $id = $test['id'];
                 $js_url .= C('URL') . $html_name . '@';
-
-                // 插入图片表
                 $td = M('test_device');
                 $data['test_id'] = $test['id'];
                 $data['image480'] = "Storage/image480/{$test['id']}.gif";
