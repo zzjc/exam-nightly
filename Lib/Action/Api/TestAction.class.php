@@ -51,6 +51,7 @@ class TestAction extends Action
                         and aspects.name in ($aspects)
                         and pid = 0
                         and test.cat_id = $cid
+                        and test.test_type = {$rule['type']}
                         ORDER BY rand() LIMIT $num";
                 $tests = $testmodel->query($sql);
                 $true_num = count($tests);
