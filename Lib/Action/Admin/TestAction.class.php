@@ -143,6 +143,7 @@ class TestAction extends Action
           $testOb=M("test");
           $aspectOb=M("aspects");
           $test_aspectsOb=M("test_aspects");
+		  $td = M('test_device');
           $test_type=Input::getVar($_POST['test_type']);
           if($test_type==4){
             $pid=$this->addCasetest($descriptionOb,$_POST);
@@ -166,6 +167,9 @@ class TestAction extends Action
             $url="cd /home/test\n\r../command/phantomjs/bin/phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".png";
             file_put_contents('Com.sh',$url);
             exec("Com.sh");
+			$data['test_id']=$testId;
+            $data['image480'] = "Storage/image480/{$testId}.gif";
+            $td->add($data);
           } 
            $this->redirect('Test/add');    
         }else{
