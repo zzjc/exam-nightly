@@ -164,9 +164,9 @@ class TestAction extends Action
             $new = str_replace('{REPLACE_HOLDER}', $_POST["content"][$i], $template_html);
             $html_name = $dir . '/' . $testId. '.html';
             file_put_contents($html_name, $new);
-            $url="cd /home/test\n\r../command/phantomjs/bin/phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".png";
-            file_put_contents('Com.sh',$url);
-            exec("Com.sh");
+            $document_root = C('DOCUMENT_ROOT');
+            $command="cd $document_root;phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+            exec($command);
 			$data['test_id']=$testId;
             $data['image480'] = "Storage/image480/{$testId}.gif";
             $td->add($data);
@@ -318,7 +318,7 @@ class TestAction extends Action
       if($type!=4){
         if($test->where("id=".$id)->delete()&&$test_aspects->where("test_id=".$id)->delete()){
           unlink('Data/html/' .$id.'.html');
-          unlink('Storage/image480/'.$id.".png");
+          unlink('Storage/image480/'.$id.".gif");
           echo true;
         }else{
           echo false;
@@ -328,7 +328,7 @@ class TestAction extends Action
         for($i=0;$i<count($testId);$i++){
           $test_aspects->where("test_id=".$testId[$i]["id"])->delete();
           unlink('Data/html/'.$testId[$i]["id"].'.html');
-          unlink('Storage/image480/'.$testId[$i]["id"].".png");
+          unlink('Storage/image480/'.$testId[$i]["id"].".gif");
         }
         if($casetest->where("id=".$id)->delete()&&$test->where("pid=".$id)->delete()){
           echo true;  
