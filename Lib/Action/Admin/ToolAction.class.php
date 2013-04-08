@@ -55,7 +55,7 @@ class ToolAction extends Action
                 $js_url .= C('URL') . $html_name . '@';
                 $td = M('test_device');
                 $data['test_id'] = $test['id'];
-                $data['image480'] = "Storage/image480/{$test['id']}.gif";
+                $data['image480'] = "Storage/image480/{$test['id']}_0.gif";
                 $td->add($data);
             }
             $record_data['id'] = $id;

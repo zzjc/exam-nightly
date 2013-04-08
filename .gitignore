@@ -4,3 +4,6 @@ Conf/config.php
 Data/aspects/*.json
 Data/html/*.html
 Storage/image480/*.gif
+Data/jscache.json
+Data/create_html.json
+Data/html2img/*.html

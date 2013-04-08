@@ -43,7 +43,7 @@ arrayOfUrls.forEach(function(pos, url, total){
     var indexOfUrl = fileName.length - 1;
     var tmp = fileName[indexOfUrl];
     var urlPath = tmp.split('.');
-    var file_name = "Storage/image480/" + urlPath[0] + ".gif";
+    var file_name = "Storage/image480/" + urlPath[0] + "_0.gif";
 
     // Render to a file
     renderUrlToFile(url, file_name, function(url, file){
