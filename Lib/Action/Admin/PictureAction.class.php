@@ -20,7 +20,8 @@ class PictureAction extends Action{
             file_put_contents($html_name, $new);
             //生成图片
             $document_root = C('DOCUMENT_ROOT');
-            $command ="cd $document_root;phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+            $phantomjs = C('PHANTOMJS_PATH');
+            $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
             exec($command);
         }else{
             echo '修改失败';

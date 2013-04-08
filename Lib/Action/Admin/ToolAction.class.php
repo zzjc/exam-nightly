@@ -65,7 +65,8 @@ class ToolAction extends Action
                 echo 'js error';
             }
             $document_root = C('DOCUMENT_ROOT');
-            $command = "cd $document_root;phantomjs server.js";
+            $phantomjs = C('PHANTOMJS_PATH');
+            $command = "cd $document_root;$phantomjs server.js";
             exec($command);
             echo "生成完成!<br />";
         } else

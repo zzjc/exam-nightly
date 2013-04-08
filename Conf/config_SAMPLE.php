@@ -24,4 +24,5 @@ return array(
     // 站点信息
     'URL' => 'http://192.168.100.217/exam/', // 别忘记最后的 '/'
     'DOCUMENT_ROOT' => '/home/test/', // 别忘记最后的 '/'
+    'PHANTOMJS_PATH' => ''
 );

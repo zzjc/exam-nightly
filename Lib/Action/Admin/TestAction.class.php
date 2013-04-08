@@ -165,7 +165,8 @@ class TestAction extends Action
             $html_name = $dir . '/' . $testId. '.html';
             file_put_contents($html_name, $new);
             $document_root = C('DOCUMENT_ROOT');
-            $command="cd $document_root;phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+            $phantomjs = c('PHANTOMJS_PATH');
+            $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
             exec($command);
 			$data['test_id']=$testId;
             $data['image480'] = "Storage/image480/{$testId}.gif";
