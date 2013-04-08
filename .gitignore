@@ -1,0 +1,6 @@
+*.tar.gz
+Runtime
+Conf/config.php
+Data/aspects/*.json
+Data/html/*.html
+Storage/image480/*.gif
