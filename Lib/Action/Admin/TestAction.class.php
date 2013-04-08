@@ -285,9 +285,12 @@ class TestAction extends Action
              $new = str_replace('{REPLACE_HOLDER}',$optionAll, $template_html);
              $html_name = $dir . '/' . $testId.'_'.$k. '.html';
              file_put_contents($html_name, $new);
-             $url="phantomjs.exe rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
-             file_put_contents('Com.cmd',$url);
-             exec("Com.cmd");                   
+
+             $document_root = C('DOCUMENT_ROOT');
+             $phantomjs = c('PHANTOMJS_PATH');
+             $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
+             exec($command);
+
              $data['test_id']=$testId;
              $data['image480'] = "Storage/image480/{$testId}_{$k}.gif";
              $data['answer']=$abcdArr[$k];
@@ -346,9 +349,12 @@ class TestAction extends Action
           $new = str_replace('{REPLACE_HOLDER}',$optionAll, $template_html);
           $html_name = $dir . '/' . $testId.'_'.$g. '.html';
           file_put_contents($html_name, $new);
-          $url="phantomjs.exe rasterize.js "."Data/html/".$testId.'_'.$g.".html Storage/image480/".$testId.'_'.$g.".gif";
-          file_put_contents('Com.cmd',$url);
-          exec("Com.cmd");                   
+
+          $document_root = C('DOCUMENT_ROOT');
+          $phantomjs = c('PHANTOMJS_PATH');
+          $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$g.".html Storage/image480/".$testId.'_'.$g.".gif";
+          exec($command); 
+
           $data['test_id']=$testId;
           $data['image480'] = "Storage/image480/{$testId}_{$g}.gif";
           $data['answer']=$answerFinal;
@@ -367,9 +373,14 @@ class TestAction extends Action
         $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
         $html_name = $dir . '/' . $testId. '.html';
         file_put_contents($html_name, $new);
-        $url="phantomjs.exe rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
-        file_put_contents('Com.cmd',$url);
-        exec("Com.cmd");
+
+
+        $document_root = C('DOCUMENT_ROOT');
+        $phantomjs = c('PHANTOMJS_PATH');
+        $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+        exec($command); 
+
+
         $data['test_id']=$testId;
         $data['image480'] = "Storage/image480/{$testId}.gif";
         $data['answer']=Input::getVar($post["answer"][$i]);
