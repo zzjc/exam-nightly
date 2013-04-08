@@ -22,6 +22,13 @@ class TestAction extends Action
 
     }
     /*
+      *将题目类型写入session
+    */
+    public function ses_type(){
+      setcookie("test_type",$_POST['test_type'],-1,"/");
+      echo $_COOKIE["test_type"];
+    }
+    /*
     *试题列表分类获取题目信息内容
     */
      public function index()
@@ -137,18 +144,21 @@ class TestAction extends Action
     */
     public function add()
     {
+       header("Content-type: text/html; charset=utf-8");
        $cate=M("category");
        if($this->isPost()){
           $descriptionOb=M("casetest");
           $testOb=M("test");
           $aspectOb=M("aspects");
           $test_aspectsOb=M("test_aspects");
+          $td=M("test_device");
           $test_type=Input::getVar($_POST['test_type']);
           if($test_type==4){
             $pid=$this->addCasetest($descriptionOb,$_POST);
           }else{
             $pid="";
           }
+          //添加题目并生成4张随机题目图片
           for($i=0;$i<count($_POST["content"]);$i++){
             $aspectArr= json_decode(str_replace("\\","",$_POST["name"][$i]),true);
             $testId=$this->addTest($testOb,$_POST,$pid,$i,$test_type);
@@ -156,20 +166,12 @@ class TestAction extends Action
               $aspectsId=$aspectOb->field("id")->where("name='{$aspectArr[$j]}'")->find();
               $this->addTestAspect($test_aspectsOb,$_POST,$testId,$aspectsId["id"]);
             } 
-            $dir = 'Data/html';
-            $template = "Data/template.html"; 
-            $template_html = file_get_contents($template);
-            unlink('Data/html/' .$testId.'.html');
-            $new = str_replace('{REPLACE_HOLDER}', $_POST["content"][$i], $template_html);
-            $html_name = $dir . '/' . $testId. '.html';
-            file_put_contents($html_name, $new);
-            $url="cd /home/test\n\r../command/phantomjs/bin/phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".png";
-            file_put_contents('Com.sh',$url);
-            exec("Com.sh");
+            //添加图片
+            $this->addPicture($testId,$_POST,$i);
           } 
-           $this->redirect('Test/add');    
+            $this->redirect('Test/add');    
         }else{
-             $arrCate=$cate->where('group_id = ' . $this->gid)->select();
+             $arrCate=$cate->where('group_id = '.$this->gid)->select();
              $this->assign("arrCate",$arrCate);
              $this->display();
          } 
@@ -201,7 +203,7 @@ class TestAction extends Action
           $data["level"]=Input::getVar($post["level"][$i]);
           $data["answer"]=Input::getVar($post["answer"][$i]);
           if($test_type!=4){
-            $data["test_type"]=$test_type;
+            $data["test_type"]=$test_type;            
           }else{
             $data["test_type"]=Input::getVar($post["setsType"][$i]);
           }
@@ -216,6 +218,182 @@ class TestAction extends Action
       }
 
     }
+    /*
+    *
+    *分类添加图片
+    */
+    public function addPicture($testId,$post,$i){
+     $td=M("test_device");
+     $test_type=Input::getVar($post['test_type']);
+     switch($test_type){
+       case 1:
+       //写入数据库
+         $this->addOption($post["optionA"][$i],$testId);
+         $this->addOption($post["optionB"][$i],$testId);
+         $this->addOption($post["optionC"][$i],$testId);
+         $this->addOption($post["optionD"][$i],$testId);
+         //生成图
+          $optionArr=array($post["optionA"][$i],$post["optionB"][$i],$post["optionC"][$i],$post["optionD"][$i]);
+         //查找正确的选项位置
+           switch($post['answer'][$i]){
+             case 'A':
+               $answer=0;
+               break;
+             case 'B':
+               $answer=1;
+               break;
+             case 'C':
+               $answer=2;
+               break;
+             case 'D':
+               $answer=3;
+               break;  
+
+         }
+           //随机生成题目选项数组
+           for($k=0;$k<4;$k++){
+             $arrnum=array();
+             $abc=$answer."";
+             $arrnum[$k]=$optionArr[$answer];  
+             for($f=0;$f<4;$f++){
+               if($f!=$k){
+                 //生成随机数，判断随机数是否和$f重复，或已经被选了
+                 while(true){
+                   $num=rand(0,3);
+                   $n=(string) $num;
+                   if($num!=$answer&&!strpos($abc,$n)){
+                     $abc.=$num;
+                     $arrnum[$f]=$optionArr[$num]; 
+                     break;
+                   }
+                 }
+               }
+             }
+             $optionAll="";
+             //生成题目图片
+             $abcdArr=array("A","B","C","D");
+             ksort($arrnum);
+             foreach($arrnum as $key=>$val){
+                 $optionNum=$key+1;
+                 $optionAll==''?$optionAll.= $post["content"][$i]."<br/>".$optionNum.".".str_replace('<br/>','',$val):$optionAll.='<br/>'.$optionNum.".".str_replace('<br/>','',$val);  
+
+           }
+             $dir = 'Data/html';
+             $template = "Data/template.html"; 
+             $template_html = file_get_contents($template);
+             unlink('Data/html/' .$testId.'_'.$k.'.html');
+             $new = str_replace('{REPLACE_HOLDER}',$optionAll, $template_html);
+             $html_name = $dir . '/' . $testId.'_'.$k. '.html';
+             file_put_contents($html_name, $new);
+             $url="phantomjs.exe rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
+             file_put_contents('Com.cmd',$url);
+             exec("Com.cmd");                   
+             $data['test_id']=$testId;
+             $data['image480'] = "Storage/image480/{$testId}_{$k}.gif";
+             $data['answer']=$abcdArr[$k];
+             $td->add($data);                
+           }
+           break;
+      case 2:
+        $this->addOption($post["optionA"][$i],$testId);
+        $this->addOption($post["optionB"][$i],$testId);
+        $this->addOption($post["optionC"][$i],$testId);
+        $this->addOption($post["optionD"][$i],$testId);    
+        //添加多选题定义随机组合
+         //重新排序后添加图片得出答案
+        $optionArr=array($post["optionA"][$i],$post["optionB"][$i],$post["optionC"][$i],$post["optionD"][$i]);
+        $abcdArr=array("A","B","C","D");
+        for($g=0;$g<4;$g++){
+          $randStr="";
+          $randArr=array();
+          $numFirst=rand(0,3);
+          $randStr.=$abcdArr[$numFirst];
+          $randArr[0]=$optionArr[$numFirst];
+          while(true){
+            $num=rand(0,3);
+            if(!strpos($randStr,$abcdArr[$num])&&$abcdArr[$num]!=$randStr[0]){
+              $randStr.=$abcdArr[$num];
+              array_push($randArr,$optionArr[$num]);
+              if(strlen($randStr)==4){
+                 break;
+              }   
+            }                     
+          }
+          $optionAll="";
+          foreach($randArr as $key=>$val){
+              $optionNum=$key+1;
+              $optionAll==''?$optionAll.= $post["content"][$i]."<br/>".$optionNum.".".str_replace('<br/>','',$val):$optionAll.='<br/>'.$optionNum.".".str_replace('<br/>','',$val);    
+
+          }                    
+          //根据答案查找位置
+          $answerStr="";
+          for($q=0;$q<strlen($post['answer'][$i]);$q++){
+            $answerOption=strpos($randStr,$post['answer'][$i][$q]);
+            $answerStr==""?$answerStr.=$answerOption:$answerStr.=",".$answerOption;
+          }
+          $rep1=str_replace("0","A",$answerStr);
+          $rep2=str_replace("1","B",$rep1);
+          $rep3=str_replace("2","C",$rep2);
+          $answerStr=str_replace("3","D",$rep3);
+          $answerArr=explode(",",$answerStr);
+          sort($answerArr);
+          $answerFinal=implode("",$answerArr);
+          //生成图片
+          $dir = 'Data/html';
+          $template = "Data/template.html"; 
+          $template_html = file_get_contents($template);
+          unlink('Data/html/' .$testId.'_'.$g.'.html');
+          $new = str_replace('{REPLACE_HOLDER}',$optionAll, $template_html);
+          $html_name = $dir . '/' . $testId.'_'.$g. '.html';
+          file_put_contents($html_name, $new);
+          $url="phantomjs.exe rasterize.js "."Data/html/".$testId.'_'.$g.".html Storage/image480/".$testId.'_'.$g.".gif";
+          file_put_contents('Com.cmd',$url);
+          exec("Com.cmd");                   
+          $data['test_id']=$testId;
+          $data['image480'] = "Storage/image480/{$testId}_{$g}.gif";
+          $data['answer']=$answerFinal;
+          $td->add($data);  
+
+         }
+        break;
+      case 3:
+        $this->addOption($post["optionA"][$i],$testId);
+        $this->addOption($post["optionB"][$i],$testId);
+        $dir = 'Data/html';
+        $template = "Data/template.html"; 
+        $template_html = file_get_contents($template);
+        unlink('Data/html/' .$testId.'.html');
+        $replace_content="<p>".$post["content"][$i]."</p><p>A.".$post["optionA"][$i]."</p><p>B.".$post["optionB"][$i]."</p";
+        $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
+        $html_name = $dir . '/' . $testId. '.html';
+        file_put_contents($html_name, $new);
+        $url="phantomjs.exe rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+        file_put_contents('Com.cmd',$url);
+        exec("Com.cmd");
+        $data['test_id']=$testId;
+        $data['image480'] = "Storage/image480/{$testId}.gif";
+        $data['answer']=Input::getVar($post["answer"][$i]);
+        $td->add($data);   
+        break;
+     case 4:
+        $setsType=Input::getVar($post["setsType"][$i]);
+        $post['test_type']=$setsType;
+        $this->addPicture($testId,$post,$i);
+        break;
+    }  
+  }
+
+    /*
+    *添加试题选择项
+    */
+    public function addOption($option,$testId){
+     $optionOb=M("test_choice");
+     $data['option']=$option;
+     $data['test_id']=$testId;
+     $optionOb->add($data);
+    }
+
+
     /*
     *添加题目与知识点关联
     */
@@ -254,12 +432,18 @@ class TestAction extends Action
        $test=M("test");
        $test_aspects=M("test_aspects");
        $aspectsOb=M("aspects");
+       $test_choice=M("test_choice");
        $aspects=Input::getVar($_POST["aspects"]);
        $data["answer"]=Input::getVar($_POST["answer"]);
        $data["point"]=Input::getVar($_POST["point"]);
        $data["content"]=Input::getVar($_POST["question"]);
        $data["level"]=Input::getVar($_POST["level"]);
        $testId=Input::getVar($_POST["id"]);
+       $test_type=Input::getVar($_POST["test_type"]);
+       $choiceA=Input::getVar($_POST["choiceA"]);
+       $choiceB=Input::getVar($_POST["choiceB"]);
+       $choiceC=Input::getVar($_POST["choiceC"]);
+       $choiceD=Input::getVar($_POST["choiceD"]);
        $test->where('id='.$testId)->save($data);
        $aspectArr=explode(",",str_replace("\"","",str_replace("]","",str_replace("[","",$aspects))));
        @$test_aspects->where("test_id=".$testId)->delete();
@@ -269,6 +453,24 @@ class TestAction extends Action
           $datt['test_id']=$testId;
           $test_aspects->add($datt);   
        }
+       $test_id=$test_choice->field("id")->where("test_id=".$testId)->select();
+       if($test_type==1||$test_type==2){
+          $test_choice->where('id='.$test_id["0"]["id"])->save(array("option"=>$choiceA));
+          $test_choice->where('id='.$test_id["1"]["id"])->save(array("option"=>$choiceB));
+          $test_choice->where('id='.$test_id["2"]["id"])->save(array("option"=>$choiceC));
+          $test_choice->where('id='.$test_id["3"]["id"])->save(array("option"=>$choiceD));
+       }else{
+          $test_choice->where('id='.$test_id["0"]["id"])->save(array("option"=>$choiceA));
+          $test_choice->where('id='.$test_id["1"]["id"])->save(array("option"=>$choiceB));
+       }
+    }
+    /*
+      *获取题目选项
+    */
+    public function getTestOption(){
+      $test_choice=M("test_choice");
+      $option=$test_choice->field('option')->where("test_id=".$_POST['testId'])->select();
+      echo json_encode($option);
     }
     /*
     *根据id获取材料阅读题的信息
@@ -311,10 +513,16 @@ class TestAction extends Action
       $casetest=M("casetest");
       $test=M("test");
       $test_aspects=M("test_aspects");
+      $td=M("test_choice");
+      $test_device=M("test_device");
       if($type!=4){
-        if($test->where("id=".$id)->delete()&&$test_aspects->where("test_id=".$id)->delete()){
+        if($test->where("id=".$id)->delete()&&$test_aspects->where("test_id=".$id)->delete()&&$td->where("test_id=".$id)->delete()&&$test_device->where("test_id=".$id)->delete()){
           unlink('Data/html/' .$id.'.html');
-          unlink('Storage/image480/'.$id.".png");
+          unlink('Storage/image480/'.$id.".gif");
+          for($i=0;$i<4;$i++){
+            unlink('Data/html/' .$id."_".$i.'.html');
+            unlink('Storage/image480/'.$id."_".$i.".gif");
+          }
           echo true;
         }else{
           echo false;
@@ -323,8 +531,14 @@ class TestAction extends Action
         $testId=$test->field("id")->where("pid=".$id)->select();
         for($i=0;$i<count($testId);$i++){
           $test_aspects->where("test_id=".$testId[$i]["id"])->delete();
+          $td->where("test_id=".$testId[$i]["id"])->delete();
+          $test_device->where("test_id=".$testId[$i]["id"])->delete();
           unlink('Data/html/'.$testId[$i]["id"].'.html');
-          unlink('Storage/image480/'.$testId[$i]["id"].".png");
+          unlink('Storage/image480/'.$testId[$i]["id"].".gif");
+          for($j=0;$j<4;$j++){
+            unlink('Data/html/'.$testId[$i]["id"]."_".$j.'.html');
+            unlink('Storage/image480/'.$testId[$i]["id"]."_".$j.".gif");
+          }
         }
         if($casetest->where("id=".$id)->delete()&&$test->where("pid=".$id)->delete()){
           echo true;  

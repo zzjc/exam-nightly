@@ -1,8 +1,8 @@
- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1transitional.dtd">
 <html>
 <head>
 <link href="/Public/artDialog/skins/opera.css" rel="stylesheet" />
+<link rel="stylesheet" href="/Public/css/updateTitle.css" type="text/css" />
 <script src="/Public/js/jquery.js"></script>
 <script src="/Public/artDialog/artDialog.js"></script>
 <script src="/Public/artDialog/plugins/iframeTools.source.js"></script>
@@ -10,13 +10,22 @@
 <script type="text/javascript" src="/Public/js/updateText.js"></script>
 <script charset="utf-8" type="text/javascript" src="/Public/editor/kindeditor.js"></script>
 <script charset="utf-8" type="text/javascript" src="/Public/editor/lang/zh_CN.js"></script>
+<script type="text/javascript">
+    function openUpdateChoice(optionArr,test_type){
+      art.dialog.data("option",optionArr);
+      art.dialog.data("test_type",test_type);
+      art.dialog.open("/Tpl/default/Admin/Test/updateOption.html",{fixed: true,id:"testOption",title:'修改题目选项'}, false);    
+    }    
+
+</script>
 </head>
 <body>
 <p>请输入题干:<textarea id='editor_id' style="width:480px"></textarea></p>
-<p><textarea id="aspects" rows="1" name="aspects" style="width:480px"></textarea></p>
+<div id="option"></div>
+<div class='aspects'><textarea id="aspects" rows="1" name="aspects" style="width:480px"></textarea></div>
 <div id="answer"></div>
-<p><span>分数:</span><input type="text" id="point"></p>
-<p>
+<div class="point"><span>分数:</span><input type="text" id="point"></div>
+<div class='level'>
     难度：<select id="difficult" name="level">
          	  <option value="1">1</option>
             <option value="2">2</option>
@@ -30,6 +39,6 @@
             <option value="10">10</option>
           </select>          
 </p>
-<p><input type="button" onclick="if(confirm('确认修改？')){sub()}" id="exit" value="修改"></p>
+<p><input type="button" class='btn' onclick="if(confirm('确认修改？')){sub()}" id="exit"  value="确定"></p>
 </body>
 </html>

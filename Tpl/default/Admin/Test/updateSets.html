@@ -20,13 +20,13 @@
       art.dialog.data("type",type);
       art.dialog.data("setsId",setsId);
       art.dialog.data("sets_type",sets_type);
-      art.dialog.open("/Tpl/default/Admin/Test/updateTest.html",{fixed: true,id:"singleTitle",width:510,height:460,title:'修改题目'}, false);
+      art.dialog.open("/Tpl/default/Admin/Test/updateTest.html",{fixed: true,id:"singleTitle",width:510,height:500,title:'修改题目'}, false);
     }
 </script>
 </head>
 <body>
 <p>请修改材料:<textarea id='editor_id' style="width:480px"></textarea></p>
 <div id="singleTitle"></div>
-<p><input type="button" onclick="if(confirm('确认修改？')){updateDescription()}" id="exit" value="修改"></p>
+<p><input type="button" onclick="if(confirm('确认修改？')){updateDescription()}"  class='btn' id="exit" value="确定"></p>
 </body>
 </html>

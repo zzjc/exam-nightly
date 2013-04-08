@@ -3,144 +3,33 @@
 <html>
 <head>
 <link href="/Public/artDialog/skins/opera.css" rel="stylesheet" />
+<link rel="stylesheet" href="/Public/css/addOption.css" type="text/css" />
 <script src="/Public/js/jquery.js"></script>
 <script src="/Public/artDialog/artDialog.js"></script>
 <script src="/Public/artDialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/Public/js/textext.js"></script>
+<script type="text/javascript" src="/Public/js/artdialogTitle.js"></script>
 <script charset="utf-8" type="text/javascript" src="/Public/editor/kindeditor.js"></script>
 <script charset="utf-8" type="text/javascript" src="/Public/editor/lang/zh_CN.js"></script>
-	 <script>
-        var editor;
-        var origin=artDialog.open.origin;
-        var setsType=art.dialog.data("setsType");
-        var cat_id=origin.$("#name").val();
-        $(function(){
-            $('#aspects').textext({
-                plugins : 'tags prompt focus autocomplete ajax arrow',
-                tagsItems : "",
-                prompt : '选择知识点...',
-                html: {
-                    hidden: '<input type="hidden" id="aspects_name" />'
-                },
-                ajax : {
-                    url : '/Data/aspects/'+cat_id+'.json?' + parseInt(Math.random()*100000000),
-                    dataType : 'json',
-                    cacheResults : false
-                }
-            });            
-            var keditor;
-            KindEditor.ready(function(K) {
-                keditor=K.create('#editor_id');
-                editor=keditor;
-            });
-            var test_type=origin.$("input[name='test_type'][type='radio']:checked").val();
-            switch(test_type)
-   　     　{
-  　　         case "1":
-   　　            $("#answer").html("<span>答案:</span>"+
-                                     "<input type='radio' name='answer[]' value='A'>A"+
-                                     "<input type='radio' name='answer[]' value='B'>B"+
-                                     "<input type='radio' name='answer[]' value='C'>C"+
-                                     "<input type='radio' name='answer[]' value='D'>D");        
-                    break;
-               case "2":
-                    $("#answer").html("<span>答案:</span>"+
-                                      "<input type='checkbox' name='answer[]' value='A'>A"+
-                                      "<input type='checkbox'name='answer[]' value='B'>B"+
-                                      "<input type='checkbox' name='answer[]' value='C'>C"+
-                                      "<input type='checkbox' name='answer[]' value='D'>D");         
-                    break;
-                case "3":
-                     $("#answer").html("<span>答案:</span>"+
-                                       "<input type='radio' name='answer[]' value='A'>对"+
-                                       "<input type='radio'name='answer[]' value='B'>错");       
-                     break;
-                case "4":
-                  switch(setsType){
-                    case "1":
-                      $("#answer").html("<span>答案:</span>"+
-                        "<input type='radio' name='answer[]' value='A'>A"+
-                        "<input type='radio' name='answer[]' value='B'>B"+
-                        "<input type='radio' name='answer[]' value='C'>C"+
-                        "<input type='radio' name='answer[]' value='D'>D");        
-                    break;
-                    case "2":
-                      $("#answer").html("<span>答案:</span>"+
-                        "<input type='checkbox' name='answer[]' value='A'>A"+
-                        "<input type='checkbox'name='answer[]' value='B'>B"+
-                        "<input type='checkbox' name='answer[]' value='C'>C"+
-                        "<input type='checkbox' name='answer[]' value='D'>D");         
-                      break;
-                    case "3":
-                     $("#answer").html("<span>答案:</span>"+
-                        "<input type='radio' name='answer[]' value='A'>对"+
-                        "<input type='radio'name='answer[]' value='B'>错");       
-                     break;
-                  }
-　　        }             
-        })
-    /*
-      *添加知识点
-    */
-    function addAspects(){
-      art.dialog.data("cat_id",cat_id);
-      art.dialog.open("/Tpl/default/Admin/Test/addAspects.html",{title:"添加知识点"});
-    }
-    //判断题目类型和输出题目具体信息
-		function sub(){
-			var aspects=document.getElementById('aspects_name').value;
-            var answerMulti=$("input[name='answer[]'][type='checkbox']:checked");
-            var answerSingle=$("input[name='answer[]'][type='radio']:checked").val();
-            if(answerMulti!=""){
-                var multiAnswer="";
-                for(var i=0;i<answerMulti.length;i++){
-                    multiAnswer+=answerMulti[i].value;   
-                 }
-            }
-			var answer=answerSingle?answerSingle:multiAnswer;
-			var point=document.getElementById('point').value;
-			var question=editor.html();
-      var level=$("#difficult").val();
-      var tips=answer==""?"答案不能为空":"";
-      tips+=tips==""?aspects=="[]"?"知识点不能为空":"":aspects=="[]"?",知识点不能为空":"";
-      tips+=tips==""?point==""?"分数不能为空":"":point==""?",分数不能为空":"";
-      tips+=tips==""?question==""?"题干不为空":"":question==""?",题干不为空":"";
-      if(tips==""){
-        var detailOb=origin.$("#titleDetail");
-        detailOb.append("<div class='rule_done'><p>问题:"+question+
-                              "</p><p>知识点:"+aspects+
-                              "</p><span class='detailSplit'>分数:"+point+
-                              "</span><span class='detailSplit'>答案:"+answer+
-                              "</span><span class='detailSplit'>难度:"+level+
-                              "</div>");
-        var title_hide=$("<div class='title_hide'>"+
-                            "<input type='hidden' name='content[]' value='"+question+"'/>"+
-                            "<input type='hidden' name='name[]' value='"+aspects+"'/>"+
-                            "<input type='hidden' name='answer[]' value='"+answer+"'/>"+
-                            "<input type='hidden' name='point[]' value='"+point+"'/>"+
-                            "<input type='hidden' name='level[]' value='"+level+"'/>"+
-                            "<input type='hidden' name='setsType[]' value='"+setsType+"'/>"+
-                          "</div>");
-        detailOb.append(title_hide);
-        origin.$("#addText").css("display","inline");
-        origin.$("#resetText").css("display","inline");
-        origin.$("#titleSingle").css("display","none");
-        art.dialog.close();
-      }else{
-        alert(tips);
-      }
-		}    
-	 </script>
 </head>
 <body>
 <p>请输入题干:<textarea id='editor_id' style="width:480px"></textarea></p>
-<div>
-  <div><textarea id="aspects" rows="1" name="aspects" style="width:480px"></textarea></div>
-  <div><input type="button" onclick="addAspects()" value="添加知识点"></div>
+<div class='rule_done'></div>
+<div id='option'>
+  <input name='optionA[]' type="hidden" value="">
+  <input name='optionB[]' type="hidden" value="">
+  <input name='optionC[]' type="hidden" value="">
+  <input name='optionD[]' type="hidden" value="">
+</div>
+<div class='addOption'><span><a href='javascript:void(0)' onclick='openAddOption()'>请添加题目选项</a></span></div>
+<div class='aspects'>
+  <div class='addAspects1'><textarea id="aspects" rows="1" name="aspects" ></textarea></div>
+  <div  class="addAspects2"><input type="button" onclick="addAspects()" value="添加知识点" id="addAspects2"></div>
+  <div class='clear'></div>
 </div>
 <div id="answer"></div>
-<p><span>分数:</span><input type="text" id="point"></p>
-<p>
+<div class='point'><span>分数:</span><input type="text" id="point" value='1'></div>
+<div class='level'>
     难度：<select id="difficult" name="level">
          	  <option value="1">1</option>
             <option value="2">2</option>
@@ -153,7 +42,7 @@
             <option value="9">9</option>
             <option value="10">10</option>
           </select>          
-</p>
-<p><input type="button" onclick="sub()" id="exit" value="确定规则"></p>
+</div>
+<div class='confirm'><input class='btn' type="button" onclick="sub()" id="exit" value="确定"></div>
 </body>
 </html>

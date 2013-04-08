@@ -5,46 +5,6 @@
  <script src="/Public/artDialog/artDialog.js"></script>
  <script src="/Public/artDialog/plugins/iframeTools.source.js"></script>
  <script type="text/javascript" language="javascript" src="/Public/js/addTest.js"></script>
- <script type="text/javascript">
-    var editor;
-      KindEditor.ready(function(K) {
-              editor=K.create('#editor_id');
-      });
-     function selectSetsType(){
-        art.dialog({
-                   title:'选择题目类型',
-
-                   follow: document.getElementById('titleSets'),
-                   content: "<input type='radio' value='1' name='setsType[]'/>单选题<br /><br />" +
-                           "<input type='radio' value='2' name='setsType[]' />多选题<br /><br />"+
-                           "<input type='radio' value='3' name='setsType[]'>判断题",
-                   ok: function () {             
-                       var setsType=$("input[name='setsType[]']:checked").val();
-                       switch(setsType){
-                          case "1":
-                            art.dialog.data("setsType",setsType);
-                            art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:520,height:460,title:'添加单选题'},false);
-                          break;
-                          case "2":
-                            art.dialog.data("setsType",setsType);
-                            art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:520,height:460,title:'添加多选题'},false);
-                            break;
-                          case "3":
-                            art.dialog.data("setsType",setsType);
-                            art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:520,height:460,title:'添加判断题'},false);
-                            break;
-                       }
-                   }
-               });
-      }
-     function openTitleSetsDel(){
-      art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:520,height:460,title:'添加题目'}, false);
-    }
-    function openTitleSingleDel(){
-      art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:520,height:460,title:'添加题目'},false);
-      $("#titleSingle").attr("disabled","true");
-    }
- </script>
     <form action="__URL__/add" method="post" id="title">	
      <p>
         <span class="type">类别:</span>
@@ -64,13 +24,13 @@
   	 </div>
      <div id="titleDetail"></div>
       <div>
-        <input type="button" value="添加题目信息" id="titleSingle">
+        <input type="button" value="添加题目信息" id="titleSingle" class='btn'>
       </div>
       <div>
-        <input type="button" value="添加题组信息" id="titleSets">
+        <input type="button" value="添加题目信息" id="titleSets" class='btn'>
       </div>
       <p>
-          <input type="submit" class="btn" id="addText" value="新增试题" />
+          <input type="submit" class="btn" id="addText" value="确定" />
           <input type="reset" class="btn" id="resetText" onclick="if(confirm('确认重置内容?')){document.location.reload()}" value="重置试题">
       </p>
     </form>

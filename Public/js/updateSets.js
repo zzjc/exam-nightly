@@ -39,7 +39,7 @@ $(function(){
                               "</p><span class='detailSplit'>分数:"+point+
                               "</span><span class='detailSplit'>答案:"+answer+
                               "</span><span class='detailSplit'>难度:"+level+
-                              "</span><span><a href='javascript:void(0)' onclick='openUpdateTest("+testId+","+setsId+","+test_type+")'>修改</a></span>"+
+                              "</span><span><a href='javascript:void(0)'  onclick='openUpdateTest("+testId+","+setsId+","+test_type+")'>修改</a></span>"+
                               "</div>");
             aspects="";
         }
