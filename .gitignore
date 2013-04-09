@@ -1,3 +1,4 @@
+Public/editor/attached/image/
 *.tar.gz
 Runtime
 Conf/config.php
@@ -7,3 +8,4 @@ Storage/image480/*.gif
 Data/jscache.json
 Data/create_html.json
 Data/html2img/*.html
+
