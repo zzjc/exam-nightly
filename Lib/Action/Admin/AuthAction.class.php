@@ -7,6 +7,7 @@ class AuthAction extends Action
      */
     public function login()
     {
+        $error = '';
         if ($this->isPost()) {
             $Manager = M('manager');
             if($Manager->autoCheckToken($_POST)) {
@@ -17,7 +18,7 @@ class AuthAction extends Action
                         on m.group_id = g.id
                         where m.name = '$username' and password = '$password'";
                 $row = $Manager->query($sql);
-                if($row[0]['gid'] == 0 || $row[0]['gid'] == 1) {
+                if($row) {
                     $user = $row[0];
                     Session::set('manager', true);
                     Session::set('userid', $user['id']);
@@ -29,13 +30,15 @@ class AuthAction extends Action
                         Session::set('gid', $user['gid']);
                         Session::set('gname', $user['gname']);
                     }
-
                     $this->redirect('index/index');
+                } else {
+                    $error = '用户名 或者 密码错误，请重试';
                 }
             } else {
                 die('表单令牌验证错误');
             }
         }
+        $this->assign('error', $error);
         $this->display();
     }
 
