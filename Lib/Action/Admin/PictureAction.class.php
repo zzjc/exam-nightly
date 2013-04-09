@@ -29,16 +29,16 @@
 	        	switch ($test_type){
  					case "1":
 			           switch($answer){
-			             case 'A':
+			             case '1':
 			               $answer=0;
 			               break;
-			             case 'B':
+			             case '2':
 			               $answer=1;
 			               break;
-			             case 'C':
+			             case '3':
 			               $answer=2;
 			               break;
-			             case 'D':
+			             case '4':
 			               $answer=3;
 			               break;  			
 
@@ -65,7 +65,7 @@
 			             }
 			             $optionAll="";
 			             //生成题目图片
-			             $abcdArr=array("A","B","C","D");
+			             $abcdArr=array("1","2","3","4");
 			             ksort($arrnum);
 			             foreach($arrnum as $key=>$val){
 			             	 $optionNum=$key+1;
@@ -83,7 +83,8 @@
 			             $document_root = C('DOCUMENT_ROOT');
 			             $phantomjs = C('PHANTOMJS_PATH');
 			             $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
-			             exec($command);
+			             exec($command); 			             
+
 			             $data['test_id']=$testId;
 			             $data['image480'] = "Storage/image480/{$testId}_{$k}.gif";
 			             $data['answer']=$abcdArr[$k]; 
@@ -114,13 +115,9 @@
 						    //根据答案查找位置
 						    $answerStr="";
 						    for($q=0;$q<strlen($answer);$q++){
-						      $answerOption=strpos($randStr,$answer[$q]);
+						      $answerOption=strpos($randStr,$answer[$q])+1;
 						      $answerStr==""?$answerStr.=$answerOption:$answerStr.=",".$answerOption;
 						    }
-						    $rep1=str_replace("0","A",$answerStr);
-						    $rep2=str_replace("1","B",$rep1);
-						    $rep3=str_replace("2","C",$rep2);
-						    $answerStr=str_replace("3","D",$rep3);
 						    $answerArr=explode(",",$answerStr);
 						    sort($answerArr);
 						    $answerFinal=implode("",$answerArr);
@@ -135,7 +132,8 @@
 	    			        $document_root = C('DOCUMENT_ROOT');
 	    			        $phantomjs = C('PHANTOMJS_PATH');
 	    			        $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$g.".html Storage/image480/".$testId.'_'.$g.".gif";
-	           				exec($command);
+	           				exec($command);	
+
 						    $data['image480'] = "Storage/image480/{$testId}_{$g}.gif";
 						    $data['answer']=$answerFinal;
 						    $testDevice->where("id=".$device_id[$g]["id"])->save($data);
@@ -146,7 +144,7 @@
     			        $template = "Data/template.html"; 
     			        $template_html = file_get_contents($template);
     			        unlink('Data/html/' .$testId.'.html');
-    			        $replace_content="<p>".$content["content"]."</p><p>A.".$choiceA."</p><p>B.".$choiceB."</p";
+    			        $replace_content="<p>".$content["content"]."</p><p>1.".$choiceA."</p><p>2.".$choiceB."</p";
     			        $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
     			        $html_name = $dir . '/' . $testId. '.html';
     			        file_put_contents($html_name, $new);
@@ -154,7 +152,8 @@
     			        $document_root = C('DOCUMENT_ROOT');
     			        $phantomjs = C('PHANTOMJS_PATH');
     			        $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
-           				exec($command);
+           				exec($command);   
+					            				
     			        $data['image480'] = "Storage/image480/{$testId}.gif";
     			        $data['answer']=Input::getVar($answer);
     			        $testDevice->where("test_id=".$testId)->save($data);									        		

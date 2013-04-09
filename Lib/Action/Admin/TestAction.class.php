@@ -236,16 +236,16 @@ class TestAction extends Action
           $optionArr=array($post["optionA"][$i],$post["optionB"][$i],$post["optionC"][$i],$post["optionD"][$i]);
          //查找正确的选项位置
            switch($post['answer'][$i]){
-             case 'A':
+             case '1':
                $answer=0;
                break;
-             case 'B':
+             case '2':
                $answer=1;
                break;
-             case 'C':
+             case '3':
                $answer=2;
                break;
-             case 'D':
+             case '4':
                $answer=3;
                break;  
 
@@ -271,7 +271,7 @@ class TestAction extends Action
              }
              $optionAll="";
              //生成题目图片
-             $abcdArr=array("A","B","C","D");
+             $abcdArr=array("1","2","3","4");
              ksort($arrnum);
              foreach($arrnum as $key=>$val){
                  $optionNum=$key+1;
@@ -305,7 +305,7 @@ class TestAction extends Action
         //添加多选题定义随机组合
          //重新排序后添加图片得出答案
         $optionArr=array($post["optionA"][$i],$post["optionB"][$i],$post["optionC"][$i],$post["optionD"][$i]);
-        $abcdArr=array("A","B","C","D");
+        $abcdArr=array("1","2","3","4");
         for($g=0;$g<4;$g++){
           $randStr="";
           $randArr=array();
@@ -331,13 +331,9 @@ class TestAction extends Action
           //根据答案查找位置
           $answerStr="";
           for($q=0;$q<strlen($post['answer'][$i]);$q++){
-            $answerOption=strpos($randStr,$post['answer'][$i][$q]);
+            $answerOption=strpos($randStr,$post['answer'][$i][$q])+1;
             $answerStr==""?$answerStr.=$answerOption:$answerStr.=",".$answerOption;
           }
-          $rep1=str_replace("0","A",$answerStr);
-          $rep2=str_replace("1","B",$rep1);
-          $rep3=str_replace("2","C",$rep2);
-          $answerStr=str_replace("3","D",$rep3);
           $answerArr=explode(",",$answerStr);
           sort($answerArr);
           $answerFinal=implode("",$answerArr);
@@ -354,6 +350,7 @@ class TestAction extends Action
           $phantomjs = c('PHANTOMJS_PATH');
           $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$g.".html Storage/image480/".$testId.'_'.$g.".gif";
           exec($command); 
+ 
 
           $data['test_id']=$testId;
           $data['image480'] = "Storage/image480/{$testId}_{$g}.gif";
@@ -379,7 +376,6 @@ class TestAction extends Action
         $phantomjs = c('PHANTOMJS_PATH');
         $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
         exec($command); 
-
 
         $data['test_id']=$testId;
         $data['image480'] = "Storage/image480/{$testId}.gif";

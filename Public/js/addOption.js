@@ -8,8 +8,8 @@
      if(test_type==3){
         $("#option").empty();
         $("#option").append(
-            "<div >选项A:<textarea id=\"editor_A\" name='optionA[]' class='test_box'> </textarea> </div>"+
-            "<div >选项B:<textarea id=\"editor_B\" name='optionB[]' class='test_box'> </textarea></div>");
+            "<div >选项A:<textarea id=\"editor_A\" name='optionA[]' class='test_box'></textarea> </div>"+
+            "<div >选项B:<textarea id=\"editor_B\" name='optionB[]' class='test_box'></textarea></div>");
      }
     $("[name='optionA[]']").focus();
  })

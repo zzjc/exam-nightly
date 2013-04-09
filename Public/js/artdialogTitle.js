@@ -27,43 +27,43 @@
    　{
 　      case "1":
            $("#answer").html("<span>答案:</span>"+
-                               "<input type='radio' name='answer[]' value='A'>A"+
-                               "<input type='radio' name='answer[]' value='B'>B"+
-                               "<input type='radio' name='answer[]' value='C'>C"+
-                               "<input type='radio' name='answer[]' value='D'>D");        
+                               "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
+                               "<input type='radio' name='answer[]' value='2'>2&nbsp&nbsp&nbsp"+
+                               "<input type='radio' name='answer[]' value='3'>3&nbsp&nbsp&nbsp"+
+                               "<input type='radio' name='answer[]' value='4'>4");        
               break;
          case "2":
               $("#answer").html("<span>答案:</span>"+
-                                "<input type='checkbox' name='answer[]' value='A'>A"+
-                                "<input type='checkbox'name='answer[]' value='B'>B"+
-                                "<input type='checkbox' name='answer[]' value='C'>C"+
-                                "<input type='checkbox' name='answer[]' value='D'>D");         
+                                "<input type='checkbox' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
+                                "<input type='checkbox'name='answer[]' value='2'>2&nbsp&nbsp&nbsp"+
+                                "<input type='checkbox' name='answer[]' value='3'>3&nbsp&nbsp&nbsp"+
+                                "<input type='checkbox' name='answer[]' value='4'>4");         
               break;
           case "3":
                $("#answer").html("<span>答案:</span>"+
-                                 "<input type='radio' name='answer[]' value='A'>对"+
-                                 "<input type='radio'name='answer[]' value='B'>错");       
+                                 "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
+                                 "<input type='radio'name='answer[]' value='2'>2&nbsp&nbsp&nbsp");       
                break;
           case "4":
             switch(setsType){
               case "1":
                 $("#answer").html("<span>答案:</span>"+
-                  "<input type='radio' name='answer[]' value='A'>A"+
-                  "<input type='radio' name='answer[]' value='B'>B"+
-                  "<input type='radio' name='answer[]' value='C'>C"+
-                  "<input type='radio' name='answer[]' value='D'>D");        
+                  "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
+                  "<input type='radio' name='answer[]' value='2'>2&nbsp&nbsp&nbsp"+
+                  "<input type='radio' name='answer[]' value='3'>3&nbsp&nbsp&nbsp"+
+                  "<input type='radio' name='answer[]' value='4'>4&nbsp");        
               break;
               case "2":
                 $("#answer").html("<span>答案:</span>"+
-                  "<input type='checkbox' name='answer[]' value='A'>A"+
-                  "<input type='checkbox'name='answer[]' value='B'>B"+
-                  "<input type='checkbox' name='answer[]' value='C'>C"+
-                  "<input type='checkbox' name='answer[]' value='D'>D");         
+                  "<input type='checkbox' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
+                  "<input type='checkbox'name='answer[]' value='2'>2&nbsp&nbsp&nbsp"+
+                  "<input type='checkbox' name='answer[]' value='3'>3&nbsp&nbsp&nbsp"+
+                  "<input type='checkbox' name='answer[]' value='4'>4");         
                 break;
               case "3":
                $("#answer").html("<span>答案:</span>"+
-                  "<input type='radio' name='answer[]' value='A'>对"+
-                  "<input type='radio'name='answer[]' value='B'>错");       
+                  "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
+                  "<input type='radio'name='answer[]' value='2'>2");       
                break;
             }
     }             
