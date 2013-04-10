@@ -69,7 +69,7 @@
 			             ksort($arrnum);
 			             foreach($arrnum as $key=>$val){
 			             	 $optionNum=$key+1;
-			                 $optionAll==''?$optionAll.=$content["content"]."<br/>".$optionNum.".".str_replace('<br/>','',$val):$optionAll.='<br/>'.$optionNum.".".str_replace('<br/>','',$val);  			
+			                 $optionAll==''?$optionAll.=$content["content"]."<br/>"."(".$optionNum.")".".".str_replace('<br/>','',$val):$optionAll.='<br/>'."(".$optionNum.")".".".str_replace('<br/>','',$val);  			
 
 			          	 }
 			             $dir = 'Data/html';
@@ -112,7 +112,7 @@
 						    $optionAll="";
 						    foreach($randArr as $key=>$val){
 						    	$optionNum=$key+1;
-						        $optionAll==''?$optionAll.= $content["content"]."<br/>".$optionNum.".".str_replace('<br/>','',$val):$optionAll.='<br/>'.$optionNum.".".str_replace('<br/>','',$val);    							           
+						        $optionAll==''?$optionAll.= $content["content"]."<br/>"."(".$optionNum.")".".".str_replace('<br/>','',$val):$optionAll.='<br/>'."(".$optionNum.")".".".str_replace('<br/>','',$val);    							           
 						    }                    
 						    //根据答案查找位置
 						    $answerStr="";
@@ -134,7 +134,7 @@
 	    			        $document_root = C('DOCUMENT_ROOT');
 	    			        $phantomjs = C('PHANTOMJS_PATH');
 	    			        $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$g.".html Storage/image480/".$testId.'_'.$g.".gif";
-	           				exec($command);	
+	           				exec($command);	           				
 
 						    $data['image480'] = "Storage/image480/{$testId}_{$g}.gif";
 						    $data['answer']=$answerFinal;
@@ -146,7 +146,7 @@
     			        $template = "Data/template.html"; 
     			        $template_html = file_get_contents($template);
     			        unlink('Data/html/' .$testId.'.html');
-    			        $replace_content="<p>".$content["content"]."</p><p>1.".$choiceA."</p><p>2.".$choiceB."</p";
+    			        $replace_content="<p>".$content["content"]."</p><p>(1).".$choiceA."</p><p>(2.".$choiceB."</p";
     			        $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
     			        $html_name = $dir . '/' . $testId. '.html';
     			        file_put_contents($html_name, $new);

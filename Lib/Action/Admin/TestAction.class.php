@@ -275,7 +275,7 @@ class TestAction extends Action
              ksort($arrnum);
              foreach($arrnum as $key=>$val){
                  $optionNum=$key+1;
-                 $optionAll==''?$optionAll.= $post["content"][$i]."<br/>".$optionNum.".".str_replace('<br/>','',$val):$optionAll.='<br/>'.$optionNum.".".str_replace('<br/>','',$val);  
+                 $optionAll==''?$optionAll.= $post["content"][$i]."<br/>"."(".$optionNum.")".".".str_replace('<br/>','',$val):$optionAll.='<br/>'."(".$optionNum.")".".".str_replace('<br/>','',$val);  
 
            }
              $dir = 'Data/html';
@@ -325,7 +325,7 @@ class TestAction extends Action
           $optionAll="";
           foreach($randArr as $key=>$val){
               $optionNum=$key+1;
-              $optionAll==''?$optionAll.= $post["content"][$i]."<br/>".$optionNum.".".str_replace('<br/>','',$val):$optionAll.='<br/>'.$optionNum.".".str_replace('<br/>','',$val);    
+              $optionAll==''?$optionAll.= $post["content"][$i]."<br/>"."(".$optionNum.")".".".str_replace('<br/>','',$val):$optionAll.='<br/>'."(".$optionNum.")".".".str_replace('<br/>','',$val);    
 
           }                    
           //根据答案查找位置
@@ -366,7 +366,7 @@ class TestAction extends Action
         $template = "Data/template.html"; 
         $template_html = file_get_contents($template);
         unlink('Data/html/' .$testId.'.html');
-        $replace_content="<p>".$post["content"][$i]."</p><p>A.".$post["optionA"][$i]."</p><p>B.".$post["optionB"][$i]."</p";
+        $replace_content="<p>".$post["content"][$i]."</p><p>(1).".$post["optionA"][$i]."</p><p>(2).".$post["optionB"][$i]."</p";
         $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
         $html_name = $dir . '/' . $testId. '.html';
         file_put_contents($html_name, $new);
