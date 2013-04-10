@@ -25,7 +25,7 @@
 	        $device_id=$testDevice->where("test_id=".$testId)->field("id")->select();
 	        if($content){
 	        	$optionArr=array($choiceA,$choiceB,$choiceC,$choiceD);
-	        	$abcdArr=array("A","B","C","D");
+	        	$abcdArr=array("1","2","3","4");
 	        	switch ($test_type){
  					case "1":
 			           switch($answer){
@@ -83,7 +83,7 @@
 			             $document_root = C('DOCUMENT_ROOT');
 			             $phantomjs = C('PHANTOMJS_PATH');
 			             $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
-			             exec($command); 			             
+			             exec($command); 				             	             
 
 			             $data['test_id']=$testId;
 			             $data['image480'] = "Storage/image480/{$testId}_{$k}.gif";
@@ -134,6 +134,7 @@
 	    			        $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$g.".html Storage/image480/".$testId.'_'.$g.".gif";
 	           				exec($command);	
 
+
 						    $data['image480'] = "Storage/image480/{$testId}_{$g}.gif";
 						    $data['answer']=$answerFinal;
 						    $testDevice->where("id=".$device_id[$g]["id"])->save($data);
@@ -152,8 +153,8 @@
     			        $document_root = C('DOCUMENT_ROOT');
     			        $phantomjs = C('PHANTOMJS_PATH');
     			        $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
-           				exec($command);   
-					            				
+           				exec($command);   				            				
+    			        
     			        $data['image480'] = "Storage/image480/{$testId}.gif";
     			        $data['answer']=Input::getVar($answer);
     			        $testDevice->where("test_id=".$testId)->save($data);									        		
