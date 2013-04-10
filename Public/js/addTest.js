@@ -1,24 +1,39 @@
-   function sessction(){
+   //用cookie记录题目类型
+   function type_cookie(){
     var arrStr=document.cookie.split(";");
     for(var i=0;i<arrStr.length;i++){
       var temp="";
       temp=arrStr[i].split("=");
       if(/test_type/.test(temp[0])){
        var typeCookie=temp[1];
-        break;
       };
+      if(/cate/.test(temp[0])){
+        var cateCookie=temp[1];
+      }
     }
     if(typeCookie){
       $("input[name='test_type'][value='"+typeCookie+"'][type='radio']").get(0).checked=true;
+    }
+    if(cateCookie){
+      $("#name").val(cateCookie);
     }
    }
    /*
    *判断题目类型
    */
    function type(){
+       var artWin=art.dialog.list['memdiv'];
+       var artSeTy=art.dialog.list["setsType"];
+       if(artWin){
+        artWin.close();
+       }
+       if(artSeTy){
+        artSeTy.close();
+       }
        $("#addText").css("display","none");
        $("#resetText").css("display","none");
        var test_type=$("input[name='test_type'][type='radio']:checked").val();
+       var cate=$("#name").val();
        $("#titleSets").hide();
        $("#titleSingle").show();    
        $("#titleDetail").empty();
@@ -44,15 +59,14 @@
        $.ajax({
            url:"/Admin/Test/ses_type",
            type:"post",
-           data:"test_type="+test_type,
+           data:"test_type="+test_type+"&cate="+cate,
            dataType:"text",
-           success:function(d){
-               
+           success:function(d){   
            }
-       })    
+       })
      }
     $(function(){
-      sessction();
+      type_cookie();
       type();
       $("#name").bind("change",type);
       $("[name='test_type']").bind("change",type);
@@ -66,6 +80,7 @@
  //打开材料分析题的子题
  function selectSetsType(){
     art.dialog({
+               id:"setsType",
                title:'选择题目类型',
                follow: document.getElementById('titleSets'),
                content: "<input type='radio' value='1' name='setsType[]'/>单选题<br /><br />" +

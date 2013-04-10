@@ -83,7 +83,8 @@
 			             $document_root = C('DOCUMENT_ROOT');
 			             $phantomjs = C('PHANTOMJS_PATH');
 			             $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
-			             exec($command); 				             	             
+			             exec($command); 	
+
 
 			             $data['test_id']=$testId;
 			             $data['image480'] = "Storage/image480/{$testId}_{$k}.gif";
@@ -111,7 +112,8 @@
 						    $optionAll="";
 						    foreach($randArr as $key=>$val){
 						    	$optionNum=$key+1;
-						        $optionAll==''?$optionAll.= $content["content"]."<br/>".$optionNum.".".str_replace('<br/>','',$val):$optionAll.='<br/>'.$optionNum.".".str_replace('<br/>','',$val);    							           }                    
+						        $optionAll==''?$optionAll.= $content["content"]."<br/>".$optionNum.".".str_replace('<br/>','',$val):$optionAll.='<br/>'.$optionNum.".".str_replace('<br/>','',$val);    							           
+						    }                    
 						    //根据答案查找位置
 						    $answerStr="";
 						    for($q=0;$q<strlen($answer);$q++){
@@ -133,7 +135,6 @@
 	    			        $phantomjs = C('PHANTOMJS_PATH');
 	    			        $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$g.".html Storage/image480/".$testId.'_'.$g.".gif";
 	           				exec($command);	
-
 
 						    $data['image480'] = "Storage/image480/{$testId}_{$g}.gif";
 						    $data['answer']=$answerFinal;

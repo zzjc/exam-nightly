@@ -26,7 +26,7 @@ class TestAction extends Action
     */
     public function ses_type(){
       setcookie("test_type",$_POST['test_type'],-1,"/");
-      echo $_COOKIE["test_type"];
+      setcookie("cate",$_POST['cate'],-1,"/");
     }
     /*
     *试题列表分类获取题目信息内容

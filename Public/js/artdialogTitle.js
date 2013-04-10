@@ -15,7 +15,7 @@
           ajax : {
               url : '/Data/aspects/'+cat_id+'.json?' + parseInt(Math.random()*100000000),
               dataType : 'json',
-              cacheResults : false
+              cacheResults : true
           }
       });            
       var keditor;
