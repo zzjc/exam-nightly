@@ -162,7 +162,11 @@ class TestAction extends Action
             }
         }else{
           $cate=M("category");
-          $arrCate=$cate->where('group_id = ' . $this->gid)->select();
+          if($this->gid==0){
+           $arrCate=$cate->select();           
+          }else{
+            $arrCate=$cate->where('group_id = ' . $this->gid)->select();
+          }
           $this->assign("arrCate",$arrCate);
           $this->display();
          }
@@ -199,7 +203,11 @@ class TestAction extends Action
           } 
             $this->redirect('Test/add');    
         }else{
+            if($this->gid==0){
+              $arrCate=$cate->select();
+            }else{
              $arrCate=$cate->where('group_id = '.$this->gid)->select();
+            } 
              $this->assign("arrCate",$arrCate);
              $this->display();
          } 
