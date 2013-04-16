@@ -53,11 +53,19 @@ class TestAction extends Action
                     $str=trim(strip_tags($val["content"]));
                     $str=preg_replace('/\s(?=\s)/','',$str);
                     $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
-                    echo "<tr><td>...</td><td>".$str."...".
-                         "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
-                         删除</a></td></tr>";
+                    switch($this->gid){
+                      case 0:
+                        echo "<tr><td>...</td><td>".$str."...".
+                             "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                             删除</a></td></tr>";
+                      break;
+                      default:
+                        echo "<tr><td>...</td><td>".$str."...".
+                             "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                             "</td></tr>";
+                    }
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
 
@@ -77,11 +85,19 @@ class TestAction extends Action
                     $str=trim(strip_tags($val["content"]));
                     $str=preg_replace('/\s(?=\s)/','',$str);
                     $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
-                    echo "<tr><td>...</td><td>".$str."...".
-                         "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
-                         删除</a></td></tr>";
+                    switch($this->gid){
+                      case 0:
+                         echo "<tr><td>...</td><td>".$str."...".
+                           "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                           "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                           修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                           删除</a></td></tr>";
+                      break;
+                      default:
+                         echo "<tr><td>...</td><td>".$str."...".
+                           "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                           "</td></tr>"; 
+                    }
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
 
@@ -102,11 +118,19 @@ class TestAction extends Action
                     $str=trim(strip_tags($val["content"]));
                     $str=preg_replace('/\s(?=\s)/','',$str);
                     $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
-                    echo "<tr><td>...</td><td>".$str."...".
-                         "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
-                         删除</a></td></tr>";
+                    switch($this->gid){
+                      case 0:
+                        echo "<tr><td>...</td><td>".$str."...".
+                             "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                             删除</a></td></tr>";
+                      break;
+                      default:
+                        echo "<tr><td>...</td><td>".$str."...".
+                             "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                             "</td></tr>";
+                    }
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
                     }
@@ -123,10 +147,16 @@ class TestAction extends Action
                     $str=trim(strip_tags($val["description"]));
                     $str=preg_replace('/\s(?=\s)/','',$str);
                     $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
-                    echo "<tr><td>".$str."..."."</td><td>...</td><td>...</td><td>...</td>
-                          <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
-                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
-                         删除</a></td></tr>";
+                    switch($this->gid){
+                      case 0:
+                        echo "<tr><td>".$str."..."."</td><td>...</td><td>...</td><td>...</td>
+                              <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
+                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                             删除</a></td></tr>";
+                      break;
+                      default:
+                        echo "<tr><td>".$str."..."."</td><td>...</td><td>...</td><td>...</td></tr>";
+                    }
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
 
@@ -149,12 +179,20 @@ class TestAction extends Action
                     $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,20,"utf-8");
                     $ea=trim(strip_tags($val["ea"]));
                     $ea=preg_replace('/\s(?=\s)/','',$ea);
-                    $ea=mb_substr(preg_replace('/[\n\r\t]/','',$ea),0,20,"utf-8");                    
-                    echo "<tr><td>...</td><td>".$str."...".
-                         "</td><td>".$ea."</td><td>".strip_tags($val["point"]).
-                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
-                         删除</a></td></tr>";
+                    $ea=mb_substr(preg_replace('/[\n\r\t]/','',$ea),0,20,"utf-8");
+                    switch($this->gid){
+                      case 0:                    
+                        echo "<tr><td>...</td><td>".$str."...".
+                             "</td><td>".$ea."</td><td>".strip_tags($val["point"]).
+                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                             删除</a></td></tr>";
+                      break;
+                      default:
+                        echo "<tr><td>...</td><td>".$str."...".
+                           "</td><td>".$ea."</td><td>".strip_tags($val["point"]).
+                           "</td></tr>";
+                    }     
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
                     }
