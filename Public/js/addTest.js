@@ -54,7 +54,14 @@
           case "4":
             $("#description").show();
             $("#titleSets").show();
-            $("#titleSingle").hide();    
+            $("#titleSingle").hide();
+          break;
+          case "5":
+            $("#description").hide();
+            $("#titleSingle").val("添加题目信息");
+          break;
+
+
 　　   }
        $.ajax({
            url:"/Admin/Test/ses_type",

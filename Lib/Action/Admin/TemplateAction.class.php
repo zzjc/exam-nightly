@@ -31,18 +31,17 @@ class TemplateAction extends Action
         if($this->isPost()) {            
             $Template = M('template');
             if($Template->autoCheckToken($_POST)) {
-                $_post = Input::getVar($_POST);
-                $data['cat_id'] = $_post['cat_id'];
-                $data['name'] = $_post['name'];
-                $data['description'] = $_post['description'];
-                $data['content'] = $this->_rules2json(
-                        $_post['type'], 
-                        $_post['difficult'], 
-                        $_post['number'], 
-                        $_post['score'], 
-                        $_post['aspects']);
-                $data['score'] = $_post['sum'];
-                $data['num'] = $_post['total'];
+                $data['cat_id'] = Input::getVar($_POST['cat_id']);
+                $data['name'] =Input::getVar($_POST['name']); 
+                $data['description'] = Input::getVar($_POST['description']); 
+                $data['content'] = Input::getVar($this->_rules2json(
+                       $_POST['type'], 
+                       $_POST['difficult'], 
+                       $_POST['number'], 
+                       $_POST['score'], 
+                       $_POST['aspects']));
+                $data['score'] = Input::getVar($_POST['sum']);
+                $data['num'] =  Input::getVar($_POST['total']);
                 $Template->add($data);
                 $this->redirect('template/index');
             } else {

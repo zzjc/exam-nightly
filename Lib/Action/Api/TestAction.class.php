@@ -23,7 +23,7 @@ class TestAction extends Action
         foreach($rules as $rule) {
             $rule = (array)$rule;
             $rule_type=$rule['type'];
-            if($rule_type!= 4) {
+            if($rule_type!=4&&$rule_type!=5) {
                 $difficult = explode('-', $rule['difficult']);
                 $difficult_from = $difficult[0];
                 $difficult_to = $difficult[1];
@@ -47,6 +47,7 @@ class TestAction extends Action
                   INNER JOIN test_aspects ta ON test.id = ta.test_id
                   INNER JOIN aspects ON ta.aspects_id = aspects.id
                   INNER JOIN test_device td ON test.id = td.test_id
+
                   WHERE $level
                   AND test.test_type =$rule_type
                   AND aspects.name
@@ -71,7 +72,7 @@ class TestAction extends Action
                     $images[] = $t['img'];
                     $final[0][] = $t;
                 }
-            } else {//材料分析题
+            } else if($rule_type==4){//材料分析题
                 $num = $rule['number'];
                 $sql = "select id, description from casetest
                         where cat_id = $cid
@@ -99,7 +100,47 @@ class TestAction extends Action
                     $cases[$key]['options'] = $tests;
 
                 }
-                $final[1] = $cases;
+                $final[1]= $cases; 
+            }else if($rule_type==5){
+                  $difficult = explode('-', $rule['difficult']);
+                  $difficult_from = $difficult[0];
+                  $difficult_to = $difficult[1];
+                  $num = $rule['number'];
+                  $aspects = json_decode($rule['aspects']);
+                  foreach($aspects as $key => $aspect)
+                      $aspects[$key] = "'$aspect'";
+                  $aspects = implode($aspects, ', '); 
+
+                  if($difficult_from == $difficult_to) {
+                      $level = "level = $difficult_to";
+                  } else {
+                      $level = "level >= $difficult_from and level <= $difficult_to";
+                  }                
+                 $sql="select test.id,test.content title,
+                  test.level,te.answer,td.image480 as img,
+                  test.test_type as type,test.point
+                  from test
+                  inner join test_essay te on te.test_id=test.id
+                  inner join test_aspects ta ON test.id = ta.test_id
+                  inner join test_device td on test.id=td.test_id
+                  inner join aspects ON ta.aspects_id = aspects.id
+                  where $level
+                  AND test.test_type=$rule_type
+                  AND aspects.name
+                  IN(
+                    $aspects
+                  )
+                  AND pid=0
+                  AND test.cat_id=$cid
+                  ORDER BY rand() limit $num";
+                  $tests = $testmodel->query($sql);
+                  foreach($tests as $t) {
+                      $t['title'] = $this->subString($t['title']);
+                      $t['title'] = trim($t['title']);
+                      $t['client'] = '';
+                      $images[] = $t['img'];
+                      $final[2][]=$t;
+                  }            
             }
         }
         $string = Json::encode(json_encode($final));
@@ -137,7 +178,7 @@ class TestAction extends Action
               AND pid =0
               AND test.cat_id =$cid
               ORDER BY rand( )
-          ) AS newGroup group by id limit  $number";                                    
+          ) AS newGroup group by id limit  $number";                                  
           $test = M();
           return $test->query($sql);
     }

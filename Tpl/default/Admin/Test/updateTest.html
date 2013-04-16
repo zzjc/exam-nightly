@@ -15,12 +15,12 @@
       art.dialog.data("option",optionArr);
       art.dialog.data("test_type",test_type);
       art.dialog.open("/Tpl/default/Admin/Test/updateOption.html",{fixed: true,id:"testOption",title:'修改题目选项'}, false);    
-    }    
-
+    }
 </script>
 </head>
 <body>
 <p>请输入题干:<textarea id='editor_id' style="width:480px"></textarea></p>
+<div class="essay_answer">请输入答案:<textarea id="essay_answer" style="width:480px"></textarea></div>
 <div id="option"></div>
 <div class='aspects'><textarea id="aspects" rows="1" name="aspects" style="width:480px"></textarea></div>
 <div id="answer"></div>

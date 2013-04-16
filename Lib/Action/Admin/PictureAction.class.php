@@ -7,6 +7,9 @@
 	        $testId=Input::getVar($_POST["testId"]);
 	        $test_type=Input::getVar($_POST["test_type"]);
 	        $sets_type=Input::getVar($_POST["sets_type"]);
+			$dir = 'Data/html';
+			$template = "Data/template.html"; 
+			$template_html = file_get_contents($template);	        
 	        if($test_type==4){
 	        	$test_type=$sets_type;
 	        }
@@ -14,7 +17,8 @@
 	        $choiceB=Input::getVar($_POST["choiceB"]);
 	        $choiceC=Input::getVar($_POST["choiceC"]);
 	        $choiceD=Input::getVar($_POST["choiceD"]);
-	        $answer=Input::getVar($_POST["answer"]);	       
+	        $answer=Input::getVar($_POST["answer"]);
+	        $eaAnswer=Input::getVar($_POST["eaAnswer"]);	       
 	        //重新生成html
 	        $dir = 'Data/html';
 	        $template = "Data/template.html"; 
@@ -72,9 +76,7 @@
 			                 $optionAll==''?$optionAll.=$content["content"]."<br/>"."(".$optionNum.")".".".str_replace('<br/>','',$val):$optionAll.='<br/>'."(".$optionNum.")".".".str_replace('<br/>','',$val);  			
 
 			          	 }
-			             $dir = 'Data/html';
-			             $template = "Data/template.html"; 
-			             $template_html = file_get_contents($template);
+
 			             unlink('Data/html/' .$testId.'_'.$k.'.html');
 			             $new = str_replace('{REPLACE_HOLDER}',$optionAll, $template_html);
 			             $html_name = $dir . '/' . $testId.'_'.$k. '.html';
@@ -123,9 +125,7 @@
 						    $answerArr=explode(",",$answerStr);
 						    sort($answerArr);
 						    $answerFinal=implode("",$answerArr);
-						    $dir = 'Data/html';
-						    $template = "Data/template.html"; 
-						    $template_html = file_get_contents($template);
+
 						    unlink('Data/html/' .$testId.'_'.$g.'.html');
 						    $new = str_replace('{REPLACE_HOLDER}',$optionAll, $template_html);
 						    $html_name = $dir . '/' . $testId.'_'.$g. '.html';
@@ -141,10 +141,7 @@
 						    $testDevice->where("id=".$device_id[$g]["id"])->save($data);
 						}
 						break;
-					default:
-    			        $dir = 'Data/html';
-    			        $template = "Data/template.html"; 
-    			        $template_html = file_get_contents($template);
+					case "3":
     			        unlink('Data/html/' .$testId.'.html');
     			        $replace_content="<p>".$content["content"]."</p><p>(1).".$choiceA."</p><p>(2.".$choiceB."</p";
     			        $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
@@ -154,11 +151,28 @@
     			        $document_root = C('DOCUMENT_ROOT');
     			        $phantomjs = C('PHANTOMJS_PATH');
     			        $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
-           				exec($command);   				            				
-    			        
+           				exec($command);   			
+
     			        $data['image480'] = "Storage/image480/{$testId}.gif";
-    			        $data['answer']=Input::getVar($answer);
-    			        $testDevice->where("test_id=".$testId)->save($data);									        		
+    			        $data['answer']=$answer;
+    			        $testDevice->where("test_id=".$testId)->save($data);
+    			        break;
+    			    case "5":
+    			    	unlink('Data/html/' .$testId.'.html');
+    			        $replace_content="<p>".$content["content"]."</p>";
+    			        $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
+    			        $html_name = $dir . '/' . $testId. '.html';
+    			        file_put_contents($html_name, $new);
+    			          //生成图片
+    			        $document_root = C('DOCUMENT_ROOT');
+    			        $phantomjs = C('PHANTOMJS_PATH');
+    			        $command ="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+           				exec($command);   				            				
+
+    			        $data['image480'] = "Storage/image480/{$testId}.gif";
+    			        $data['answer']=Input::getVar($eaAnswer);
+    			        $testDevice->where("test_id=".$testId)->save($data);    			            			            			    	
+    			        break;
 		        }
 		    }else{
 		         echo '修改失败';  

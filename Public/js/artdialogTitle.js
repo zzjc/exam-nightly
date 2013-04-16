@@ -1,7 +1,7 @@
 
   var editor;
   var origin=artDialog.open.origin;
-  var setsType=art.dialog.data("setsType");
+  var setsType=art.dialog.data("setsType")==""?"":art.dialog.data("setsType");
   var cat_id=origin.$("#name").val();
   var test_type=origin.$("input[name='test_type'][type='radio']:checked").val();
   $(function(){ 
@@ -17,12 +17,14 @@
               dataType : 'json',
               cacheResults : true
           }
-      });            
+      });         
       var keditor;
       KindEditor.ready(function(K) {
           keditor=K.create('#editor_id');
           editor=keditor;               
       });
+      $(".essay_answer").hide();
+
       switch(test_type)
    　{
 　      case "1":
@@ -66,6 +68,11 @@
                   "<input type='radio'name='answer[]' value='2'>(2)");       
                break;
             }
+            break;
+          case "5":
+            $(".essay_answer").show();
+            $(".addOption").hide();
+          break;
     }             
   })
   /*
@@ -85,25 +92,32 @@
   }
   //判断题目类型和输出题目具体信息
 function sub(){
-	var aspects=document.getElementById('aspects_name').value;
-          var answerMulti=$("input[name='answer[]'][type='checkbox']:checked");
-          var answerSingle=$("input[name='answer[]'][type='radio']:checked").val();
-          if(answerMulti!=""){
-              var multiAnswer="";
-              for(var i=0;i<answerMulti.length;i++){
-                  multiAnswer+=answerMulti[i].value;   
-               }
-          }
-	var answer=answerSingle?answerSingle:multiAnswer;
+	var answer="";
+  var aspects=document.getElementById('aspects_name').value;
+  if(test_type!=5){
+    var answerMulti=$("input[name='answer[]'][type='checkbox']:checked");
+    var answerSingle=$("input[name='answer[]'][type='radio']:checked").val();
+    if(answerMulti!=""){
+        var multiAnswer="";
+        for(var i=0;i<answerMulti.length;i++){
+            multiAnswer+=answerMulti[i].value;   
+         }
+    }
+  	 answer=answerSingle?answerSingle:multiAnswer;
+  }else{
+    answer=$("#essay_answer").val();
+  }
 	var point=document.getElementById('point').value;
-	var question=editor.html();
+  if(editor){
+	 var question=editor.html();
+  }
     var level=$("#difficult").val();
     var choiceA=$("[name='optionA[]']").val();
     var choiceB=$("[name='optionB[]']").val();
     var choiceC=$("[name='optionC[]']").val();
     var choiceD=$("[name='optionD[]']").val();
     var tips=answer==""?"答案不能为空":"";
-    if(test_type!=3&&test_type!=4){
+    if(test_type!=3&&test_type!=4&&test_type!=5){
       if(choiceA==""||choiceB==""||choiceC==""||choiceD==""||choiceA==" "||choiceB==" "||choiceC==" "||choiceD==" "){
         tips+=tips==""?"题目选项不完整":",题目选项不完整" 
       }
@@ -135,7 +149,7 @@ function sub(){
     tips+=tips==""?question==""?"题干不为空":"":question==""?",题干不为空":"";
     if(tips==""){
       var detailOb=origin.$("#titleDetail");
-      if(test_type!=3){
+      if(test_type!=3&&test_type!=5){
         detailOb.append("<div class='rule_done'><p>问题:"+question+
                               "</p><p>1."+choiceA+
                               "</p><p>2."+choiceB+
@@ -158,7 +172,7 @@ function sub(){
                             "<input type='hidden' name='level[]' value='"+level+"'/>"+
                             "<input type='hidden' name='setsType[]' value='"+setsType+"'/>"+
                           "</div>");
-      }else{
+      }else if(test_type==3){
         detailOb.append("<div class='rule_done'><p>问题:"+question+
                               "</p><p>1."+choiceA+
                               "</p><p>2."+choiceB+
@@ -177,6 +191,22 @@ function sub(){
                             "<input type='hidden' name='level[]' value='"+level+"'/>"+
                             "<input type='hidden' name='setsType[]' value='"+setsType+"'/>"+
                           "</div>");        
+      }else if(test_type==5){
+        detailOb.append("<div class='rule_done'><p>问题:"+question+
+                      "</p><p><span class='detailSplit'>答案:"+answer+
+                      "</span></p><p>知识点:"+aspects+
+                      "</p><span class='detailSplit'>分数:"+point+
+                      "</span><span class='detailSplit'>难度:"+level+
+                      "</span></div>");
+        var title_hide=$("<div class='title_hide'>"+
+                            "<input type='hidden' name='content[]' value='"+question+"'/>"+          
+                            "<input type='hidden' name='name[]' value='"+aspects+"'/>"+
+                            "<input type='hidden' name='answer[]' value='"+answer+"'/>"+
+                            "<input type='hidden' name='point[]' value='"+point+"'/>"+
+                            "<input type='hidden' name='level[]' value='"+level+"'/>"+
+                            "<input type='hidden' name='setsType[]' value='"+setsType+"'/>"+
+                          "</div>");            
+
       }
       detailOb.append(title_hide);
       origin.$("#addText").css("display","inline");

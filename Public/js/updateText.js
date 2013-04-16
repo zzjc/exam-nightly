@@ -12,6 +12,7 @@
  var setsId=art.dialog.data("setsId");
  var categoryId=art.dialog.data("categoryId");
  $(function(){
+     $(".essay_answer").hide();
      var keditor;
      KindEditor.ready(function(K) {
          keditor=K.create('#editor_id');
@@ -78,7 +79,7 @@
                               );    
               $("#answer").html("<span>答案:</span>"+
                                  "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
-                                 "<input type='radio'name='answer[]' value='1'>2");       
+                                 "<input type='radio'name='answer[]' value='2'>2");       
                break;
           case "4":
              if(sets_type==1){
@@ -132,6 +133,11 @@
                        "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
                        "<input type='radio'name='answer[]' value='2'>2&nbsp&nbsp&nbsp");  
              }
+             break;
+          case "5":
+            $(".essay_answer").show();
+            $(".addOption").hide();
+          break;
           }
         }
       })       
@@ -139,7 +145,7 @@
      $.ajax({
        url:"/Admin/Test/getTitleInfo",
        type:"post",
-       data:"id="+id,
+       data:"id="+id+"&test_type="+test_type,
        dataType:"text",
        success:function(d){
         var titleInfo=jQuery.parseJSON(d);
@@ -190,6 +196,12 @@
                editor.html(titleInfo["content"]);
            }
            break;
+         case "5":
+           $("#point").val(titleInfo["point"]);
+           $("#difficult").val(titleInfo["level"]);
+           $("#essay_answer").val(titleInfo["eaAnswer"]["answer"]);
+           editor.html(titleInfo["content"]);
+         break;
         } 
         $('#aspects').textext({
            plugins:'tags prompt focus autocomplete ajax arrow',
@@ -207,6 +219,10 @@
        }
      })             
  })
+
+
+
+
   //判断题目类型和输出题目具体信息
  function sub(){
   var choiceA=$("[name='optionA[]']").val();
@@ -223,52 +239,61 @@
              }
      }
  	var answer=answerSingle?answerSingle:multiAnswer;
+  var eaAnswer=$("#essay_answer").val();
  	var point=document.getElementById('point').value;
  	var question=editor.html();
   question = question.replace(/%/g, "%25");  
   question= question.replace(/\&/g, "%26");  
   question= question.replace(/\+/g, "%2B");
   var level=$("#difficult").val();
-  var tips=answer==""?"答案不能为空":"";
-  if(test_type!=3&&test_type!=4){
-    if(choiceA==""||choiceB==""||choiceC==""||choiceD==""||choiceA==" "||choiceB==" "||choiceC==" "||choiceD==" "){
+  switch(test_type){
+    case "5":
+      var tips=eaAnswer==""?"答案不能为空":"";
+    break;
+    default:
+      var tips=answer==""?"答案不能为空":"";
+  }
+
+  if(test_type==1&&test_type==2){
+    if(choiceA==""||choiceB==""||choiceC==""||choiceD==""){
       tips+=tips==""?"题目选项不完整":",题目选项不完整" 
     }
   }else if(test_type==3){
-    if(choiceA==""||choiceB==""||choiceA==" "||choiceB==" "||choiceC==" "||choiceD==" "){
+    if(choiceA==""||choiceB==""){
       tips+=tips==""?"题目选项不完整":",题目选项不完整"
     }
   }else if(test_type==4){
     switch(sets_type){
       case "1":
-        if(choiceA==""||choiceB==""||choiceC==""||choiceD==""||choiceA==" "||choiceB==" "||choiceC==" "||choiceD==" "){
+        if(choiceA==""||choiceB==""||choiceC==""||choiceD==""){
          tips+=tips==""?"题目选项不完整":",题目选项不完整"
         }           
       break;
       case "2":
-        if(choiceA==""||choiceB==""||choiceC==""||choiceD==""||choiceA==" "||choiceB==" "||choiceC==" "||choiceD==" "){
+        if(choiceA==""||choiceB==""||choiceC==""||choiceD==""){
          tips+=tips==""?"题目选项不完整":",题目选项不完整"
         }           
       break; 
       case "3":
-        if(choiceA==""||choiceB==""||choiceA==" "||choiceB==" "||choiceC==" "||choiceD==" "){
+        if(choiceA==""||choiceB==""){
          tips+=tips==""?"题目选项不完整":",题目选项不完整"
         }           
       break;             
     }
+    
   }  
   tips+=tips==""?aspects=="[]"?"知识点不能为空":"":aspects=="[]"?",知识点不能为空":"";
   tips+=tips==""?point==""?"分数不能为空":"":point==""?",分数不能为空":"";
   tips+=tips==""?question==""?"题干不为空":"":question==""?",题干不为空":"";
   if(tips!=""){
     alert(tips);
-  }else{   
+  }else{  
      $.ajax({
        url:"/Admin/Test/updateTest",
        type:"post",
-       data:"aspects="+aspects+"&answer="+answer+"&point="+point+
+       data:"aspects="+aspects+"&answer="+answer+"&eaAnswer="+eaAnswer+"&point="+point+
             "&question="+question+"&level="+level+"&id="+id+"&test_type="+test_type+
-            "&choiceA="+choiceA+"&choiceB="+choiceB+"&choiceC="+choiceC+"&choiceD="+choiceD,
+            "&choiceA="+choiceA+"&choiceB="+choiceB+"&choiceC="+choiceC+"&choiceD="+choiceD+"&sets_type="+sets_type,
        dataType:"text",
        success:function(d){
         //随即生成4张图片
@@ -286,7 +311,8 @@
             $.ajax({
               url:"/Admin/Picture/update_html",
               type:"post",
-              data:"testId="+id+"&test_type="+test_type+"&choiceA="+choiceA+"&choiceB="+choiceB+"&choiceC="+choiceC+"&choiceD="+choiceD+"&answer="+answer+"&sets_type="+sets_type,
+              data:"testId="+id+"&test_type="+test_type+"&choiceA="+choiceA+"&choiceB="+choiceB+
+                   "&choiceC="+choiceC+"&choiceD="+choiceD+"&answer="+answer+"&eaAnswer="+eaAnswer+"&sets_type="+sets_type,
               dataType:"text",
               success:function(fd){
                 setsTitleInfo();
@@ -297,6 +323,10 @@
      })
    }
  	}
+
+
+
+
   //获得试题信息
 function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;
@@ -312,6 +342,9 @@ function testInfo(){
         }
     })
 }
+
+
+
 function setsTitleInfo(){
   var singleTitleOb=origin.$("#singleTitle");
   singleTitleOb.empty();

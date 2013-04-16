@@ -162,3 +162,28 @@ code{
     width:450px;
     font-size: 12px;
 }
+#essay_answer {
+    width: 400px; 
+    min-height:100px; 
+    max-height:100px;
+    _height:100px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    padding: 3px; 
+    outline: 0; 
+    border: 1px solid #a0b3d6; 
+    font-size: 12px; 
+    word-wrap: break-word;
+    resize:none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-radius:5px; 
+    margin-bottom: 10px;
+}
+#essay_answer:focus{
+    -moz-box-shadow: 0 0 6px rgba(0, 100, 255, .45);
+    -webkit-box-shadow: 0 0 6px rgba(0, 100, 255, .45);
+    box-shadow: 0 0 6px rgba(0, 100, 255, .45);
+    border-color: #9DACCC;
+
+}

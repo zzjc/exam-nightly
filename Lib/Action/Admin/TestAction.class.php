@@ -35,6 +35,7 @@ class TestAction extends Action
     { 
         $test=M("test");
         $casetest=M("casetest");
+        $essay=M("test_essay");
         if($this->isAjax()){
             $categoryId=Input::getVar($_GET["categoryId"]);
             $type=Input::getVar($_GET["type"]);
@@ -131,6 +132,33 @@ class TestAction extends Action
 
                     }
                 }
+                break;
+              case 5:
+                $confident['test_type']=5;
+                $confident['pid']=0;
+                $confident['cat_id']=$categoryId;
+                $count=$test->where($confident)->count();  
+                $page=new page($count,10);
+                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
+                $show=$page->show();  
+                $list = $test->field("test.*,te.answer as ea")->join("inner join test_essay as te on test.id=te.test_id")->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
+
+                foreach($list as $key=>$val){
+                    $str=trim(strip_tags($val["content"]));
+                    $str=preg_replace('/\s(?=\s)/','',$str);
+                    $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,20,"utf-8");
+                    $ea=trim(strip_tags($val["ea"]));
+                    $ea=preg_replace('/\s(?=\s)/','',$ea);
+                    $ea=mb_substr(preg_replace('/[\n\r\t]/','',$ea),0,20,"utf-8");                    
+                    echo "<tr><td>...</td><td>".$str."...".
+                         "</td><td>".$ea."</td><td>".strip_tags($val["point"]).
+                         "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                         修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                         删除</a></td></tr>";
+                    if($key==count($list)-1){
+                      echo "<tr><td colspan='5'>".$show."</td></tr>";
+                    }
+                }                  
             }
         }else{
           $cate=M("category");
@@ -159,7 +187,7 @@ class TestAction extends Action
             $pid="";
           }
           //添加题目并生成4张随机题目图片
-          for($i=0;$i<count($_POST["content"]);$i++){
+          for($i=0;$i<count($_POST["level"]);$i++){
             $aspectArr= json_decode(str_replace("\\","",$_POST["name"][$i]),true);
             $testId=$this->addTest($testOb,$_POST,$pid,$i,$test_type);
             for($j=0;$j<count($aspectArr);$j++){
@@ -197,22 +225,37 @@ class TestAction extends Action
     */
     public function addTest($model,$post,$pid,$i,$test_type){
       if($model->autoCheckToken($post)){
-          $data["pid"]=$pid;
-          $data['cat_id']=Input::getVar($post["category"]);
-          $data["content"]=Input::getVar($post["content"][$i]);
-          $data["level"]=Input::getVar($post["level"][$i]);
-          $data["answer"]=Input::getVar($post["answer"][$i]);
-          if($test_type!=4){
-            $data["test_type"]=$test_type;            
-          }else{
-            $data["test_type"]=Input::getVar($post["setsType"][$i]);
-          }
-          $data["point"]=Input::getVar($post["point"][$i]);
-          $data["author"]=$_SESSION['username'];
-          $data["date"]=time();
-          if($model->add($data)){
-            return mysql_insert_id();
-          }
+        $essay=M("test_essay");
+        $data['cat_id']=Input::getVar($post["category"]);  
+        $data["level"]=Input::getVar($post["level"][$i]);  
+        $data["answer"]=Input::getVar($post["answer"][$i]);     
+        $data["point"]=Input::getVar($post["point"][$i]); 
+        $data["author"]=$_SESSION['username'];    
+        $data["date"]=time();
+        $data['content']=Input::getVar($post["content"][$i]);            
+        $data["pid"]=$pid;   
+        $data["test_type"]=$test_type;        
+        switch($test_type){
+           case "5":
+           $data["answer"]=""; 
+            if($model->add($data)){
+                $test_id=mysql_insert_id();
+                $dat["test_id"]=$test_id;
+                $dat["answer"]=Input::getVar($post["answer"][$i]);
+                $essay->add($dat);
+                return $test_id;  
+            }                                                     
+          break;
+          default:
+            if($test_type==4){
+              $data["test_type"]=Input::getVar($post["setsType"][$i]);
+              $model->add($data);
+              return mysql_insert_id();
+            }else{
+              $model->add($data);
+              return mysql_insert_id();            
+            }
+        }
       }else{
           echo "表单令牌错误";
       }
@@ -224,6 +267,11 @@ class TestAction extends Action
     */
     public function addPicture($testId,$post,$i){
      $td=M("test_device");
+     $document_root = C('DOCUMENT_ROOT');
+     $phantomjs = c('PHANTOMJS_PATH');
+     $dir = 'Data/html';
+     $template = "Data/template.html"; 
+     $template_html = file_get_contents($template);          
      $test_type=Input::getVar($post['test_type']);
      switch($test_type){
        case 1:
@@ -275,19 +323,16 @@ class TestAction extends Action
              ksort($arrnum);
              foreach($arrnum as $key=>$val){
                  $optionNum=$key+1;
-                 $optionAll==''?$optionAll.= $post["content"][$i]."<br/>"."(".$optionNum.")".".".str_replace('<br/>','',$val):$optionAll.='<br/>'."(".$optionNum.")".".".str_replace('<br/>','',$val);  
+                 $optionAll==''?$optionAll.=Input::getVar($post["content"][$i])."<br/>"."(".$optionNum.")".".".str_replace('<br/>','',Input::getVar($val)):$optionAll.='<br/>'."(".$optionNum.")".".".str_replace('<br/>','',Input::getVar($val));  
 
            }
-             $dir = 'Data/html';
-             $template = "Data/template.html"; 
-             $template_html = file_get_contents($template);
+
              unlink('Data/html/' .$testId.'_'.$k.'.html');
              $new = str_replace('{REPLACE_HOLDER}',$optionAll, $template_html);
              $html_name = $dir . '/' . $testId.'_'.$k. '.html';
              file_put_contents($html_name, $new);
 
-             $document_root = C('DOCUMENT_ROOT');
-             $phantomjs = c('PHANTOMJS_PATH');
+
              $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
              exec($command);
 
@@ -325,7 +370,7 @@ class TestAction extends Action
           $optionAll="";
           foreach($randArr as $key=>$val){
               $optionNum=$key+1;
-              $optionAll==''?$optionAll.= $post["content"][$i]."<br/>"."(".$optionNum.")".".".str_replace('<br/>','',$val):$optionAll.='<br/>'."(".$optionNum.")".".".str_replace('<br/>','',$val);    
+              $optionAll==''?$optionAll.= Input::getVar($post["content"][$i])."<br/>"."(".$optionNum.")".".".str_replace('<br/>','',Input::getVar($val)):$optionAll.='<br/>'."(".$optionNum.")".".".str_replace('<br/>','',Input::getVar($val));    
 
           }                    
           //根据答案查找位置
@@ -338,19 +383,14 @@ class TestAction extends Action
           sort($answerArr);
           $answerFinal=implode("",$answerArr);
           //生成图片
-          $dir = 'Data/html';
-          $template = "Data/template.html"; 
-          $template_html = file_get_contents($template);
+
           unlink('Data/html/' .$testId.'_'.$g.'.html');
           $new = str_replace('{REPLACE_HOLDER}',$optionAll, $template_html);
           $html_name = $dir . '/' . $testId.'_'.$g. '.html';
           file_put_contents($html_name, $new);
 
-          $document_root = C('DOCUMENT_ROOT');
-          $phantomjs = c('PHANTOMJS_PATH');
           $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$g.".html Storage/image480/".$testId.'_'.$g.".gif";
-          exec($command); 
- 
+          exec($command);    
 
           $data['test_id']=$testId;
           $data['image480'] = "Storage/image480/{$testId}_{$g}.gif";
@@ -362,31 +402,39 @@ class TestAction extends Action
       case 3:
         $this->addOption($post["optionA"][$i],$testId);
         $this->addOption($post["optionB"][$i],$testId);
-        $dir = 'Data/html';
-        $template = "Data/template.html"; 
-        $template_html = file_get_contents($template);
+
         unlink('Data/html/' .$testId.'.html');
-        $replace_content="<p>".$post["content"][$i]."</p><p>(1).".$post["optionA"][$i]."</p><p>(2).".$post["optionB"][$i]."</p";
+        $replace_content="<p>".Input::getVar($post["content"][$i])."</p><p>(1).".Input::getVar($post["optionA"][$i])."</p><p>(2).".Input::getVar($post["optionB"][$i])."</p>";
         $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
         $html_name = $dir . '/' . $testId. '.html';
         file_put_contents($html_name, $new);
 
-
-        $document_root = C('DOCUMENT_ROOT');
-        $phantomjs = c('PHANTOMJS_PATH');
         $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
-        exec($command); 
+        exec($command);        
 
         $data['test_id']=$testId;
         $data['image480'] = "Storage/image480/{$testId}.gif";
         $data['answer']=Input::getVar($post["answer"][$i]);
         $td->add($data);   
         break;
-     case 4:
-        $setsType=Input::getVar($post["setsType"][$i]);
-        $post['test_type']=$setsType;
-        $this->addPicture($testId,$post,$i);
-        break;
+      case 4:
+         $setsType=Input::getVar($post["setsType"][$i]);
+         $post['test_type']=$setsType;
+         $this->addPicture($testId,$post,$i);
+         break;
+      case 5:
+        unlink('Data/html/' .$testId.'.html');
+        $replace_content="<p>".Input::getvar($post["content"][$i])."</p>";
+        $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
+        $html_name = $dir . '/' . $testId. '.html';
+        file_put_contents($html_name, $new);
+
+        $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+        exec($command);      
+
+        $data['test_id']=$testId;
+        $data['image480'] = "Storage/image480/{$testId}.gif";
+        $td->add($data);            
     }  
   }
 
@@ -395,7 +443,7 @@ class TestAction extends Action
     */
     public function addOption($option,$testId){
      $optionOb=M("test_choice");
-     $data['option']=$option;
+     $data['option']=Input::getVar($option);
      $data['test_id']=$testId;
      $optionOb->add($data);
     }
@@ -422,6 +470,8 @@ class TestAction extends Action
       $test=M("test");
       $test_aspects=M("test_aspects");
       $aspects=M("aspects");
+      $ea=M("test_essay");
+      $test_type=$_POST["test_type"];
       $id=Input::getVar($_POST["id"]);
       $aspectsId=$test_aspects->field("aspects_id")->where("test_id=".$id)->select();
       $aspectsName=array();
@@ -429,6 +479,9 @@ class TestAction extends Action
         $aspectsName[]=$aspects->field("name")->where("id=".$aspectsId[$i]["aspects_id"])->find();
       }
       $titleInfo=$test->where("id=".$id)->find();
+      if($test_type==5){
+        $titleInfo["eaAnswer"]=$ea->field("answer")->where("test_id=".$id)->find();
+      }
       $titleInfo["name"]=$aspectsName;
       echo json_encode($titleInfo);
     }
@@ -437,22 +490,31 @@ class TestAction extends Action
     */
     public function updateTest(){
        $test=M("test");
+       $essay=M("test_essay");
        $test_aspects=M("test_aspects");
        $aspectsOb=M("aspects");
        $test_choice=M("test_choice");
        $aspects=Input::getVar($_POST["aspects"]);
+       $dat["answer"]=Input::getVar($_POST["eaAnswer"]);
        $data["answer"]=Input::getVar($_POST["answer"]);
        $data["point"]=Input::getVar($_POST["point"]);
        $data["content"]=Input::getVar($_POST["question"]);
        $data["level"]=Input::getVar($_POST["level"]);
        $testId=Input::getVar($_POST["id"]);
        $test_type=Input::getVar($_POST["test_type"]);
+       $sets_type=Input::getVar($_POST["sets_type"]);
        $choiceA=Input::getVar($_POST["choiceA"]);
        $choiceB=Input::getVar($_POST["choiceB"]);
        $choiceC=Input::getVar($_POST["choiceC"]);
        $choiceD=Input::getVar($_POST["choiceD"]);
+       if($test_type==4){
+          $test_type=$sets_type;  
+       }
        $test->where('id='.$testId)->save($data);
-       $aspectArr=explode(",",str_replace("\"","",str_replace("]","",str_replace("[","",$aspects))));
+       if($test_type==5){
+        $essay->where("test_id=".$testId)->save($dat);
+       }
+       $aspectArr=json_decode($aspects);
        @$test_aspects->where("test_id=".$testId)->delete();
        for($i=0;$i<count($aspectArr);$i++){
           $aspectsId=$aspectsOb->where("name='".$aspectArr[$i]."'")->getField("id");
@@ -466,7 +528,7 @@ class TestAction extends Action
           $test_choice->where('id='.$test_id["1"]["id"])->save(array("option"=>$choiceB));
           $test_choice->where('id='.$test_id["2"]["id"])->save(array("option"=>$choiceC));
           $test_choice->where('id='.$test_id["3"]["id"])->save(array("option"=>$choiceD));
-       }else{
+       }else if($test_type==3){
           $test_choice->where('id='.$test_id["0"]["id"])->save(array("option"=>$choiceA));
           $test_choice->where('id='.$test_id["1"]["id"])->save(array("option"=>$choiceB));
        }
@@ -522,19 +584,20 @@ class TestAction extends Action
       $test_aspects=M("test_aspects");
       $td=M("test_choice");
       $test_device=M("test_device");
+      $ea=M("test_essay");
       if($type!=4){
-        if($test->where("id=".$id)->delete()&&$test_aspects->where("test_id=".$id)->delete()&&$td->where("test_id=".$id)->delete()&&$test_device->where("test_id=".$id)->delete()){
-          unlink('Data/html/' .$id.'.html');
-          unlink('Storage/image480/'.$id.".gif");
-          for($i=0;$i<4;$i++){
-            unlink('Data/html/' .$id."_".$i.'.html');
-            unlink('Storage/image480/'.$id."_".$i.".gif");
-          }
-          echo true;
-        }else{
-          echo false;
+        $test->where("id=".$id)->delete();
+        $test_aspects->where("test_id=".$id)->delete();
+        $td->where("test_id=".$id)->delete();
+        $ea->where("test_id=".$id)->delete();
+        $test_device->where("test_id=".$id)->delete();
+        unlink('Data/html/' .$id.'.html');
+        unlink('Storage/image480/'.$id.".gif");
+        for($i=0;$i<4;$i++){
+          unlink('Data/html/' .$id."_".$i.'.html');
+          unlink('Storage/image480/'.$id."_".$i.".gif");
         }
-      }else{  
+      }else if($type==4){  
         $testId=$test->field("id")->where("pid=".$id)->select();
         for($i=0;$i<count($testId);$i++){
           $test_aspects->where("test_id=".$testId[$i]["id"])->delete();
