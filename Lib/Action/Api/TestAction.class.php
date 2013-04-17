@@ -19,7 +19,7 @@ class TestAction extends Action
         $rules = json_decode($t['content']);
         $testmodel = M();
         $images = array();
-        $final = array();
+        $final = array(array(),array(),array());
         foreach($rules as $rule) {
             $rule = (array)$rule;
             $rule_type=$rule['type'];
@@ -197,11 +197,30 @@ class TestAction extends Action
         $from = $data[0];
         $to   = $data[1];
         $test = M('test');
+        $essay=M();
         $sql = "select *from(select d.id,d.content title,d.image480 img, d.answer, d.point, d.level, d.test_type as type from 
-                (select a.id,a.pid,a.cat_id,a.content,a.level,a.test_type,a.point,a.date,a.author,td.image480,td.answer, (select count(id) from test where test.id<=a.id and cat_id = $cid and pid = 0) as rownum
+                (select a.id,a.pid,a.cat_id,a.content,a.level,a.test_type,a.point,a.date,a.author,td.image480,td.answer, (select count(id) from test where test.id<=a.id and cat_id = $cid and pid = 0 and test_type!=5) as rownum
                 from test as a inner join test_device as td on td.test_id = a.id where pid = 0 and cat_id = $cid order by rand()) as d 
                 where rownum between $from and $to order by test_type ASC) as ran group by id";
         $tests = $test->query($sql);
+        $sqlAns="select te.test_id,te.answer  from test_essay as te";
+        foreach($tests as $key=>$val){
+          if($val["answer"]==""){
+              if(strpos($sqlAns,"where")){
+                $sqlAns.=" or test_id=".$val["id"];
+              }else{
+                $sqlAns.=" where test_id=".$val["id"];
+              }  
+          }
+        }
+        $arrAns=$essay->query($sqlAns);
+        foreach($tests as $key=>$val){
+          foreach($arrAns as $k=>$v){
+            if($val["id"]==$v["test_id"]){
+              $tests[$key]["answer"]=$v["answer"];
+            }
+          }  
+        }
         $images = array();
         $final = array();
         foreach($tests as $key => $t) {
@@ -213,7 +232,7 @@ class TestAction extends Action
         $string = Json::encode(json_encode($final));
         echo $this->tarFile($images, $string);
     }
-
+    
     /**
      * 单题总数
      */

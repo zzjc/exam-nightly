@@ -16,7 +16,11 @@ class TemplateAction extends Action
     {
 
         $Template = M('template');
-        $templates = $Template->join("category on category.id = template.cat_id")->where('group_id = ' . $this->gid)->field('template.*, category.name catname')->select();
+        if($this->$gid==0){
+            $templates = $Template->join("category on category.id = template.cat_id")->field('template.*, category.name catname')->select();
+        }else{
+            $templates = $Template->join("category on category.id = template.cat_id")->where('group_id = ' . $this->gid)->field('template.*, category.name catname')->select();
+        }
         $this->assign('templates', $templates);
         $this->display();
     }
@@ -24,7 +28,11 @@ class TemplateAction extends Action
     public function add()
     {
         $cat = M('category');
-        $cats = $cat->where('group_id = ' . $this->gid)->select();
+        if($this->$gid==0){
+            $cats = $cat->select();
+        }else{
+            $cats = $cat->where('group_id = ' . $this->gid)->select();
+        }
         $this->assign('cats', $cats);
         $select = !empty($_GET['select'])?Input::getVar($_GET['select']):1;
         $this->assign('select', $select);

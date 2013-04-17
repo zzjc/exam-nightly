@@ -58,13 +58,14 @@ class TestAction extends Action
                         echo "<tr><td>...</td><td>".$str."...".
                              "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
                              "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
                              删除</a></td></tr>";
                       break;
                       default:
                         echo "<tr><td>...</td><td>".$str."...".
                              "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                             "</td></tr>";
+                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                             修改</a></td></tr>";
                     }
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
@@ -90,13 +91,14 @@ class TestAction extends Action
                          echo "<tr><td>...</td><td>".$str."...".
                            "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
                            "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                           修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                           修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
                            删除</a></td></tr>";
                       break;
                       default:
                          echo "<tr><td>...</td><td>".$str."...".
                            "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                           "</td></tr>"; 
+                           "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                           修改</a></td></tr>";
                     }
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
@@ -123,13 +125,14 @@ class TestAction extends Action
                         echo "<tr><td>...</td><td>".$str."...".
                              "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
                              "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
                              删除</a></td></tr>";
                       break;
                       default:
                         echo "<tr><td>...</td><td>".$str."...".
                              "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                             "</td></tr>";
+                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                             修改</a></td></tr>";
                     }
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
@@ -151,11 +154,13 @@ class TestAction extends Action
                       case 0:
                         echo "<tr><td>".$str."..."."</td><td>...</td><td>...</td><td>...</td>
                               <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
-                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
                              删除</a></td></tr>";
                       break;
                       default:
-                        echo "<tr><td>".$str."..."."</td><td>...</td><td>...</td><td>...</td></tr>";
+                        echo "<tr><td>".$str."..."."</td><td>...</td><td>...</td><td>...</td>
+                              <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
+                             修改</a></td></tr>";
                     }
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
@@ -185,13 +190,14 @@ class TestAction extends Action
                         echo "<tr><td>...</td><td>".$str."...".
                              "</td><td>".$ea."</td><td>".strip_tags($val["point"]).
                              "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick='del(".$val["id"].")'>
+                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
                              删除</a></td></tr>";
                       break;
                       default:
                         echo "<tr><td>...</td><td>".$str."...".
-                           "</td><td>".$ea."</td><td>".strip_tags($val["point"]).
-                           "</td></tr>";
+                             "</td><td>".$ea."</td><td>".strip_tags($val["point"]).
+                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                             修改</a></td></tr>";
                     }     
                     if($key==count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
