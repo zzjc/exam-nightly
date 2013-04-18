@@ -150,9 +150,14 @@ code{
     width:450px;
     font-size: 12px;
 }
+
 .addOption a:hover{
      color:#00CACA;;
 }
+#update_option a:hover{
+     color:#00CACA;;
+}
+
 .aspects{
 	margin-top:10px;
 }
@@ -215,7 +220,6 @@ code{
     margin-right: 10px;
 
 }
-
 
 #essay_answer {
     width: 400px; 
