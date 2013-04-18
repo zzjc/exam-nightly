@@ -1,4 +1,3 @@
-
   var editor;
   var origin=artDialog.open.origin;
   var setsType=art.dialog.data("setsType")==""?"":art.dialog.data("setsType");
@@ -29,9 +28,9 @@
    　{
 　      case "1":
            $("#answer").html("<span>答案:</span>"+
-                               "<input type='radio' name='answer[]' value='1'>(1)&nbsp&nbsp&nbsp"+
+                               "<input type='radio' name='answer[]' value='1' checked='checked'>(1)&nbsp&nbsp&nbsp"+
                                "<input type='radio' name='answer[]' value='2'>(2)&nbsp&nbsp&nbsp"+
-                               "<input type='radio' name='answer[]' value='3'>(3)&nbsp&nbsp&nbsp"+
+                               "<input type='radio' name='answer[]' value='3' >(3)&nbsp&nbsp&nbsp"+
                                "<input type='radio' name='answer[]' value='4'>(4)");        
               break;
          case "2":
@@ -43,14 +42,14 @@
               break;
           case "3":
                $("#answer").html("<span>答案:</span>"+
-                                 "<input type='radio' name='answer[]' value='1'>(1)&nbsp&nbsp&nbsp"+
+                                 "<input type='radio' name='answer[]' value='1' checked='checked'>(1)&nbsp&nbsp&nbsp"+
                                  "<input type='radio'name='answer[]' value='2'>(2)&nbsp&nbsp&nbsp");       
                break;
           case "4":
             switch(setsType){
               case "1":
                 $("#answer").html("<span>答案:</span>"+
-                  "<input type='radio' name='answer[]' value='1'>(1)&nbsp&nbsp&nbsp"+
+                  "<input type='radio' name='answer[]' value='1' checked='checked'>(1)&nbsp&nbsp&nbsp"+
                   "<input type='radio' name='answer[]' value='2'>(2)&nbsp&nbsp&nbsp"+
                   "<input type='radio' name='answer[]' value='3'>(3)&nbsp&nbsp&nbsp"+
                   "<input type='radio' name='answer[]' value='4'>(4)&nbsp");        
@@ -64,7 +63,7 @@
                 break;
               case "3":
                $("#answer").html("<span>答案:</span>"+
-                  "<input type='radio' name='answer[]' value='1'>(1)&nbsp&nbsp&nbsp"+
+                  "<input type='radio' name='answer[]' value='1' checked='checked'>(1)&nbsp&nbsp&nbsp"+
                   "<input type='radio'name='answer[]' value='2'>(2)");       
                break;
             }
@@ -82,6 +81,14 @@
     art.dialog.data("test_type",test_type);
     art.dialog.data("setsType",setsType);
     art.dialog.open("/Tpl/default/Admin/Test/addOption.html",{fixed: true,id:"testOption",width:520,height:210,title:'添加题目选项'}, false);         
+  }
+  /*
+    *修改题目选项
+  */
+  function openUpdateOption(){
+    art.dialog.data("test_type",test_type);
+    art.dialog.data("setsType",setsType);
+    art.dialog.open("/Tpl/default/Admin/Test/addOption.html",{fixed: true,id:"testOption",width:520,height:210,title:'添加题目选项'}, false);      
   }
   /*
     *添加知识点
