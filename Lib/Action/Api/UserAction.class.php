@@ -36,3 +36,4 @@ class UserAction extends Action
         return md5($salt . md5($password));
     }
 }
+

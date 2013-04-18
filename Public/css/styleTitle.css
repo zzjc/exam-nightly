@@ -176,7 +176,7 @@ code{
 }
 /* Content */
 #content {
-    margin: 20px 0;
+    margin-bottom: 20px;
 }
 #content .container {
     padding: 20px;

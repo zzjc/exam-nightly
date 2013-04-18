@@ -151,6 +151,9 @@ code{
     border-bottom:1px solid rgba(0, 0, 0, 0.1);
     box-shadow:0 1px 0px #EEE inset;
 }
+.navigation {
+    background: none !important;
+}
 .container{
     width:1000px;
     margin:0 auto;
@@ -173,9 +176,19 @@ code{
 #user_info {
     float: right;
 }
+.nav a {
+    background: #ffffff;
+    padding: 5px 20px;
+    display: inline-block;
+    border: 1px solid #DDD;
+    border-radius: 5px;
+}
+.nav a:hover {
+    border: 1px solid #0167D8;
+}
 /* Content */
 #content {
-    margin: 20px 0;
+    margin-bottom: 20px;
 }
 #content .container {
     padding: 20px;
