@@ -16,7 +16,7 @@ class TemplateAction extends Action
     {
 
         $Template = M('template');
-        if($this->$gid==0){
+        if($this->gid==0){
             $templates = $Template->join("category on category.id = template.cat_id")->field('template.*, category.name catname')->select();
         }else{
             $templates = $Template->join("category on category.id = template.cat_id")->where('group_id = ' . $this->gid)->field('template.*, category.name catname')->select();
@@ -28,7 +28,7 @@ class TemplateAction extends Action
     public function add()
     {
         $cat = M('category');
-        if($this->$gid==0){
+        if($this->gid==0){
             $cats = $cat->select();
         }else{
             $cats = $cat->where('group_id = ' . $this->gid)->select();

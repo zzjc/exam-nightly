@@ -37,11 +37,10 @@
        $("#titleSets").hide();
        $("#titleSingle").show();    
        $("#titleDetail").empty();
-       switch(test_type)
-   　　{
-  　　   case "1":
-   　　     $("#titleSingle").val("添加单选题");
-            $("#description").hide();
+       switch(test_type){
+           case "1":
+           $("#titleSingle").val("添加单选题");
+           $("#description").hide();
             break;
          case "2":
             $("#titleSingle").val("添加多选题");
@@ -59,10 +58,7 @@
           case "5":
             $("#description").hide();
             $("#titleSingle").val("添加题目信息");
-          break;
-
-
-　　   }
+          break;}
        $.ajax({
            url:"/Admin/Test/ses_type",
            type:"post",

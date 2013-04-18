@@ -24,9 +24,8 @@
       });
       $(".essay_answer").hide();
 
-      switch(test_type)
-   　{
-　      case "1":
+      switch(test_type){
+          case "1":
            $("#answer").html("<span>答案:</span>"+
                                "<input type='radio' name='answer[]' value='1' checked='checked'>(1)&nbsp&nbsp&nbsp"+
                                "<input type='radio' name='answer[]' value='2'>(2)&nbsp&nbsp&nbsp"+
