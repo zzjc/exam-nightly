@@ -72,8 +72,25 @@
             $(".essay_answer").show();
             $(".addOption").hide();
           break;
-    }             
+    } 
+    $(".point").bind("change",coo);
+    $("#difficult").bind("change",coo);
+    if($.cookie("point")){
+      document.getElementById('point').value=$.cookie("point");
+    }
+    if($.cookie("level")){
+      $("#difficult").val($.cookie("level"));
+    }            
   })
+  /*
+    *生成答案和分数的cookie记录
+  */
+  function coo(){
+    var point=document.getElementById('point').value;
+    var level=$("#difficult").val();
+    $.cookie("point", point); 
+    $.cookie("level", level);
+  }
   /*
     *添加题目选项
   */
