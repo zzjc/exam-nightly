@@ -94,15 +94,15 @@
                      switch(setsType){
                         case "1":
                           art.dialog.data("setsType",setsType);
-                          art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:460,title:'添加单选题'},false);
+                          art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:510,title:'添加单选题'},false);
                         break;
                         case "2":
                           art.dialog.data("setsType",setsType);
-                          art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:460,title:'添加多选题'},false);
+                          art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:510,title:'添加多选题'},false);
                           break;
                         case "3":
                           art.dialog.data("setsType",setsType);
-                          art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:460,title:'添加判断题'},false);
+                          art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:510,title:'添加判断题'},false);
                           break;
                      }
                  }
@@ -110,9 +110,9 @@
     }
     //打开材料分析题
    function openTitleSetsDel(){
-    art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:480,title:'添加题目'}, false);
+    art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:510,title:'添加题目'}, false);
   }
   //打开单选；多选；判断
   function openTitleSingleDel(){
-    art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:480,title:'添加题目'},false);
+    art.dialog.open("/Tpl/default/Admin/Test/artdialogTitle.html",{fixed: true,id:'memdiv',width:500,height:510,title:'添加题目'},false);
   }

@@ -15,19 +15,13 @@
 </head>
 <body>
     <div id="option">
-        <div >
-            <span class='choice'>选项1:</span><textarea id="editor_A" name="optionA[]"  class="test_box" ></textarea>
-        </div>
-         <div >
-             <span class='choice'>选项2:</span><textarea id="editor_B" name="optionB[]" class="test_box" ></textarea>
-        </div>
-         <div >
-             <span class='choice'>选项3:</span><textarea id="editor_C" name="optionC[]"  class="test_box" ></textarea>
-        </div>
-        <div >
-             <span class='choice'>选项4:</span><textarea id="editor_D" name="optionD[]"  class="test_box" ></textarea>
+        <div class='ops'>
+            <span class='choice'>1.</span><textarea  name="option[]"  class="test_box" ></textarea><a href='javascript:void(0)' onclick='delOption(0)' class='del'>-删除</a>
         </div>
     </div>
-    <p><input type="button" onclick="addOption()" id="exit" value="添加" class='btn'></p>
+    <div id="add">
+        <span><a href="javascript:void(0)" onclick="addOption()" class='addOption'>+添加选项</a></span>
+    </div>
+    <p><input type="button" onclick="addAll()" id="exit" value="添加" class='btn'></p>
 </body>
 </html>

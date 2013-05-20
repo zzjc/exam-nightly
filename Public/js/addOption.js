@@ -4,57 +4,106 @@
     test_type=setsType;
  }
  var origin=artDialog.open.origin;
- var valA=origin.$("[name='optionA[]']").val();
- var valB=origin.$("[name='optionB[]']").val();
- var valC=origin.$("[name='optionC[]']").val();
- var valD=origin.$("[name='optionD[]']").val();
- $(function(){     
-     if(test_type==3){
-        $("#option").empty();
-        $("#option").append(
-            "<div >选项A:<textarea id=\"editor_A\" name='optionA[]' class='test_box'></textarea> </div>"+
-            "<div >选项B:<textarea id=\"editor_B\" name='optionB[]' class='test_box'></textarea></div>");
-     }
-     if(valA){
-        $("[name='optionA[]']").val(valA);
-        $("[name='optionB[]']").val(valB);
-        $("[name='optionC[]']").val(valC);
-        $("[name='optionD[]']").val(valD);
-     }
-    $("[name='optionA[]']").focus();
+ var orLen=origin.$("[name='option[]']").length;
+
+ $(function(){
+  for(var i=0;i<orLen;i++){
+    if(i==0){
+       $("[name='option[]']")[0].value=origin.$("[name='option[]']")[0].value;
+       $("[name='option[]']")[0].focus();
+    }else{
+        local=i+1;
+       $("#option").append("<div class='ops'><span class='choice'>"+local+".</span><textarea  name='option[]' class='test_box' >"+origin.$("[name='option[]']")[i].value+"</textarea><a href='javascript:void(0)' onclick='delOption("+i+")' class='del' >删除</a></div>");
+    }
+  }
+  $(".addOption").click(function(){
+    $("[name='option[]']:last").focus();
+
+
+  })
+  $(".btn").blur(function(){
+      $("[name='option[]']:first")[0].focus();
+  }) 
  })
 
- function addOption(){
-    var editor_A=$("[name='optionA[]']").val();
-    var editor_B=$("[name='optionB[]']").val();
-    var editor_C=$("[name='optionC[]']").val();
-    var editor_D=$("[name='optionD[]']").val();
-    if(!editor_A&&!editor_B&&!editor_C&&!editor_D){
-      alert("选项不完整");
-
-    }else{
-      origin.$(".rule_done").empty();
-      if(test_type!=3){
-          origin.$(".rule_done").append("<p>选项:</p>"+
-                                        "<p>1."+editor_A+
-                                        "</p><p>2."+editor_B+
-                                        "</p><p><span class='detailSplit'>3."+editor_C+
-                                        "</span></p><p><span class='detailSplit'>4."+editor_D+
-                                        "</span></p><div id='update_option'><a href='javascript:void(0)' onclick='openUpdateOption()'>修改选项</a></div>");
-          origin.$("[name='optionA[]']").val(editor_A);
-          origin.$("[name='optionB[]']").val(editor_B);
-          origin.$("[name='optionC[]']").val(editor_C);
-          origin.$("[name='optionD[]']").val(editor_D);
-          origin.$(".addOption").hide();
-          art.dialog.close();
-      }else{
-          origin.$(".rule_done").append("<p>1.:"+editor_A+
-                                        "</p><p>2."+editor_B+
-                                        "</p><div id='update_option'><a href='javascript:void(0)' onclick='openUpdateOption()'>修改选项</a></div>");
-          origin.$("[name='optionA[]']").val(editor_A);
-          origin.$("[name='optionB[]']").val(editor_B);
-          origin.$(".addOption").hide();
-          art.dialog.close();
-      }
-  }
+/*
+  *添加选项
+*/
+  function addOption()
+  {
+   var num;
+   var pnum;
+   var last=$("#option .choice:last").html();
+   if(!last){
+    num=0;
+   }else{
+    num=last.match(/\d+/);
+   }
+   pnum=num;
+   num++;
+   $("#option").append("<div class='ops'>"+
+                        "<span class='choice'>"+num+".</span><textarea  name='option[]' class='test_box' ></textarea><a href='javascript:void(0)' onclick='delOption("+pnum+")' class='del'>删除</a>"+
+                       "</div>");
  }
+ /*
+  *删除选项
+ */
+ function delOption(c){
+    $(".del").each(function(i){
+      if(i==c){
+        $(this).parent("div").remove();
+        $(".choice").each(function(i){
+          i++;
+          $(this).text(i+".");
+        })
+        $(".ops a").each(function(i){
+          $(this).attr("onclick","delOption("+i+")");
+
+        })
+      }
+
+    })
+ }
+
+/*
+  *确定添加或确定修改
+*/
+ function addAll(){
+     var len=$("[name='option[]']").length;
+     var local="";
+      if(return_val()){
+        origin.$(".rule_done").empty();
+        origin.$("#option").empty();
+        for(var i=0;i<len;i++){
+          local=i+1;
+          origin.$(".rule_done").append("<p><span class='detailSplit'>"+local+"."+$("[name='option[]']")[i].value+"</span></p>");     
+          origin.$("#option").append("<input name='option[]' type='hidden' value='"+$("[name='option[]']")[i].value+"'>");
+          if(i+1>=len){
+            origin.$(".rule_done").append("<div id='update_option'><a href='javascript:void(0)' onclick='openUpdateOption()'>修改选项</a></div>");
+          }
+        }
+        origin.$("#update_option a").focus();
+        origin.$(".addOption").hide();
+        origin.createAns();
+        art.dialog.close();        
+
+      }else{
+        alert("选项内容不能为空");
+      };
+ }
+
+ /*
+    *验证选项是否为空
+ */
+ function return_val(){
+   var len=$("[name='option[]']").length;
+   for(var j=0;j<len;j++){
+     if($("[name='option[]']")[j].value==""){     
+       return false;
+       break;     
+     }else if(j+1>=len){
+       return true;
+     }
+   }
+ }
+

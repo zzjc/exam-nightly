@@ -38,16 +38,15 @@ class TestAction extends Action
                 } else {
                     $level = "level >= $difficult_from and level <= $difficult_to";
                 }
-                  $sql="SELECT * 
+                $sql="SELECT * 
                   FROM (
                   SELECT 
-                  test.id, test.content title, test.level,td.image480 AS img, 
-                  test.test_type as type,test.point, td.answer
+                  test.id, test.content title, test.answer,test.level,td.image480 AS img, 
+                  test.test_type as type,test.point
                   FROM `test` 
                   INNER JOIN test_aspects ta ON test.id = ta.test_id
                   INNER JOIN aspects ON ta.aspects_id = aspects.id
-                  INNER JOIN test_device td ON test.id = td.test_id
-
+                  INNER JOIN test_device td ON test.id = td.test_id              
                   WHERE $level
                   AND test.test_type =$rule_type
                   AND aspects.name
@@ -59,6 +58,13 @@ class TestAction extends Action
                   ORDER BY rand( )  
                   ) AS newGroup group by id limit $num";
                 $tests = $testmodel->query($sql);
+                foreach($tests as $key=>$val){
+                  $sql="select image480  as img from test_choice where test_id=".$val['id'];
+                  $choice=$testmodel->query($sql);
+                  foreach($choice as $k=>$v){                  
+                    $tests[$key]["choice"].=$tests[$key]["choice"]==""?$v["img"]:"@".$v["img"];
+                  }
+                }
                 $true_num = count($tests);
                 if($true_num < $num) {
                     $number = $num - $true_num;
@@ -80,8 +86,8 @@ class TestAction extends Action
                 $cases = $testmodel->query($sql);
                 foreach($cases as $key => $case) {
                     $sum = 0;
-                    $test_sql = "select * from(select test.id,test.content title,
-                                test.level, td.answer, td.image480 as img,
+                    $test_sql = "select * from(select test.id,test.answer,test.content title,
+                                test.level,td.image480 as img,
                                 test.test_type as type, test.point
                                 from test
                                 inner join test_device td
@@ -94,14 +100,20 @@ class TestAction extends Action
                         $tests[$k]['client'] = '';
                         $images[] = $t['img'];
                         $sum += $t['point'];
+                        $sql="select image480 as img from test_choice where test_id=".$t['id'];
+                        $choice=$testmodel->query($sql);
+                        foreach($choice as $k2=>$v2){                  
+                          $tests[$k]["choice"].=$tests[$k]["choice"]==""?$v2["img"]:"@".$v2["img"];
+                        }                        
                     }
                     $cases[$key]['description'] = strip_tags($cases[$key]['description']);
                     $cases[$key]['score'] = strval($sum);
                     $cases[$key]['options'] = $tests;
 
                 }
-                $final[1]= $cases; 
-            }else if($rule_type==5){
+
+                $final[1]= $cases;              
+            }else if($rule_type==5){//问答题
                   $difficult = explode('-', $rule['difficult']);
                   $difficult_from = $difficult[0];
                   $difficult_to = $difficult[1];
@@ -133,6 +145,7 @@ class TestAction extends Action
                   AND pid=0
                   AND test.cat_id=$cid
                   ORDER BY rand() limit $num";
+
                   $tests = $testmodel->query($sql);
                   foreach($tests as $t) {
                       $t['title'] = $this->subString($t['title']);
@@ -140,12 +153,11 @@ class TestAction extends Action
                       $t['client'] = '';
                       $images[] = $t['img'];
                       $final[2][]=$t;
-                  }            
+                  }          
             }
         }
         $string = Json::encode(json_encode($final));
         echo $this->tarFile($images, $string);
-
     }
 
     protected function subString($title)
@@ -167,8 +179,8 @@ class TestAction extends Action
           $sql="SELECT * 
           FROM (
               SELECT 
-              test.id, test.content title, test.level,td.image480 AS img, 
-              test.test_type as type,test.point, td.answer
+              test.id, test.content title,test.answer,test.level,td.image480 AS img, 
+              test.test_type as type,test.point
               FROM `test` 
               INNER JOIN test_aspects ta ON test.id = ta.test_id
               INNER JOIN aspects ON ta.aspects_id = aspects.id
@@ -178,9 +190,17 @@ class TestAction extends Action
               AND pid =0
               AND test.cat_id =$cid
               ORDER BY rand( )
-          ) AS newGroup group by id limit  $number";                                  
-          $test = M();
-          return $test->query($sql);
+          ) AS newGroup group by id limit  $number";                              
+          $testmodel = M();
+          $tests=$testmodel->query($sql);
+          foreach($tests as $key=>$val){
+            $sql="select image480  as img from test_choice where test_id=".$val['id'];
+            $choice=$testmodel->query($sql);
+            foreach($choice as $k=>$v){                  
+              $tests[$key]["choice"].=$tests[$key]["choice"]==""?$v["img"]:"@".$v["img"];
+            }
+          }
+          return $tests;
     }
 
     /**
@@ -198,8 +218,9 @@ class TestAction extends Action
         $to   = $data[1];
         $test = M('test');
         $essay=M();
-        $sql = "select *from(select d.id,d.content title,d.image480 img, d.answer, d.point, d.level, d.test_type as type from 
-                (select a.id,a.pid,a.cat_id,a.content,a.level,a.test_type,a.point,a.date,a.author,td.image480,td.answer, (select count(id) from test where test.id<=a.id and cat_id = $cid and pid = 0 and test_type!=5) as rownum
+        $sql = "select *from(select d.id,d.answer,d.content title,d.image480 img, d.point, d.level, d.test_type as type from 
+                (select a.id,a.pid,a.answer,a.cat_id,a.content,a.level,a.test_type,a.point,a.date,a.author,td.image480,
+                (select count(id) from test where test.id<=a.id and cat_id = $cid and pid = 0 and test_type!=5) as rownum
                 from test as a inner join test_device as td on td.test_id = a.id where pid = 0 and cat_id = $cid order by rand()) as d 
                 where rownum between $from and $to order by test_type ASC) as ran group by id";
         $tests = $test->query($sql);
@@ -215,9 +236,16 @@ class TestAction extends Action
         }
         $arrAns=$essay->query($sqlAns);
         foreach($tests as $key=>$val){
-          foreach($arrAns as $k=>$v){
-            if($val["id"]==$v["test_id"]){
-              $tests[$key]["answer"]=$v["answer"];
+          if($val["type"]!=5&&$val["type"]!=4){
+            $sql="select image480  as img from test_choice where test_id=".$val['id'];
+            $choice=$essay->query($sql);
+            foreach($choice as $k=>$v){                  
+              $tests[$key]["choice"].=$tests[$key]["choice"]==""?$v["img"]:"@".$v["img"];
+            }            
+          }
+          foreach($arrAns as $k2=>$v2){
+            if($val["id"]==$v2["test_id"]){
+              $tests[$key]["answer"]=$v2["answer"];
             }
           }  
         }

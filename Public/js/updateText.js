@@ -6,11 +6,13 @@
  var editor;
  var optionArr;
  var origin=artDialog.open.origin;
+ var cat_id=origin.$("#name").val();
  var test_type=art.dialog.data("type");
  var sets_type=art.dialog.data("sets_type");
  var id=art.dialog.data("id");
  var setsId=art.dialog.data("setsId");
  var categoryId=art.dialog.data("categoryId");
+ var titleInfo;
  $(function(){
      $(".essay_answer").hide();
      var keditor;
@@ -24,119 +26,88 @@
        data:"testId="+id,
        dataType:"text",
        success:function(d){
-         optionArr=jQuery.parseJSON(d);
+        if(test_type!=5){
+           optionArr=jQuery.parseJSON(d);
+           oplen=optionArr.length;
+         }else{
+           oplen=0;
+         }
+         var str="<div class='option'><span>选项:</span><br/><div class='rule_done'>";
+         var hidStr="";
+         var num=0;
+         var singStr="<span>答案:</span>";
+         var multiStr="<span>答案:</span>";
+         for(var i=0;i<oplen;i++){
+            num=i+1;
+            str+="<p>"+num+"."+optionArr[i]['option']+"</p>";
+            hidStr+="<input type='hidden' name='option[]' value='"+optionArr[i]['option']+"'>";
+            singStr+="<input type='radio' name='answer[]' value='"+num+"'>"+num+"&nbsp&nbsp&nbsp";
+            multiStr+="<input type='checkbox' name='answer[]' value='"+num+"'>"+num+"&nbsp&nbsp&nbsp";
+         }
          switch(test_type){
           case "1":
               $("#option").html(
                                 "<div class='option'>"+
-                                "<span>选项:</span><br/><div class='rule_done'><p>1."+optionArr[0]['option']+
-                                  "</p><p>2."+optionArr[1]['option']+
-                                  "</p><span class='detailSplit'>3."+optionArr[2]['option']+
-                                  "</span><p><span class='detailSplit'>4."+optionArr[3]['option']+
-                                  "</div>"+"</p></span><span><a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a></span>"+
+                                  str+
+                                "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
                                 "</div>"+
-                                "<input type='hidden' name='optionA[]' value='"+optionArr[0]['option']+"'>"+
-                                "<input type='hidden' name='optionB[]' value='"+optionArr[1]['option']+"'>"+
-                                "<input type='hidden' name='optionC[]' value='"+optionArr[2]['option']+"'>"+
-                                "<input type='hidden' name='optionD[]' value='"+optionArr[3]['option']+"'>"
+                                  hidStr  
                                 );
-              $("#answer").html("<span>答案:</span>"+
-                                  "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
-                                  "<input type='radio' name='answer[]' value='2'>2&nbsp&nbsp&nbsp"+
-                                  "<input type='radio' name='answer[]' value='3'>3&nbsp&nbsp&nbsp"+
-                                  "<input type='radio' name='answer[]' value='4'>4"
-                                  );        
+              $("#answer").html(singStr);        
                  break;
           case "2":
               $("#option").html(
                                 "<div class='option'>"+
-                                "<span>选项:</span><br/><div class='rule_done'><p>1."+optionArr[0]['option']+
-                                  "</p><p>2."+optionArr[1]['option']+
-                                  "</p><span class='detailSplit'>3."+optionArr[2]['option']+
-                                  "</span><p><span class='detailSplit'>4."+optionArr[3]['option']+                          
-                                  "</div>"+"</p></span><span><a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a></span>"+
-                                "</div>"+           
-                                "<input type='hidden' readonly name='optionA[]' value='"+optionArr[0]['option']+"'>"+
-                                "<input type='hidden' readonly name='optionB[]' value='"+optionArr[1]['option']+"'>"+
-                                "<input type='hidden' readonly name='optionC[]' value='"+optionArr[2]['option']+"'>"+
-                                "<input type='hidden' readonly name='optionD[]' value='"+optionArr[3]['option']+"'>"
+                                  str+
+                                "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                "</div>"+
+                                  hidStr  
                                 );
-               $("#answer").html("<span>答案:</span>"+
-                                 "<input type='checkbox' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
-                                 "<input type='checkbox'name='answer[]' value='2'>2&nbsp&nbsp&nbsp"+
-                                 "<input type='checkbox' name='answer[]' value='3'>3&nbsp&nbsp&nbsp"+
-                                 "<input type='checkbox' name='answer[]' value='4'>4");         
+              $("#answer").html(multiStr);           
                break;
           case "3":
               $("#option").html(
                                 "<div class='option'>"+
-                                  "<span>选项:</span><br/><div class='rule_done'><p>1."+optionArr[0]['option']+
-                                    "</p><p>2."+optionArr[1]['option']+   
-                                  "</div>"+"</p></span><span><a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a></span>"+
-                                 "</div>"+
-                                "<input type='hidden' readonly name='optionA[]' value='"+optionArr[0]['option']+"'>"+
-                                "<input type='hidden' readonly name='optionB[]' value='"+optionArr[1]['option']+"'>"
-                              );    
-              $("#answer").html("<span>答案:</span>"+
-                                 "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
-                                 "<input type='radio'name='answer[]' value='2'>2");       
+                                  str+
+                                "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                "</div>"+
+                                  hidStr  
+                                );
+              $("#answer").html(singStr);       
                break;
           case "4":
              if(sets_type==1){
-              $("#option").html(
-                                "<div class='option'><span>选项:</span><br/><div class='rule_done'><p>1."+optionArr[0]['option']+
-                                  "</p><p>2."+optionArr[1]['option']+
-                                  "</p><span class='detailSplit'>3."+optionArr[2]['option']+
-                                  "</span><p><span class='detailSplit'>4."+optionArr[3]['option']+
-                                  "</div>"+"</p></span><span><a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+sets_type+")'>修改</a></span>"+
-                                "</div>"+
-                                "<input type='hidden' name='optionA[]' value='"+optionArr[0]['option']+"'>"+
-                                "<input type='hidden' name='optionB[]' value='"+optionArr[1]['option']+"'>"+
-                                "<input type='hidden' name='optionC[]' value='"+optionArr[2]['option']+"'>"+
-                                "<input type='hidden' name='optionD[]' value='"+optionArr[3]['option']+"'>"
-                                );              
-              $("#answer").html("<span>答案:</span>"+
-                                  "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
-                                  "<input type='radio' name='answer[]' value='2'>2&nbsp&nbsp&nbsp"+
-                                  "<input type='radio' name='answer[]' value='3'>3&nbsp&nbsp&nbsp"+
-                                  "<input type='radio' name='answer[]' value='4'>4"
-                                  );   
+                $("#option").html(
+                                  "<div class='option'>"+
+                                    str+
+                                  "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                  "</div>"+
+                                    hidStr  
+                                  );
+                $("#answer").html(singStr);  
              }else if(sets_type==2){
                 $("#option").html(
                                   "<div class='option'>"+
-                                  "<span>选项:</span><br/><div class='rule_done'><p>1."+optionArr[0]['option']+
-                                    "</p><p>2."+optionArr[1]['option']+
-                                    "</p><span class='detailSplit'>3."+optionArr[2]['option']+
-                                    "</span><p><span class='detailSplit'>4."+optionArr[3]['option']+                          
-                                    "</div>"+"</p></span><span><a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+sets_type+")'>修改</a></span>"+
-                                  "</div>"+           
-                                  "<input type='hidden' readonly name='optionA[]' value='"+optionArr[0]['option']+"'>"+
-                                  "<input type='hidden' readonly name='optionB[]' value='"+optionArr[1]['option']+"'>"+
-                                  "<input type='hidden' readonly name='optionC[]' value='"+optionArr[2]['option']+"'>"+
-                                  "<input type='hidden' readonly name='optionD[]' value='"+optionArr[3]['option']+"'>"
+                                    str+
+                                  "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                  "</div>"+
+                                    hidStr  
                                   );
-                $("#answer").html("<span>答案:</span>"+
-                      "<input type='checkbox' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
-                      "<input type='checkbox'name='answer[]' value='2'>2&nbsp&nbsp&nbsp"+
-                      "<input type='checkbox' name='answer[]' value='3'>3&nbsp&nbsp&nbsp"+
-                      "<input type='checkbox' name='answer[]' value='4'>4");   
+                $("#answer").html(multiStr);   
              }else{
                 $("#option").html(
-                                  "<div class='option'><span>选项:</span><br/><div class='rule_done'><p>1."+optionArr[0]['option']+
-                                      "</p><p>2."+optionArr[1]['option']+   
-                                    "</div>"+"</p></span><span><a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+sets_type+")'>修改</a></span>"+
-                                   "</div>"+
-                                  "<input type='hidden' readonly name='optionA[]' value='"+optionArr[0]['option']+"'>"+
-                                  "<input type='hidden' readonly name='optionB[]' value='"+optionArr[1]['option']+"'>"
-                                );   
-                $("#answer").html("<span>答案:</span>"+
-                       "<input type='radio' name='answer[]' value='1'>1&nbsp&nbsp&nbsp"+
-                       "<input type='radio'name='answer[]' value='2'>2&nbsp&nbsp&nbsp");  
+                                  "<div class='option'>"+
+                                    str+
+                                  "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                  "</div>"+
+                                    hidStr  
+                                  );
+                $("#answer").html(singStr);    
              }
              break;
           case "5":
             $(".essay_answer").show();
-            $(".addOption").hide();
+            $("#option").hide();
           break;
           }
         }
@@ -148,7 +119,7 @@
        data:"id="+id+"&test_type="+test_type,
        dataType:"text",
        success:function(d){
-        var titleInfo=jQuery.parseJSON(d);
+        titleInfo=jQuery.parseJSON(d);
         var aspects=[];
         for(var i=0;i<titleInfo["name"].length;i++){
           aspects.push(titleInfo["name"][i]["name"]);
@@ -220,15 +191,101 @@
      })             
  })
 
+  /*
+    *生成answer的个数
+  */
+  function createAns(answer){
+      var optionLen=$("#option [name='option[]']").length;
+      var str="<span>答案:</span>";
+      switch(test_type){
+          case "1":
+            for(var i=1;i<optionLen+1;i++){
+              if(i==1){
+                str+="<input type='radio' name='answer[]' value='"+i+"' checked='checked'>("+i+")&nbsp&nbsp&nbsp";
+              }else{
+                str+="<input type='radio' name='answer[]' value='"+i+"'>("+i+")&nbsp&nbsp&nbsp";
+              }
+            }
+           $("#answer").html(str); 
+           $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);       
+          break;
+         case "2":
+              for(var i=1;i<optionLen+1;i++){
+                if(i==1){
+                  str+="<input type='checkbox' name='answer[]' value='"+i+"'>("+i+")&nbsp&nbsp&nbsp";
+                }else{
+                  str+="<input type='checkbox' name='answer[]' value='"+i+"'>("+i+")&nbsp&nbsp&nbsp";
+                }
+              }
+              $("#answer").html(str);   
 
+              var answer=titleInfo["answer"].split("");
+              for(var i=0;i<answer.length;i++){
+                  $("input[type='checkbox'][value='"+answer[i]+"']").attr("checked",true);
+               }                                       
+              break;
+          case "3":
+              for(var i=1;i<optionLen+1;i++){
+                if(i==1){
+                  str+="<input type='radio' name='answer[]' value='"+i+"' checked='checked'>("+i+")&nbsp&nbsp&nbsp";
+                }else{
+                  str+="<input type='radio' name='answer[]' value='"+i+"'>("+i+")&nbsp&nbsp&nbsp";
+                }
+              }
+              $("#answer").html(str);    
+              $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);    
+               break;
+          case "4":
+            switch(setsType){
+              case "1":
+                for(var i=1;i<optionLen+1;i++){
+                  if(i==1){
+                    str+="<input type='radio' name='answer[]' value='"+i+"' checked='checked'>("+i+")&nbsp&nbsp&nbsp";
+                  }else{
+                    str+="<input type='radio' name='answer[]' value='"+i+"'>("+i+")&nbsp&nbsp&nbsp";
+                  }
+                }
+                $("#answer").html(str);    
+                $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);     
+              break;
+              case "2":
+                for(var i=1;i<optionLen+1;i++){
+                  if(i==1){
+                    str+="<input type='checkbox' name='answer[]' value='"+i+"'>("+i+")&nbsp&nbsp&nbsp";
+                  }else{
+                    str+="<input type='checkbox' name='answer[]' value='"+i+"'>("+i+")&nbsp&nbsp&nbsp";
+                  }
+                }
+                $("#answer").html(str);     
+                var answer=titleInfo["answer"].split("");
+                for(var i=0;i<answer.length;i++){
+                    $("input[type='checkbox'][value='"+answer[i]+"']").attr("checked",true);
+                 }     
+                break;
+              case "3":
+                for(var i=1;i<optionLen+1;i++){
+                  if(i==1){
+                    str+="<input type='radio' name='answer[]' value='"+i+"' checked='checked'>("+i+")&nbsp&nbsp&nbsp";
+                  }else{
+                    str+="<input type='radio' name='answer[]' value='"+i+"'>("+i+")&nbsp&nbsp&nbsp";
+                  }
+                }
+                $("#answer").html(str);  
+                $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);       
+                break;
+            }
+            break;
+    }
+  }
 
 
   //判断题目类型和输出题目具体信息
  function sub(){
-  var choiceA=$("[name='optionA[]']").val();
-  var choiceB=$("[name='optionB[]']").val();
-  var choiceC=$("[name='optionC[]']").val();
-  var choiceD=$("[name='optionD[]']").val();
+  var optionOb=$("[name='option[]']");
+  optionArr=[];
+  for(var i=0;i<optionOb.length;i++){
+    optionArr.push(optionOb[i].value);
+  }
  	var aspects=document.getElementById('aspects_name').value;
      var answerMulti=$("input[name='answer[]'][type='checkbox']:checked");
      var answerSingle=$("input[name='answer[]'][type='radio']:checked").val();
@@ -253,55 +310,28 @@
     default:
       var tips=answer==""?"答案不能为空":"";
   }
-
-  if(test_type==1&&test_type==2){
-    if(choiceA==""||choiceB==""||choiceC==""||choiceD==""){
-      tips+=tips==""?"题目选项不完整":",题目选项不完整" 
-    }
-  }else if(test_type==3){
-    if(choiceA==""||choiceB==""){
-      tips+=tips==""?"题目选项不完整":",题目选项不完整"
-    }
-  }else if(test_type==4){
-    switch(sets_type){
-      case "1":
-        if(choiceA==""||choiceB==""||choiceC==""||choiceD==""){
-         tips+=tips==""?"题目选项不完整":",题目选项不完整"
-        }           
-      break;
-      case "2":
-        if(choiceA==""||choiceB==""||choiceC==""||choiceD==""){
-         tips+=tips==""?"题目选项不完整":",题目选项不完整"
-        }           
-      break; 
-      case "3":
-        if(choiceA==""||choiceB==""){
-         tips+=tips==""?"题目选项不完整":",题目选项不完整"
-        }           
-      break;             
-    }
-    
-  }  
+  tips+=tips==""?optionArr=="[]"?"选项不能为空":"":optionArr=="[]"?",选项不能为空":"";
   tips+=tips==""?aspects=="[]"?"知识点不能为空":"":aspects=="[]"?",知识点不能为空":"";
   tips+=tips==""?point==""?"分数不能为空":"":point==""?",分数不能为空":"";
   tips+=tips==""?question==""?"题干不为空":"":question==""?",题干不为空":"";
   if(tips!=""){
     alert(tips);
   }else{  
+
      $.ajax({
        url:"/Admin/Test/updateTest",
        type:"post",
        data:"aspects="+aspects+"&answer="+answer+"&eaAnswer="+eaAnswer+"&point="+point+
             "&question="+question+"&level="+level+"&id="+id+"&test_type="+test_type+
-            "&choiceA="+choiceA+"&choiceB="+choiceB+"&choiceC="+choiceC+"&choiceD="+choiceD+"&sets_type="+sets_type,
+            "&sets_type="+sets_type+"&option="+optionArr+"&cat_id="+cat_id,
        dataType:"text",
        success:function(d){
-        //随即生成4张图片
+
           if(test_type!=4){
             $.ajax({
               url:"/Admin/Picture/update_html",
               type:"post",
-              data:"testId="+id+"&choiceA="+choiceA+"&choiceB="+choiceB+"&choiceC="+choiceC+"&choiceD="+choiceD+"&answer="+answer+"&test_type="+test_type,
+              data:"testId="+id+"&answer="+answer+"&test_type="+test_type+"&option="+optionArr+"&question="+question,
               dataType:"text",
               success:function(ed){
                 testInfo();
@@ -311,15 +341,15 @@
             $.ajax({
               url:"/Admin/Picture/update_html",
               type:"post",
-              data:"testId="+id+"&test_type="+test_type+"&choiceA="+choiceA+"&choiceB="+choiceB+
-                   "&choiceC="+choiceC+"&choiceD="+choiceD+"&answer="+answer+"&eaAnswer="+eaAnswer+"&sets_type="+sets_type,
+              data:"testId="+id+"&test_type="+test_type+"&answer="+answer+"&eaAnswer="+eaAnswer+
+                   "&sets_type="+sets_type+"&option="+optionArr+"&question="+question,
               dataType:"text",
               success:function(fd){
                 setsTitleInfo();
               }
             })
           }
-       }    
+       }   
      })
    }
  	}

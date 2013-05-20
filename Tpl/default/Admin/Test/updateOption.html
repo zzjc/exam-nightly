@@ -14,20 +14,10 @@
 <script type="text/javascript" src="/Public/js/updateOption.js"></script>
 </head>
 <body>
-    <div id="option">
-        <div >
-            选项1:<textarea id="editor_A" name="optionA[]" class="test_box"></textarea>
-        </div>
-         <div >
-            选项2:<textarea id="editor_B" name="optionB[]" class="test_box"></textarea>
-        </div>
-         <div >
-            选项3:<textarea id="editor_C" name="optionC[]" class="test_box"></textarea>
-        </div>
-        <div >
-            选项4:<textarea id="editor_D" name="optionD[]" class="test_box"></textarea>
-        </div>
-    </div>
+    <div id="option"></div>
+    <div id="add">
+        <span><a href="javascript:void(0)" onclick="addOption()" class='addOption'>+添加选项</a></span>
+    </div>    
     <p><input type="button" onclick="updateOption()" id="exit" class='btn' value="确定"></p>
 </body>
 </html>

@@ -123,7 +123,7 @@ input.btn:active,button:active,.button:active{
     padding:12px 26px;
     text-shadow:0 1px 3px rgba(0, 0, 0, 0.5);
     font-weight:bold;
-    margin-top:15px;
+    margin-top:10px;
 }
 code{
     -webkit-border-radius:3px;

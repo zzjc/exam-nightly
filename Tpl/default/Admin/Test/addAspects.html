@@ -21,17 +21,22 @@
             data:"name="+aspects+"&cat_id="+cat_id,
             dataType:"text",
             success:function(d){
-             $.ajax({
-                url:"/Admin/Tool/aspects",
-                type:"post",
-                data:"",
-                dataType:"text",
-                success:function(d){
-                  origin.location.reload();
-                  art.dialog.close();
+              if(d==true){
+                 $.ajax({
+                    url:"/Admin/Tool/aspects",
+                    type:"post",
+                    data:"",
+                    dataType:"text",
+                    success:function(d){
+                      origin.location.reload();
+                      art.dialog.close();
+                    }
+                  })
+                }else{
+                  alert("知识点已存在");
                 }
-              })
             }
+
           })
     }else{
       alert("知识点不能为空");
