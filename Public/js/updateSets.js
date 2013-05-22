@@ -7,6 +7,7 @@ var setsId=art.dialog.data("id");
 var origin=artDialog.open.origin;
 var test_type=art.dialog.data("type");
 var categoryId=art.dialog.data("categoryId");
+var aspectId=art.dialog.data('aspectId');
 $(function(){ 
     var keditor;
     KindEditor.ready(function(K) {
@@ -71,7 +72,7 @@ function testInfo(){
     $.ajax({
         url:"/Admin/Test/index",
         type:"get",
-        data:"categoryId="+categoryId+"&type="+test_type+"&p="+p,
+        data:"categoryId="+categoryId+"&type="+test_type+"&aspectId="+aspectId+"&p="+p,
         dataType:"text",
         success:function(d){
             origin.$("#test").append(d);

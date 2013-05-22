@@ -1,5 +1,3 @@
- var optionArr=art.dialog.data("option");
- var test_type=art.dialog.data("test_type");
  var origin=artDialog.open.origin;
  var orOption=origin.$("[name='option[]']");
  var orOplen=origin.$("[name='option[]']").length;
@@ -9,7 +7,10 @@
   num=i+1;
   area+="<div class='ops'><span class='choice'>"+num+".</span><textarea name='option[]' class='test_box'>"+orOption[i].value+"</textarea><a href='javascript:void(0)' onclick='delOption("+i+")' class='del'>-删除</a></div>";
  }
- $(function(){       
+ $(function(){ 
+   $(".addOption").click(function(){
+    $("[name='option[]']:last").focus();
+  })      
   $("#option").append(area);   
  })
  /*

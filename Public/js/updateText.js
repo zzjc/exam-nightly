@@ -7,6 +7,10 @@
  var optionArr;
  var origin=artDialog.open.origin;
  var cat_id=origin.$("#name").val();
+ if(!cat_id){
+  cat_id=origin.origin.$("#name").val();
+ }
+ var aspectId=art.dialog.data('aspectId');
  var test_type=art.dialog.data("type");
  var sets_type=art.dialog.data("sets_type");
  var id=art.dialog.data("id");
@@ -15,6 +19,7 @@
  var titleInfo;
  $(function(){
      $(".essay_answer").hide();
+     $("#zhezhao").hide();
      var keditor;
      KindEditor.ready(function(K) {
          keditor=K.create('#editor_id');
@@ -49,7 +54,7 @@
               $("#option").html(
                                 "<div class='option'>"+
                                   str+
-                                "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice()'>修改</a>"+
                                 "</div>"+
                                   hidStr  
                                 );
@@ -59,7 +64,7 @@
               $("#option").html(
                                 "<div class='option'>"+
                                   str+
-                                "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice()'>修改</a>"+
                                 "</div>"+
                                   hidStr  
                                 );
@@ -69,7 +74,7 @@
               $("#option").html(
                                 "<div class='option'>"+
                                   str+
-                                "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice()'>修改</a>"+
                                 "</div>"+
                                   hidStr  
                                 );
@@ -80,7 +85,7 @@
                 $("#option").html(
                                   "<div class='option'>"+
                                     str+
-                                  "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                  "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice()'>修改</a>"+
                                   "</div>"+
                                     hidStr  
                                   );
@@ -89,7 +94,7 @@
                 $("#option").html(
                                   "<div class='option'>"+
                                     str+
-                                  "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                  "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice()'>修改</a>"+
                                   "</div>"+
                                     hidStr  
                                   );
@@ -98,7 +103,7 @@
                 $("#option").html(
                                   "<div class='option'>"+
                                     str+
-                                  "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice("+d+','+test_type+")'>修改</a>"+
+                                  "</div>"+"<a href='javascript:void(0)' onclick='openUpdateChoice()'>修改</a>"+
                                   "</div>"+
                                     hidStr  
                                   );
@@ -194,7 +199,7 @@
   /*
     *生成answer的个数
   */
-  function createAns(answer){
+  function createAns(){
       var optionLen=$("#option [name='option[]']").length;
       var str="<span>答案:</span>";
       switch(test_type){
@@ -236,8 +241,8 @@
               $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);    
                break;
           case "4":
-            switch(setsType){
-              case "1":
+            switch(sets_type){
+              case 1:
                 for(var i=1;i<optionLen+1;i++){
                   if(i==1){
                     str+="<input type='radio' name='answer[]' value='"+i+"' checked='checked'>("+i+")&nbsp&nbsp&nbsp";
@@ -248,7 +253,7 @@
                 $("#answer").html(str);    
                 $("input[type='radio'][value='"+titleInfo["answer"]+"']").attr("checked",true);     
               break;
-              case "2":
+              case 2:
                 for(var i=1;i<optionLen+1;i++){
                   if(i==1){
                     str+="<input type='checkbox' name='answer[]' value='"+i+"'>("+i+")&nbsp&nbsp&nbsp";
@@ -262,7 +267,7 @@
                     $("input[type='checkbox'][value='"+answer[i]+"']").attr("checked",true);
                  }     
                 break;
-              case "3":
+              case 3:
                 for(var i=1;i<optionLen+1;i++){
                   if(i==1){
                     str+="<input type='radio' name='answer[]' value='"+i+"' checked='checked'>("+i+")&nbsp&nbsp&nbsp";
@@ -317,6 +322,9 @@
   if(tips!=""){
     alert(tips);
   }else{  
+     var h=document.documentElement.scrollHeight;
+     $("#zhezhao").css("height",h);
+     $("#zhezhao").show();
 
      $.ajax({
        url:"/Admin/Test/updateTest",
@@ -326,7 +334,6 @@
             "&sets_type="+sets_type+"&option="+optionArr+"&cat_id="+cat_id,
        dataType:"text",
        success:function(d){
-
           if(test_type!=4){
             $.ajax({
               url:"/Admin/Picture/update_html",
@@ -357,14 +364,14 @@
 
 
 
-  //获得试题信息
+//获得试题信息
 function testInfo(){
     var p=origin.$("#page").val()?origin.$("#page").val():1;
     origin.$("#test tr:gt(0)").empty();
     $.ajax({
         url:"/Admin/Test/index",
         type:"get",
-        data:"categoryId="+categoryId+"&type="+test_type+"&p="+p,
+        data:"categoryId="+categoryId+"&aspectId="+aspectId+"&type="+test_type+"&p="+p,
         dataType:"text",
         success:function(d){
             origin.$("#test").append(d);

@@ -32,10 +32,16 @@
     KindEditor.ready(function(K) {
         keditor=K.create('#editor_id', {
                 afterTab : function() {
-                  if($("[name='option[]']").val()){
-                    $("#update_option a").focus();
-                  }else{
-                    $(".addOption span a").focus();
+                  switch(test_type){
+                    case "5":
+                      $("#essay_answer").focus();
+                      break;
+                    default:
+                      if($("[name='option[]']").val()){
+                        $("#update_option a").focus();
+                      }else{
+                        $(".addOption span a").focus();
+                      }
                   }
                 }
               });

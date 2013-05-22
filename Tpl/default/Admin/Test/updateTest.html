@@ -12,14 +12,14 @@
 <script charset="utf-8" type="text/javascript" src="/Public/editor/kindeditor.js"></script>
 <script charset="utf-8" type="text/javascript" src="/Public/editor/lang/zh_CN.js"></script>
 <script type="text/javascript">
-    function openUpdateChoice(optionArr,test_type){
-      art.dialog.data("option",optionArr);
+    function openUpdateChoice(test_type){
       art.dialog.data("test_type",test_type);
       art.dialog.open("/Tpl/default/Admin/Test/updateOption.html",{fixed: true,width:500,height:510,id:"testOption",title:'修改题目选项'}, false);    
     }
 </script>
 </head>
 <body>
+<div id="zhezhao"></div>
 <p>请输入题干:<textarea id='editor_id' style="width:480px"></textarea></p>
 <div class="essay_answer">请输入答案:<textarea id="essay_answer" style="width:480px"></textarea></div>
 <div id="option"></div>

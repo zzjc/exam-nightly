@@ -4,6 +4,7 @@ import("ORG.Page.Page");
 class TestAction extends Action
 {
     private $gid;
+    private $picUrl;
     public function _initialize()
     {
         if(!Session::is_set('manager')) {
@@ -30,6 +31,13 @@ class TestAction extends Action
 
 
     }
+    public function getAspect(){
+          $cate=M("category");
+          $aspects=M("aspects");
+          $categoryId=$_POST["categoryId"];
+          $arrAsp=$aspects->where("cat_id=".$categoryId)->select();
+          echo json_encode($arrAsp);
+    }
     /*
       *将题目类型写入cookie
     */
@@ -48,113 +56,43 @@ class TestAction extends Action
         if($this->isAjax()){
             $categoryId=Input::getVar($_GET["categoryId"]);
             $type=Input::getVar($_GET["type"]);
+            $aspectId=Input::getVar($_GET["aspectId"]);
+            $from=strtotime(Input::getVar($_GET["from"]));
+            $to=strtotime(Input::getVar($_GET["to"]));
+            if($from&&$to){
+              $str="test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId} and test.date between {$from} and {$to}";
+              if($aspectId!=0){
+               $str="test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId} and test.date between {$from} and {$to} and a.id={$aspectId}";
+              }
+            }else{
+              $str="test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId}";
+              if($aspectId!=0){
+               $str="test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId} and a.id={$aspectId}";
+              }              
+            }
             switch($type){
               case 1:
-                $confident['test_type']=1;
-                $confident['pid']=0;
-                $confident['cat_id']=$categoryId;
-                $count=$test->where($confident)->count();  
-                $page=new Page($count,10);  
-                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% ");
-                $show=$page->show();  
-                $list = $test->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
-                foreach($list as $key=>$val){
-                    $str=trim(strip_tags($val["content"]));
-                    $str=preg_replace('/\s(?=\s)/','',$str);
-                    $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
-                    switch($this->gid){
-                      case 0:
-                        echo "<tr><td>...</td><td>".$str."...".
-                             "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
-                             删除</a></td></tr>";
-                      break;
-                      default:
-                        echo "<tr><td>...</td><td>".$str."...".
-                             "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                             修改</a></td></tr>";
-                    }
-                    if($key==count($list)-1){
-                      echo "<tr><td colspan='5'>".$show."</td></tr>";
-
-                    }
-                }
+                echo $this->indexTest($test,$str);
                 break;
               case 2:
-                $confident['test_type']=2;
-                $confident['pid']=0;
-                $confident['cat_id']=$categoryId;
-                $count=$test->where($confident)->count();  
-                $page=new page($count,10);
-                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% ");  
-                $show=$page->show();  
-                $list = $test->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
-                foreach($list as $key=>$val){
-                    $str=trim(strip_tags($val["content"]));
-                    $str=preg_replace('/\s(?=\s)/','',$str);
-                    $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
-                    switch($this->gid){
-                      case 0:
-                         echo "<tr><td>...</td><td>".$str."...".
-                           "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                           "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                           修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
-                           删除</a></td></tr>";
-                      break;
-                      default:
-                         echo "<tr><td>...</td><td>".$str."...".
-                           "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                           "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                           修改</a></td></tr>";
-                    }
-                    if($key==count($list)-1){
-                      echo "<tr><td colspan='5'>".$show."</td></tr>";
-
-                    }
-
-                }
+                echo $this->indexTest($test,$str);
                 break;
               case 3:
-                $confident['test_type']=3;
-                $confident['pid']=0;
-                $confident['cat_id']=$categoryId;
-                $count=$test->where($confident)->count();  
-                $page=new page($count,10);
-                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
-                $show=$page->show();  
-                $list = $test->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
-                foreach($list as $key=>$val){
-                    $str=trim(strip_tags($val["content"]));
-                    $str=preg_replace('/\s(?=\s)/','',$str);
-                    $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
-                    switch($this->gid){
-                      case 0:
-                        echo "<tr><td>...</td><td>".$str."...".
-                             "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                             修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
-                             删除</a></td></tr>";
-                      break;
-                      default:
-                        echo "<tr><td>...</td><td>".$str."...".
-                             "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                             "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                             修改</a></td></tr>";
-                    }
-                    if($key==count($list)-1){
-                      echo "<tr><td colspan='5'>".$show."</td></tr>";
-                    }
-                }
+                echo $this->indexTest($test,$str);
                 break;
               case 4:
-                $confident['cat_id']=$categoryId;
-                $count=$casetest->where($confident)->count();  
+                $confident['casetest.cat_id']=$categoryId;
+                $str="casetest.cat_id={$categoryId} and  and t.date between {$from} and {$to} ";
+                if($aspectId!=0){
+                 $str="casetest.cat_id={$categoryId} and  and t.date between {$from} and {$to} and a.id={$aspectId}";
+                }
+                $count=$casetest->where($str)->count();  
                 $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
                 $show=$page->show();  
-                $list =$casetest->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
+                $list =$casetest->field("casetest.description,casetest.id")->join("inner join test as t  on casetest.id=t.pid")->join("inner join test_aspects as ta on t.id=ta.test_id")
+                                ->join("inner join aspects a on ta.aspects_id=a.id")->where($str)->group('casetest.id')
+                                ->limit($page->firstRow.','.$page->listRows)->select();
                 foreach($list as $key=>$val){
                     $str=trim(strip_tags($val["description"]));
                     $str=preg_replace('/\s(?=\s)/','',$str);
@@ -177,15 +115,14 @@ class TestAction extends Action
                     }
                 }
                 break;
-              case 5:
-                $confident['test_type']=5;
-                $confident['pid']=0;
-                $confident['cat_id']=$categoryId;
-                $count=$test->where($confident)->count();  
+              case 5:          
+                $count=$test->field("test.id,test.point,test.answer,test.content,te.answer as ea")->join("inner join test_essay as te on test.id=te.test_id")->join('inner join test_aspects ta ON test.id =ta.test_id ')
+                        ->join('inner join aspects a on ta.aspects_id=a.id')->where($str)->count();  
                 $page=new page($count,10);
                 $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
                 $show=$page->show();  
-                $list = $test->field("test.*,te.answer as ea")->join("inner join test_essay as te on test.id=te.test_id")->where($confident)->limit($page->firstRow.','.$page->listRows)->select();
+                $list = $test->field("test.id,test.point,test.answer,test.content,te.answer as ea")->join("inner join test_essay as te on test.id=te.test_id")->join('inner join test_aspects ta ON test.id =ta.test_id ')
+                        ->join('inner join aspects a on ta.aspects_id=a.id')->where($str)->limit($page->firstRow.','.$page->listRows)->select();
 
                 foreach($list as $key=>$val){
                     $str=trim(strip_tags($val["content"]));
@@ -215,14 +152,55 @@ class TestAction extends Action
             }
         }else{
           $cate=M("category");
+          $aspects=M("aspects");
           if($this->gid==0){
-           $arrCate=$cate->select();           
+           $arrCate=$cate->select();
+           $arrAsp=$aspects->where("cat_id=".$arrCate[0]["id"])->select();           
           }else{
             $arrCate=$cate->where('group_id = ' . $this->gid)->select();
           }
           $this->assign("arrCate",$arrCate);
+          $this->assign("arrAsp",$arrAsp);
           $this->display();
          }
+    }
+    /*
+    *试题列表分类获取题目信息内容
+    */
+    public function indexTest($test,$str){
+      $trStr="";
+      $count=$test->field("test.id,test.point,test.answer,test.content")->join('inner join test_aspects ta ON test.id =ta.test_id ')
+              ->join('inner join aspects a on ta.aspects_id=a.id')->where($str)->count();  
+      $page=new Page($count,10);  
+      $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% ");
+      $show=$page->show();  
+      $list = $test->field("test.id,test.point,test.answer,test.content")->join('inner join test_aspects ta ON test.id =ta.test_id ')
+              ->join('inner join aspects a on ta.aspects_id=a.id')->where($str)->limit($page->firstRow.','.$page->listRows)->select();
+      foreach($list as $key=>$val){
+          $str=trim(strip_tags($val["content"]));
+          $str=preg_replace('/\s(?=\s)/','',$str);
+          $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
+          switch($this->gid){
+            case 0:
+              $trStr.= "<tr><td>...</td><td>".$str."...".
+                      "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                      "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                      修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
+                      删除</a></td></tr>";
+            break;
+            default:
+              $trStr.= "<tr><td>...</td><td>".$str."...".
+                      "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                      "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                      修改</a></td></tr>";
+          }
+          if($key==count($list)-1){
+            $trStr.="<tr><td colspan='5'>".$show."</td></tr>";
+
+        }
+      }
+
+      return $trStr;
     }
     /*
      *对题目分类添加
@@ -329,8 +307,7 @@ class TestAction extends Action
     */
     public function addPicture($testId,$post,$i){
      $td=M("test_device");
-     $document_root = C('DOCUMENT_ROOT');
-     $phantomjs = c('PHANTOMJS_PATH');
+     $this->$picUrl="cd ".C('DOCUMENT_ROOT').";".C('PHANTOMJS_PATH')." rasterize.js ";
      $dir = 'Data/html';
      $template = "Data/template.html"; 
      $template_html = file_get_contents($template);          
@@ -348,19 +325,16 @@ class TestAction extends Action
          }
          //生成图 
          file_put_contents($html_name, $new);
-         $url="phantomjs.exe rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+         $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
          exec($url);
          for($j=0;$j<count($option);$j++){
              $hn=str_replace('{REPLACE_HOLDER}',$option[$j], $template_html);
              $html_num = $dir . '/' . $testId. '_'.$j.'.html';
              file_put_contents($html_num,$hn);
-             $url="phantomjs.exe rasterize.js "."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
+             $url=$this->$picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
              exec($url);
          }                                       
 
-
-/*           $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
-             exec($command);*/
 
              $data['test_id']=$testId;
              $data['image480'] = "Storage/image480/{$testId}.gif";
@@ -373,19 +347,15 @@ class TestAction extends Action
          }
          //生成图 
          file_put_contents($html_name, $new);
-         $url="phantomjs.exe rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+         $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
          exec($url);
          for($j=0;$j<count($option);$j++){
              $hn=str_replace('{REPLACE_HOLDER}',$option[$j], $template_html);
              $html_num = $dir . '/' . $testId. '_'.$j.'.html';
              file_put_contents($html_num,$hn);
-             $url="phantomjs.exe rasterize.js "."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
+             $url=$this->$picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
              exec($url);
          }                                       
-
-
-/*           $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
-             exec($command);*/
 
              $data['test_id']=$testId;
              $data['image480'] = "Storage/image480/{$testId}.gif";
@@ -398,19 +368,16 @@ class TestAction extends Action
          }
          //生成图 
          file_put_contents($html_name, $new);
-         $url="phantomjs.exe rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+         $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
          exec($url);
          for($j=0;$j<count($option);$j++){
              $hn=str_replace('{REPLACE_HOLDER}',$option[$j], $template_html);
              $html_num = $dir . '/' . $testId. '_'.$j.'.html';
              file_put_contents($html_num,$hn);
-             $url="phantomjs.exe rasterize.js "."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
+             $url=$this->$picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
              exec($url);
          }                                       
 
-
-/*           $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.'_'.$k.".html Storage/image480/".$testId.'_'.$k.".gif";
-             exec($command);*/
 
              $data['test_id']=$testId;
              $data['image480'] = "Storage/image480/{$testId}.gif";
@@ -425,9 +392,8 @@ class TestAction extends Action
         $replace_content="<p>".$content."</p>";
         $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
         file_put_contents($html_name, $new);
-/*        $command="cd $document_root;$phantomjs rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
-        exec($command);  */    
-        $url="phantomjs.exe rasterize.js "."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+   
+        $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
         exec($url); 
         $data['test_id']=$testId;
         $data['image480'] = "Storage/image480/{$testId}.gif";
@@ -535,7 +501,7 @@ class TestAction extends Action
     */
     public function getTestOption(){
       $test_choice=M("test_choice");
-      $option=$test_choice->field('option')->where("test_id=".$_POST['testId'])->select();
+      $option=$test_choice->field('option')->where("test_id=".$_POST['testId'])->order('id asc')->select();
       echo json_encode($option);
     }
     /*
