@@ -165,7 +165,7 @@ class TestAction extends Action
          }
     }
     /*
-    *试题列表分类获取题目信息内容
+    *试题列表分类获取类型为1，2，3的题目信息内容
     */
     public function indexTest($test,$str){
       $trStr="";

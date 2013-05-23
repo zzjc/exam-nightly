@@ -23,19 +23,26 @@ function del(id){
 }
 
 //获得试题信息
-function testInfo(page){
+function testInfo(page,fn){
     categoryId=$("#name").val();
     type=$("#type").val();
     aspectId=$("#aspects").val();
+    var str;
     var p=parseInt(page);
     if(!p){
         p=1;
     }
+    if(fn=="#"){
+        str="&aspectId=0";
+    }else{
+        str="&aspectId="+aspectId;
+    }
+
     $("#test tr:gt(0)").empty();
     $.ajax({
         url:"/Admin/Test/index",
         type:"get",
-        data:"categoryId="+categoryId+"&type="+type+"&p="+p+"&aspectId="+aspectId+"&from="+$("#from").val()+"&to="+$("#to").val(),
+        data:"categoryId="+categoryId+"&type="+type+"&p="+p+str+"&from="+$("#from").val()+"&to="+$("#to").val(),
         dataType:"text",
         success:function(d){
            $("#test").append(d);
@@ -71,6 +78,8 @@ $(document).ready(function(){
             $( "#to" ).datepicker( "option", "minDate", selectedDate );
             if($("#from").val()&&$("#to").val()){
                 testInfo();
+            }else if(!$("#from").val()&&!$("#to").val()){
+                testInfo();
             }
         }
     });
@@ -82,13 +91,17 @@ $(document).ready(function(){
             $( "#from" ).datepicker( "option", "maxDate", selectedDate );
             if($("#from").val()&&$("#to").val()){
                 testInfo();
+            }else if(!$("#from").val()&&!$("#to").val()){
+                testInfo();
             }            
         }
     });    
     $("#type").bind("change", testInfo);
-    $("#name").bind("change", testInfo);
+    $("#name").change(function(){
+     testInfo("1","#");
+    })
     $("#name").bind("change",getAspect);
     $("#aspects").bind("change",testInfo);
-    testInfo();
+    testInfo("1","#");
 
 })
