@@ -75,9 +75,7 @@
 				foreach($tests as $key=>$val){
 					//查找相关知识点表的知识点id
 					$sql2="select aspects_id from test_aspects where test_id=".$val["id"];
-					$qq=$test->query($sql2);	
-	
-	
+					$qq=$test->query($sql2);
 					//查找知识点表的知识点名称
 					$sql3="select name from aspects where id=".$qq[0]["aspects_id"];
 					$kk=$test->query($sql3);
