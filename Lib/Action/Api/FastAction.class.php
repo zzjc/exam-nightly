@@ -14,7 +14,7 @@
  			$sql="select content,id from test where test_type=".$type." and pid=0"; 
  			$tests=$testModel->query($sql);
 			foreach($tests as $key=>$val){
-
+				
 				$tdArr["test_id"]=$val["id"];
 				$tdArr["image480"]="Storage/image480/".$val['id'].".gif";
 				$td->add($tdArr);

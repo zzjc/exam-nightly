@@ -4,29 +4,57 @@
 		//获取数量
 		public function num(){
 			header("Content-type: text/html; charset=utf-8");
-			$num=$_GET["type"];
+			$cat_id=$_GET["cat_id"];
 			//查找知识点表的id和知识点
-			$sql="SELECT count( id ) as num,name
+			$sql="SELECT count( id ) as num,name,aspectId
 					FROM (					
-					SELECT test.id,test.test_type as type,test.cat_id, test.content, a.id AS aspectId, a.name AS name
+					SELECT test.id,test.cat_id, test.content, a.id AS aspectId, a.name AS name
 					FROM test
 					INNER JOIN test_aspects AS ta ON test.id = ta.test_id
 					INNER JOIN aspects a ON ta.aspects_id = a.id
-					WHERE test.cat_id =".$num."
+					WHERE test.cat_id =".$cat_id."
 					) AS ttt group by name";
-/*			echo $sql;*/
 			$m=M();
 			$tests=$m->query($sql);
-/*			echo "<pre>";
-				print_r($tests);
-			echo "</pre>";*/
 
 			$num=0;
 			echo "<table border:1px solid red>";
 			foreach($tests as $k=>$v){
 				echo "<tr>";
 					echo "<td>知识点:".$v["name"]."</td>";
-					echo "<td>数量:".$v["num"]."</td>";
+					for($i=1;$i<5;$i++){
+						$sql2="	SELECT count(test.id) as num
+						FROM test
+						INNER JOIN test_aspects AS ta ON test.id = ta.test_id
+						INNER JOIN aspects a ON ta.aspects_id = a.id
+						WHERE ta.aspects_id ={$v['aspectId']} and test.test_type={$i} and test.pid=0 and test.cat_id={$cat_id}";
+						if($i==4){
+							continue;
+						}else{
+							$testNum=$m->query($sql2);
+
+							switch($i){
+								case "1":
+									echo "<td>单选题数量:{$testNum[0]["num"]}</td>";
+									echo "<td></td>";									
+								break;
+								case "2":
+									echo "<td>多选题数量:{$testNum[0]["num"]}</td>";
+									echo "<td></td>";									
+								break;
+								case "3":
+									echo "<td>判断题数量:{$testNum[0]["num"]}</td>";
+								    echo "<td></td>";								
+								break;		
+								case "5":
+									echo "<td>问答题数量:{$testNum[0]["num"]}</td>";
+									echo "<td></td>";
+								break;														
+							}
+						}
+
+					}
+					echo "<td>总数量:".$v["num"]."</td>";
 				echo "</tr>";
 				$num+=$v["num"];
 			}
@@ -34,7 +62,7 @@
 			echo "总题目数:".$num;
 
 		}
-		//检验test_aspects
+		//重写test_aspects
 		public function check(){
 			header("Content-type: text/html; charset=utf-8");
 			$test=M();
@@ -67,10 +95,11 @@
 		public function kk(){
 			header("Content-type: text/html; charset=utf-8");
 			$m=M();
+			$cat_id=$_GET["cat_id"];
 			$sql="SELECT test.id,ta.aspects_id as asId
 					FROM test
 					INNER JOIN test_aspects AS ta ON test.id = ta.test_id
-					WHERE test.cat_id =5 group by id" ;
+					WHERE test.cat_id ={$cat_id} group by id" ;
 			$test=$m->query($sql);
 
 			$num=0;
