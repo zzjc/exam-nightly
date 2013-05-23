@@ -22,7 +22,7 @@
 			foreach($tests as $k=>$v){
 				echo "<tr>";
 					echo "<td>知识点:".$v["name"]."</td>";
-					for($i=1;$i<5;$i++){
+					for($i=1;$i<=5;$i++){
 						$sql2="	SELECT count(test.id) as num
 						FROM test
 						INNER JOIN test_aspects AS ta ON test.id = ta.test_id
@@ -112,6 +112,25 @@
 				}
 			}
 			echo "数量为:".$num;
+		}
+
+		//查找多知识点的题目
+		public function doubleAp(){
+			$m=M();
+			$sql="SELECT *
+				 FROM test_aspects
+				 WHERE test_id
+				 IN (				 
+
+				 SELECT test_id
+				 FROM test_aspects
+				 GROUP BY test_id
+				 HAVING count( test_id ) >1
+				 )";
+			$tests=$m->query($sql);
+			echo "<pre>";
+				print_r($tests);
+			echo "<pre>";
 		}
 
 	}
