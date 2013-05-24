@@ -66,12 +66,12 @@
 		public function check(){
 			header("Content-type: text/html; charset=utf-8");
 			$test=M();
-			$sql0="select id from category";
+			$sql0="select count(id) as num from category";
 			$cateId=$test->query($sql0);
-			foreach($cateId as $catK=>$catV){
-				$sql="select id from test where cat_id=".$catV["id"];
-				$tests=$test->query($sql);	
 
+			for($i=1;$i<=$cateId[0][num];$i++){
+				$sql="select id from test where cat_id=".$i;
+				$tests=$test->query($sql);	
 				foreach($tests as $key=>$val){
 					//查找相关知识点表的知识点id
 					$sql2="select aspects_id from test_aspects where test_id=".$val["id"];
@@ -80,11 +80,13 @@
 					$sql3="select name from aspects where id=".$qq[0]["aspects_id"];
 					$kk=$test->query($sql3);
 					//查找知识点表的id
-					$sql4="select id from aspects where name='".$kk[0]["name"]."' and cat_id=".$catV["id"];
+					$sql4="select id from aspects where name='".$kk[0]["name"]."' and cat_id=".$i;
 					$tt=$test->query($sql4);	
 					//修改test_aspets的知识关联id
 					$sql5="update test_aspects set aspects_id=".$tt[0]["id"]." where test_id=".$val["id"];
+
 					$test->query($sql5);
+
 				}
 			}
 

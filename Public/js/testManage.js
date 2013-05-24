@@ -69,6 +69,7 @@ function getAspect(){
 
 }
 $(document).ready(function(){
+    $("#aspects").val("0");
     $( "#from" ).datepicker({
         defaultDate: "+1w",
         changeYear: true,

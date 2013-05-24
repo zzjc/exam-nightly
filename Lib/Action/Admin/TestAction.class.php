@@ -224,6 +224,7 @@ class TestAction extends Action
           }
           //添加题目并生成题目图片
           for($i=0;$i<count($_POST["level"]);$i++){
+            //插入知识点关联
             $aspectArr= json_decode(str_replace("\\","",$_POST["name"][$i]),true);
             $testId=$this->addTest($testOb,$_POST,$pid,$i,$test_type);
             for($j=0;$j<count($aspectArr);$j++){
