@@ -100,8 +100,8 @@ $(document).ready(function(){
     $("#type").bind("change", testInfo);
     $("#name").change(function(){
      testInfo("1","#");
+     getAspect();
     })
-    $("#name").bind("change",getAspect);
     $("#aspects").bind("change",testInfo);
     testInfo("1","#");
 

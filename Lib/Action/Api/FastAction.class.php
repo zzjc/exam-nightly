@@ -11,7 +11,7 @@
 			$dir = 'Data/html';
  			$template = "Data/template.html";
 			$template_html = file_get_contents($template);	  
- 			$sql="select content,id from test where test_type=".$type." and pid=0"; 
+ 			$sql="select content,id from test where test_type=".$type." and pid=0 order by id asc"; 
  			$tests=$testModel->query($sql);
 			foreach($tests as $key=>$val){
 				
@@ -25,7 +25,7 @@
 				$url="phantomjs.exe rasterize.js "."Data/html/".$val['id'].".html Storage/image480/".$val['id'].".gif";
 				exec($url);
 				if($type!=5){
-					$sql_option="select * from test_choice where test_id=".$val['id'];
+					$sql_option="select * from test_choice where test_id=".$val['id']." order by id asc";
 					$option=$testModel->query($sql_option);
 					foreach($option as $key2=>$val2){
 						$data["id"]=$val2['id'];

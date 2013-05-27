@@ -158,6 +158,7 @@ class TestAction extends Action
            $arrAsp=$aspects->where("cat_id=".$arrCate[0]["id"])->select();           
           }else{
             $arrCate=$cate->where('group_id = ' . $this->gid)->select();
+            $arrAsp=$aspects->where("cat_id=" . $arrCate[0]["id"])->select();    
           }
           $this->assign("arrCate",$arrCate);
           $this->assign("arrAsp",$arrAsp);
@@ -308,7 +309,7 @@ class TestAction extends Action
     */
     public function addPicture($testId,$post,$i){
      $td=M("test_device");
-     $this->$picUrl="cd ".C('DOCUMENT_ROOT').";".C('PHANTOMJS_PATH')." rasterize.js ";
+     $this->picUrl="cd ".C('DOCUMENT_ROOT').";".C('PHANTOMJS_PATH')." rasterize.js ";
      $dir = 'Data/html';
      $template = "Data/template.html"; 
      $template_html = file_get_contents($template);          
@@ -326,13 +327,13 @@ class TestAction extends Action
          }
          //生成图 
          file_put_contents($html_name, $new);
-         $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+         $url=$this->picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
          exec($url);
          for($j=0;$j<count($option);$j++){
              $hn=str_replace('{REPLACE_HOLDER}',$option[$j], $template_html);
              $html_num = $dir . '/' . $testId. '_'.$j.'.html';
              file_put_contents($html_num,$hn);
-             $url=$this->$picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
+             $url=$this->picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
              exec($url);
          }                                       
 
@@ -348,13 +349,13 @@ class TestAction extends Action
          }
          //生成图 
          file_put_contents($html_name, $new);
-         $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+         $url=$this->picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
          exec($url);
          for($j=0;$j<count($option);$j++){
              $hn=str_replace('{REPLACE_HOLDER}',$option[$j], $template_html);
              $html_num = $dir . '/' . $testId. '_'.$j.'.html';
              file_put_contents($html_num,$hn);
-             $url=$this->$picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
+             $url=$this->picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
              exec($url);
          }                                       
 
@@ -369,17 +370,15 @@ class TestAction extends Action
          }
          //生成图 
          file_put_contents($html_name, $new);
-         $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+         $url=$this->picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
          exec($url);
          for($j=0;$j<count($option);$j++){
              $hn=str_replace('{REPLACE_HOLDER}',$option[$j], $template_html);
              $html_num = $dir . '/' . $testId. '_'.$j.'.html';
              file_put_contents($html_num,$hn);
-             $url=$this->$picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
+             $url=$this->picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
              exec($url);
          }                                       
-
-
              $data['test_id']=$testId;
              $data['image480'] = "Storage/image480/{$testId}.gif";
              $td->add($data);   
@@ -393,8 +392,7 @@ class TestAction extends Action
         $replace_content="<p>".$content."</p>";
         $new = str_replace('{REPLACE_HOLDER}', $replace_content, $template_html);
         file_put_contents($html_name, $new);
-   
-        $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+        $url=$this->picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
         exec($url); 
         $data['test_id']=$testId;
         $data['image480'] = "Storage/image480/{$testId}.gif";

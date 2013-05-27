@@ -5,7 +5,7 @@
 		private $picUrl;
 	    public function update_html(){
 	        header("content-type:text/html;charset=utf8");
-	        $this->$picUrl="cd ".C('DOCUMENT_ROOT').";".c('PHANTOMJS_PATH')." rasterize.js ";
+	        $this->picUrl="cd ".C('DOCUMENT_ROOT').";".c('PHANTOMJS_PATH')." rasterize.js ";
 	        $testId=Input::getVar($_POST["testId"]);
 	        $test_type=Input::getVar($_POST["test_type"]);
 	        $sets_type=Input::getVar($_POST["sets_type"]);
@@ -31,12 +31,12 @@
     			        $html_name = $dir . '/' . $testId. '.html';
     			        file_put_contents($html_name, $new);
     			          //生成图片			            				
-				        $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+				        $url=$this->picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
 				        exec($url);			            			            			    	
     			        break;
  					default:
 			             file_put_contents($html_name, $new);
-			         	 $url=$this->$picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
+			         	 $url=$this->picUrl."Data/html/".$testId.".html Storage/image480/".$testId.".gif";
 			             exec($url);
 			             for($i=0;$i<10;$i++){
 			          		unlink('Storage/image480/'.$testId."_".$i.".gif");
@@ -45,7 +45,7 @@
 				             $hn=str_replace('{REPLACE_HOLDER}',input::getVar($option[$j]), $template_html);
 				             $html_num = $dir . '/' . $testId. '_'.$j.'.html';
 				             file_put_contents($html_num,$hn);
-				             $url=$this->$picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
+				             $url=$this->picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
 				             exec($url);
 				         }
 		        	  break;    			        
