@@ -2,6 +2,9 @@
 	require 'Common/Json.php';
 	import('ORG.Util.Input');
 	class PictureAction extends Action{
+		/*
+		    *修改题目时重新生成图片
+		*/
 		private $picUrl;
 	    public function update_html(){
 	        header("content-type:text/html;charset=utf8");
@@ -47,6 +50,7 @@
 				             file_put_contents($html_num,$hn);
 				             $url=$this->picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
 				             exec($url);
+				             echo $url;
 				         }
 		        	  break;    			        
 		        }
