@@ -50,7 +50,6 @@
 				             file_put_contents($html_num,$hn);
 				             $url=$this->picUrl."Data/html/".$testId."_{$j}.html Storage/image480/".$testId."_{$j}.gif";
 				             exec($url);
-				             echo $url;
 				         }
 		        	  break;    			        
 		        }
