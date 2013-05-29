@@ -8,7 +8,8 @@
 		private $picUrl;
 	    public function update_html(){
 	        header("content-type:text/html;charset=utf8");
-	        $this->picUrl="cd ".C('DOCUMENT_ROOT').";".c('PHANTOMJS_PATH')." rasterize.js ";
+	       // $this->picUrl="cd ".C('DOCUMENT_ROOT').";".c('PHANTOMJS_PATH')." rasterize.js ";
+	        $this->picUrl="phantomjs.exe rasterize.js ";
 	        $testId=Input::getVar($_POST["testId"]);
 	        $test_type=Input::getVar($_POST["test_type"]);
 	        $sets_type=Input::getVar($_POST["sets_type"]);
