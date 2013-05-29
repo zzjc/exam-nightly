@@ -163,7 +163,6 @@ class TestAction extends Action
           $this->assign("arrCate",$arrCate);
           $this->assign("arrAsp",$arrAsp);
           $this->display();
-          
          }
     }
     /*
