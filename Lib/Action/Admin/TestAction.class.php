@@ -54,23 +54,38 @@ class TestAction extends Action
         $casetest=M("casetest");
         $essay=M("test_essay");
         if($this->isAjax()){
-            $categoryId=Input::getVar($_GET["categoryId"]);
-            $type=Input::getVar($_GET["type"]);
-            $aspectId=Input::getVar($_GET["aspectId"]);
-            $from=strtotime(Input::getVar($_GET["from"]));
-            $to=strtotime(Input::getVar($_GET["to"]));
-            if($from&&$to){
-              $str="test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId} and test.date between {$from} and {$to}";
-              if($aspectId!=0){
-               $str="test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId} and test.date between {$from} and {$to} and a.id={$aspectId}";
+            $categoryId = Input::getVar($_GET["categoryId"]);
+            $type       = Input::getVar($_GET["type"]);
+            $aspectId   = Input::getVar($_GET["aspectId"]);
+            $from       = strtotime(Input::getVar($_GET["from"]));
+            $to         = strtotime(Input::getVar($_GET["to"]));
+            $author     = Input::getVar($_GET["author"]);
+            if ($from && $to) {
+                $str = "test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId} and test.date between {$from} and {$to}";
+              if ($aspectId != 0) {
+                  $str .= " and a.id={$aspectId}";
               }
-            }else{
-              $str="test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId}";
-              if($aspectId!=0){
-               $str="test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId} and a.id={$aspectId}";
-              }              
+              if ($author) {
+                if($_SESSION['gid'] !=0){
+                  $str .= " and test.author='{$author}'";
+                } elseif ($_SESSION['gid'] ==0 && $_SESSION['username'] != $author) {
+                    $str .= " and test.author='{$author}'";
+                }
+              }
+            } else {
+                $str = "test.test_type={$type} and test.pid=0 and test.cat_id={$categoryId}";
+                if ($aspectId != 0) {
+                    $str .= " and a.id={$aspectId}";
+                }
+                if ($author) {
+                    if($_SESSION['gid'] !=0){
+                      $str .= " and test.author='{$author}'";
+                    } elseif ($_SESSION['gid'] ==0 && $_SESSION['username'] != $author) {
+                        $str .= " and test.author='{$author}'";
+                    }
+                }              
             }
-            switch($type){
+            switch ($type) {
               case 1:
                 echo $this->indexTest($test,$str);
                 break;
@@ -81,67 +96,105 @@ class TestAction extends Action
                 echo $this->indexTest($test,$str);
                 break;
               case 4:
-                $confident['casetest.cat_id']=$categoryId;
-                $str="casetest.cat_id={$categoryId} and  and t.date between {$from} and {$to} ";
-                if($aspectId!=0){
-                 $str="casetest.cat_id={$categoryId} and  and t.date between {$from} and {$to} and a.id={$aspectId}";
+                $confident['casetest.cat_id'] = $categoryId;
+                if ($from && $to) {
+                    $str="casetest.cat_id={$categoryId} and t.date between {$from} and {$to} ";
+                    if ($aspectId != 0) {
+                        $str .= "  and a.id={$aspectId}";                     
+                    }
+                    if ($author) {
+                      if($_SESSION['gid'] !=0){
+                        $str .= " and t.author='{$author}'";
+                      } elseif ($_SESSION['gid'] ==0 && $_SESSION['username'] != $author) {
+                          $str .= " and t.author='{$author}'";
+                      }
+                    }                    
+                } else {
+                    $str="casetest.cat_id={$categoryId}";
+                    if ($aspectId != 0) {
+                        $str .= "  and a.id={$aspectId}";                     
+                    }
+                    if ($author) {
+                      if($_SESSION['gid'] !=0){
+                        $str .= " and t.author='{$author}'";
+                      } elseif ($_SESSION['gid'] ==0 && $_SESSION['username'] != $author) {
+                          $str .= " and t.author='{$author}'";
+                      }
+                    }                                           
                 }
-                $count=$casetest->where($str)->count();  
-                $page=new page($count,10);
-                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
-                $show=$page->show();  
-                $list =$casetest->field("casetest.description,casetest.id")->join("inner join test as t  on casetest.id=t.pid")->join("inner join test_aspects as ta on t.id=ta.test_id")
+                $count = $casetest->field("casetest.description,casetest.id")->join("inner join test as t  on casetest.id=t.pid")->join("inner join test_aspects as ta on t.id=ta.test_id")
+                       ->join("inner join aspects a on ta.aspects_id=a.id")->where($str)->count();  
+                $page = new page($count,10);
+                $page -> setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
+                $show = $page->show();  
+                $list = $casetest->field("casetest.description,casetest.id")->join("inner join test as t  on casetest.id=t.pid")->join("inner join test_aspects as ta on t.id=ta.test_id")
                                 ->join("inner join aspects a on ta.aspects_id=a.id")->where($str)->group('casetest.id')
                                 ->limit($page->firstRow.','.$page->listRows)->select();
+               // echo $casetest->getLastSql();
                 foreach($list as $key=>$val){
-                    $str=trim(strip_tags($val["description"]));
-                    $str=preg_replace('/\s(?=\s)/','',$str);
-                    $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
-                    switch($this->gid){
+                    $str = trim(strip_tags($val["description"]));
+                    $str = preg_replace('/\s(?=\s)/','',$str);
+                    if (mb_strlen(preg_replace('/[\n\r\t]/','',$str),"utf-8") > 40) {
+                        $omiss = "......";
+                    } else {
+                        $omiss = "";
+                    };                       
+                    $str = mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
+                    switch ($this->gid) {
                       case 0:
-                        echo "<tr><td>".$str."..."."</td><td>...</td><td>...</td><td>...</td>
+                        echo "<tr><td class='left'>".$str.$omiss."</td><td>...</td><td>...</td><td>...</td>
                               <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
                              修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
                              删除</a></td></tr>";
                       break;
                       default:
-                        echo "<tr><td>".$str."..."."</td><td>...</td><td>...</td><td>...</td>
+                        echo "<tr><td class='left'>".$str.$omiss."</td><td>...</td><td>...</td><td>...</td>
                               <td><a href='javascript:void(0)' onclick='openUpdateSets(".$val["id"].")'>
                              修改</a></td></tr>";
                     }
-                    if($key==count($list)-1){
+                    if($key == count($list)-1){
                       echo "<tr><td colspan='5'>".$show."</td></tr>";
 
                     }
                 }
                 break;
               case 5:          
-                $count=$test->field("test.id,test.point,test.answer,test.content,te.answer as ea")->join("inner join test_essay as te on test.id=te.test_id")->join('inner join test_aspects ta ON test.id =ta.test_id ')
-                        ->join('inner join aspects a on ta.aspects_id=a.id')->where($str)->count();  
-                $page=new page($count,10);
-                $page->setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
-                $show=$page->show();  
+                $count = $test->field("test.id,test.point,test.answer,test.content,te.answer as ea")->join("inner join test_essay as te on test.id=te.test_id")->join('inner join test_aspects ta ON test.id =ta.test_id ')
+                        ->join('inner join aspects a on ta.aspects_id=a.id')->where($str)->count();         
+                $page  = new page($count,10);
+                $page -> setConfig('theme', "%totalRow% %header% %nowPage%/%totalPage% 页%first%  %prePage% %upPage%  %linkPage%  %downPage% %nextPage% %end% "); 
+                $show = $page->show();  
                 $list = $test->field("test.id,test.point,test.answer,test.content,te.answer as ea")->join("inner join test_essay as te on test.id=te.test_id")->join('inner join test_aspects ta ON test.id =ta.test_id ')
                         ->join('inner join aspects a on ta.aspects_id=a.id')->where($str)->limit($page->firstRow.','.$page->listRows)->select();
-
+                //echo $test->getLastSql(); 
                 foreach($list as $key=>$val){
                     $str=trim(strip_tags($val["content"]));
                     $str=preg_replace('/\s(?=\s)/','',$str);
+                    if (mb_strlen(preg_replace('/[\n\r\t]/','',$str),"utf-8") > 20) {
+                        $omiss = "......";
+                    } else {
+                        $omiss = "";
+                    };                       
                     $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,20,"utf-8");
                     $ea=trim(strip_tags($val["ea"]));
                     $ea=preg_replace('/\s(?=\s)/','',$ea);
+                    if (mb_strlen(preg_replace('/[\n\r\t]/','',$ea),"utf-8") > 20) {
+                        $omiea = "......";
+                    } else {
+                        $omiea = "";
+                    };                        
                     $ea=mb_substr(preg_replace('/[\n\r\t]/','',$ea),0,20,"utf-8");
                     switch($this->gid){
                       case 0:                    
-                        echo "<tr><td>...</td><td>".$str."...".
-                             "</td><td>".$ea."</td><td>".strip_tags($val["point"]).
+                        echo "<tr><td>...</td><td class='left'>".$str.$omiss.
+                             "</td><td class='left'>".$ea.$omiea."</td><td>".strip_tags($val["point"]).
                              "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                              修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
                              删除</a></td></tr>";
                       break;
                       default:
-                        echo "<tr><td>...</td><td>".$str."...".
-                             "</td><td>".$ea."</td><td>".strip_tags($val["point"]).
+                        echo "<tr><td>...</td><td class='left'>".$str.$omiss.
+                             "</td><td class='left'>".$ea.$omiea."</td><td>".strip_tags($val["point"]).
                              "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
                              修改</a></td></tr>";
                     }     
@@ -151,18 +204,22 @@ class TestAction extends Action
                 }                  
             }
         }else{
-          $cate=M("category");
-          $aspects=M("aspects");
-          if($this->gid==0){
-           $arrCate=$cate->select();
-           $arrAsp=$aspects->where("cat_id=".$arrCate[0]["id"])->select();           
-          }else{
-            $arrCate=$cate->where('group_id = ' . $this->gid)->select();
-            $arrAsp=$aspects->where("cat_id=" . $arrCate[0]["id"])->select();    
+          $cate = M("category");
+          $aspects = M("aspects");
+          $manager = M("manager");
+          if ($this->gid == 0) {
+              $arrCate = $cate->select();
+              $arrAsp = $aspects->where("cat_id=".$arrCate[0]["id"])->select();
+              $arrAuthor = $manager->select();         
+          } else {
+              $arrCate = $cate->where('group_id = ' . $this->gid)->select();
+              $arrAsp = $aspects->where("cat_id=" . $arrCate[0]["id"])->select();
+              $arrAuthor = array(array("name"=>$_SESSION['username'])); 
           }
-          $this->assign("arrCate",$arrCate);
-          $this->assign("arrAsp",$arrAsp);
-          $this->display();
+          $this -> assign("arrCate",$arrCate);
+          $this -> assign("arrAsp",$arrAsp);
+          $this -> assign("arrAuthor",$arrAuthor);
+          $this -> display();
          }
     }
     /*
@@ -178,30 +235,36 @@ class TestAction extends Action
       $list = $test->field("test.id,test.point,test.answer,test.content")->join('inner join test_aspects ta ON test.id =ta.test_id ')
               ->join('inner join aspects a on ta.aspects_id=a.id')->where($str)->limit($page->firstRow.','.$page->listRows)->select();
       foreach($list as $key=>$val){
-          $str=trim(strip_tags($val["content"]));
-          $str=preg_replace('/\s(?=\s)/','',$str);
-          $str=mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
-          switch($this->gid){
+          $str = trim(strip_tags($val["content"]));
+          $str = preg_replace('/\s(?=\s)/','',$str);
+          if (mb_strlen(preg_replace('/[\n\r\t]/','',$str),"utf-8") > 40) {
+              $omiss = "......";
+          } else {
+              $omiss = "";
+          };          
+          $str = mb_substr(preg_replace('/[\n\r\t]/','',$str),0,40,"utf-8");
+          switch($this -> gid){
             case 0:
-              $trStr.= "<tr><td>...</td><td>".$str."...".
-                      "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                      "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                      修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
-                      删除</a></td></tr>";
+              $trStr .= "<tr><td>...</td><td class='left'>".$str.$omiss.
+                        "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                        "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                        修改</a>&nbsp&nbsp&nbsp&nbsp<a href='javascript:void(0)' onclick=\"if(confirm('确认要删除')){del(".$val["id"].")}\">
+                        删除</a></td></tr>";
             break;
             default:
-              $trStr.= "<tr><td>...</td><td>".$str."...".
-                      "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
-                      "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
-                      修改</a></td></tr>";
+              $trStr.= "<tr><td>...</td><td class='left'>".$str.$omiss.
+                       "</td><td>".$val["answer"]."</td><td>".strip_tags($val["point"]).
+                       "</td><td><a href='javascript:void(0)' onclick='openUpdateTest(".$val["id"].")'>
+                       修改</a></td></tr>";
           }
           if($key==count($list)-1){
             $trStr.="<tr><td colspan='5'>".$show."</td></tr>";
 
         }
       }
+      //return $test->getLastSql();
 
-      return $trStr;
+        return $trStr;
     }
     /*
      *对题目分类添加
