@@ -42,7 +42,9 @@ function testInfo(page,fn){
     $.ajax({
         url:"/Admin/Test/index",
         type:"get",
-        data:"categoryId="+categoryId+"&type="+type+"&p="+p+str+"&from="+$("#from").val()+"&to="+$("#to").val(),
+        data:"categoryId="+categoryId+"&type="+type+"&p="+p+str
+                        +"&from="+$("#from").val()+"&to="+$("#to").val()
+                        +"&author="+$("#author").val(),
         dataType:"text",
         success:function(d){
            $("#test").append(d);
@@ -102,6 +104,7 @@ $(document).ready(function(){
      getAspect();
     })
     $("#aspects").bind("change",testInfo);
+    $("#author").bind("change", testInfo);
     $("#name").val($("#name option:first").val());
     testInfo("1","#");
 

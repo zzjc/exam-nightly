@@ -251,3 +251,7 @@ code{
 #singleTitle .rule_done a:hover{
     color:#00CACA;
 }
+#test .left{
+    text-align: left;
+
+}

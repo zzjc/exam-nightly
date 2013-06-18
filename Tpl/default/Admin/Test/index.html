@@ -85,7 +85,16 @@
         <th>
           <input type="text" id="to" name="to"/>
         </th>
-        <th colspan="2"></th>
+        <th>
+          录入者:
+        </th>
+        <th>
+          <select id="author">
+             <volist name="arrAuthor" id="vo2">
+               <option value={$vo2.name}>{$vo2.name}</option>
+             </volist>              
+          </select>
+        </th>
     </tr>
 </table>
 <table id="test">
