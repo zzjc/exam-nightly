@@ -71,11 +71,15 @@ class TestAction extends Action
                     $extra = $this->getExtraTest($difficult_from, $difficult_to, $number, $cid,$rule_type);               
                     $tests=array_merge($tests, $extra);
                 }
-                foreach($tests as $t) {
+                foreach($tests as $tk=>$t) {
                     $t['title'] = $this->subString($t['title']);
                     $t['title'] = trim($t['title']);
                     $t['client'] = '';
                     $images[] = $t['img'];
+                    $choiceArr=explode("@",$t["choice"]);
+                    for($q=0;$q<count($choiceArr);$q++){
+                      $images[]=$choiceArr[$q];
+                    }
                     $final[0][] = $t;
                 }
             } else if($rule_type==4){//材料分析题
@@ -104,7 +108,11 @@ class TestAction extends Action
                         $choice=$testmodel->query($sql);
                         foreach($choice as $k2=>$v2){                  
                           $tests[$k]["choice"].=$tests[$k]["choice"]==""?$v2["img"]:"@".$v2["img"];
-                        }                        
+                        } 
+                        $choiceArr=explode("@",$t["choice"]);
+                        for($q=0;$q<count($choiceArr);$q++){
+                          $images[]=$choiceArr[$q];
+                        }                       
                     }
                     $cases[$key]['description'] = strip_tags($cases[$key]['description']);
                     $cases[$key]['score'] = strval($sum);
@@ -152,6 +160,7 @@ class TestAction extends Action
                       $t['title'] = trim($t['title']);
                       $t['client'] = '';
                       $images[] = $t['img'];
+                      $images[] = $t['choice'];
                       $final[2][]=$t;
                   }          
             }
@@ -255,6 +264,10 @@ class TestAction extends Action
             $tests[$key]['title'] = $this->subString($t['title']);
             $tests[$key]['client'] = '';
             $images[] = $t['img'];
+            $choiceArr=explode("@",$t["choice"]);
+            for($q=0;$q<count($choiceArr);$q++){
+              $images[]=$choiceArr[$q];
+            }    
             $final[0][] = $tests[$key];
         }
         $string = Json::encode(json_encode($final));
